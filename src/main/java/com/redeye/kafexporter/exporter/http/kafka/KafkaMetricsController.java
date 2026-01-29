@@ -3,10 +3,10 @@ package com.redeye.kafexporter.exporter.http.kafka;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.epozen.emma.exporter.kafka.Collector;
-import com.epozen.emma.exporter.kafka.util.JSONUtil;
-import com.epozen.emma.exporter.kafka.util.http.annotation.Controller;
-import com.epozen.emma.exporter.kafka.util.http.annotation.RequestHandler;
+import com.redeye.kafexporter.acquisitor.kafka.KafkaAcquisitor;
+import com.redeye.kafexporter.util.JSONUtil;
+import com.redeye.kafexporter.util.http.service.annotation.Controller;
+import com.redeye.kafexporter.util.http.service.annotation.RequestHandler;
 
 /**
  * Kafka 성능 정보 관련 컨트롤러
@@ -26,10 +26,10 @@ public class KafkaMetricsController {
 		
 		Map<String, Object> metricsMap = new HashMap<>();
 		
-		metricsMap.put("system", Collector.getSystemMetrics());
-		metricsMap.put("broker", Collector.getBrokerMetrics());
-		metricsMap.put("producer", Collector.getProducerMetrics(null));
-		metricsMap.put("consumer", Collector.getConsumerMetrics(null));
+		metricsMap.put("system", KafkaAcquisitor.getSystemMetrics());
+		metricsMap.put("broker", KafkaAcquisitor.getBrokerMetrics());
+		metricsMap.put("producer", KafkaAcquisitor.getProducerMetrics(null));
+		metricsMap.put("consumer", KafkaAcquisitor.getConsumerMetrics(null));
 		
 		return JSONUtil.toJSON(metricsMap);
 	}
@@ -41,7 +41,7 @@ public class KafkaMetricsController {
 	 */
 	@RequestHandler(path = "/broker")
 	public static String getBrokerMetrics() throws Exception {
-		return JSONUtil.toJSON(Collector.getBrokerMetrics());
+		return JSONUtil.toJSON(KafkaAcquisitor.getBrokerMetrics());
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class KafkaMetricsController {
 	 */
 	@RequestHandler(path = "/broker/lag")
 	public static String getConsumerGroupLag() throws Exception {
-		return JSONUtil.toJSON(Collector.getConsumerLag());
+		return JSONUtil.toJSON(KafkaAcquisitor.getConsumerLag());
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class KafkaMetricsController {
 	 */
 	@RequestHandler(path = "/producer")
 	public static String getProducerMetrics() throws Exception {
-		return JSONUtil.toJSON(Collector.getProducerMetrics("*"));
+		return JSONUtil.toJSON(KafkaAcquisitor.getProducerMetrics("*"));
 	}
 	
 	/**
@@ -71,6 +71,6 @@ public class KafkaMetricsController {
 	 */
 	@RequestHandler(path = "/consumer")
 	public static String getConsumerMetrics() throws Exception {
-		return JSONUtil.toJSON(Collector.getConsumerMetrics("*"));
+		return JSONUtil.toJSON(KafkaAcquisitor.getConsumerMetrics("*"));
 	}
 }

@@ -2,12 +2,22 @@ package com.redeye.kafexporter.util;
 
 import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.GroupListing;
+import org.apache.kafka.clients.admin.ListOffsetsResult.ListOffsetsResultInfo;
+import org.apache.kafka.clients.admin.OffsetSpec;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.common.TopicPartition;
 
 import com.redeye.kafexporter.util.jmx.JMXService;
 
 /**
- * 
+ * Kafka 유틸리티 클래스
  * 
  * @author jmsohn
  */
@@ -116,7 +126,7 @@ public class KafkaUtil {
 	 *
 	 * @param adminClient Kafka 클라이언트 객체
 	 * @param groupId 그룹 아이디
-	 * @return 
+	 * @return 컨슈머 그룹 lag 값
 	 */
 	public static long getConsumerLag(AdminClient adminClient, String groupId) throws Exception {
 

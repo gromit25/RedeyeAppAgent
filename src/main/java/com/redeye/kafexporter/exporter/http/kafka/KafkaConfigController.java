@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.epozen.emma.exporter.kafka.Collector;
-import com.epozen.emma.exporter.kafka.util.JSONUtil;
-import com.epozen.emma.exporter.kafka.util.http.annotation.Controller;
-import com.epozen.emma.exporter.kafka.util.http.annotation.RequestHandler;
+import com.redeye.kafexporter.acquisitor.kafka.KafkaAcquisitor;
+import com.redeye.kafexporter.util.JSONUtil;
+import com.redeye.kafexporter.util.http.service.annotation.Controller;
+import com.redeye.kafexporter.util.http.service.annotation.RequestHandler;
 
 /**
  * Kafka 설정 정보 관련 컨트롤러
@@ -28,9 +28,9 @@ public class KafkaConfigController {
 		// 설정 값 메시지 생성
 		Map<String, Object> configMap = new HashMap<>();
 
-		configMap.put("broker", Collector.getBrokerConfigMap());
-		configMap.put("producer", Collector.getProducerConfigMap());
-		configMap.put("consumer", Collector.getConsumerConfigMap());
+		configMap.put("broker", KafkaAcquisitor.getBrokerConfigMap());
+		configMap.put("producer", KafkaAcquisitor.getProducerConfigMap());
+		configMap.put("consumer", KafkaAcquisitor.getConsumerConfigMap());
 		
 		return JSONUtil.toJSON(configMap);
 	}
@@ -42,7 +42,7 @@ public class KafkaConfigController {
 	 */
 	@RequestHandler(path = "/broker")
 	public static String getBrokerConfigMap(List<String> pathParamList) throws Exception {
-		return JSONUtil.toJSON(Collector.getBrokerConfigMap());
+		return JSONUtil.toJSON(KafkaAcquisitor.getBrokerConfigMap());
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class KafkaConfigController {
 	 */
 	@RequestHandler(path = "/producer")
 	public static String getProducerConfigMap(List<String> pathParamList) throws Exception {
-		return JSONUtil.toJSON(Collector.getProducerConfigMap());
+		return JSONUtil.toJSON(KafkaAcquisitor.getProducerConfigMap());
 	}
 
 	/**
@@ -62,6 +62,6 @@ public class KafkaConfigController {
 	 */
 	@RequestHandler(path = "/consumer")
 	public static String getConsumerConfigMap(List<String> pathParamList) throws Exception {
-		return JSONUtil.toJSON(Collector.getConsumerConfigMap());
+		return JSONUtil.toJSON(KafkaAcquisitor.getConsumerConfigMap());
 	}
 }

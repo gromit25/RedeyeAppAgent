@@ -1,15 +1,14 @@
 package com.redeye.kafexporter.exporter.http.kafka;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.epozen.emma.exporter.kafka.Collector;
-import com.epozen.emma.exporter.kafka.util.JSONUtil;
-import com.epozen.emma.exporter.kafka.util.http.annotation.Controller;
-import com.epozen.emma.exporter.kafka.util.http.annotation.RequestHandler;
+import com.redeye.kafexporter.acquisitor.kafka.KafkaAcquisitor;
+import com.redeye.kafexporter.util.JSONUtil;
+import com.redeye.kafexporter.util.http.service.annotation.Controller;
+import com.redeye.kafexporter.util.http.service.annotation.RequestHandler;
 
 /**
  * Kafka 클라이언트 정보 관련 컨트롤러
@@ -29,8 +28,8 @@ public class KafkaClientController {
 		
 		Map<String, Set<String>> clientIdMap = new HashMap<>();
 		
-		clientIdMap.put("producer", Collector.getProducerClientIdList());
-		clientIdMap.put("consumer", Collector.getConsumerClientIdList());
+		clientIdMap.put("producer", KafkaAcquisitor.getProducerClientIdSet());
+		clientIdMap.put("consumer", KafkaAcquisitor.getConsumerClientIdSet());
 		
 		return JSONUtil.toJSON(clientIdMap);
 	}
@@ -45,7 +44,7 @@ public class KafkaClientController {
 	public String getClientConfigMap(List<String> pathParamList) {
 		
 		return JSONUtil.toJSON(
-			Collector.getClientConfigMap(
+			KafkaAcquisitor.getConfigMap(
 				pathParamList.get(0)	// Client Id
 			)
 		);
@@ -61,7 +60,7 @@ public class KafkaClientController {
 	public String getClientMetrics(List<String> pathParamList) throws Exception {
 		
 		return JSONUtil.toJSON(
-			Collector.getMetrics(
+			KafkaAcquisitor.getMetrics(
 				pathParamList.get(0)	// Client Id
 			)
 		);
