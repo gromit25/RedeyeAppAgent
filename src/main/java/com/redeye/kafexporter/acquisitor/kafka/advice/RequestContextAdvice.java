@@ -5,7 +5,7 @@ import java.net.InetAddress;
 import net.bytebuddy.asm.Advice;
 
 /**
- * 
+ * 브로커에서 클라이언트 접속 IP 획득을 위한 어드바이스 클래스
  * 
  * @author jmsohn
  */
