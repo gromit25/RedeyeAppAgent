@@ -1,4 +1,4 @@
-package com.redeye.kafexporter.acuisitor.kafka.advice;
+package com.redeye.kafexporter.acquisitor.kafka.advice;
 
 import java.net.InetAddress;
 
