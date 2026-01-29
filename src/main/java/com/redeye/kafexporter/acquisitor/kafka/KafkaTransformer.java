@@ -31,8 +31,18 @@ public class KafkaTransformer {
 		if(inst == null) {
 			throw new IllegalArgumentException("'inst' is null.");
 		}
-		
-		// --- Kafka ProducerConfig 메소드 훅킹 설정
+
+		// Kafka 요청 컨택스트 어드바이스 설정
+		new AgentBuilder.Default()
+			.type(ElementMatchers.named("org.apache.kafka.common.requests.RequestContext"))
+			.transform(
+				(builder, typeDescription, classLoader, module, protectedDomain) -> {
+					return builder
+						.constructor(ElementMatchers.any())
+						.intercept(Advice.to(RequestContextAdvice.class));
+				}
+			)
+			.installOn(inst);
 		
 		// Kafka ProducerConfig 생성자 호출 어드바이스 설정
 		ProducerConfigAdvice.init(KafkaAcquisitor.producerConfigMap);
@@ -48,8 +58,6 @@ public class KafkaTransformer {
 			)
         	.installOn(inst);
 		
-		// --- Kafka ConsumerConfig 메소드 훅킹 설정
-		
 		// Kafka ConsumerConfig 생성자 호출 어드바이스 설정
 		ConsumerConfigAdvice.init(KafkaAcquisitor.consumerConfigMap);
 		
@@ -64,14 +72,14 @@ public class KafkaTransformer {
 			)
 			.installOn(inst);
 		
-		// --- KafkaConsumer 메소드 훅킹 설정
+		// KafkaConsumer의 생성자 호출 어드바이스 설정
 		
 		// 초기화
 		KafkaConsumerPollAdvice.init(KafkaAcquisitor.poolTimeStatDaemon);
 		KafkaConsumerCommitSyncAdvice.init(KafkaAcquisitor.commitSyncTimeStatDaemon);
 		KafkaConsumerCommitAsyncAdvice.init(KafkaAcquisitor.commitAsyncTimeStatDaemon);
 
-		// KafkaConsumer의 생성자 호출 어드바이스 설정
+		// 설정 수행
 		new AgentBuilder.Default()
 			.type(ElementMatchers.named("org.apache.kafka.clients.consumer.KafkaConsumer"))
 			.transform(
