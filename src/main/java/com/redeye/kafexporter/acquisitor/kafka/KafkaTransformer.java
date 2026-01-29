@@ -8,6 +8,7 @@ import com.redeye.kafexporter.acquisitor.kafka.advice.KafkaConsumerCommitSyncAdv
 import com.redeye.kafexporter.acquisitor.kafka.advice.KafkaConsumerConstructorAdvice;
 import com.redeye.kafexporter.acquisitor.kafka.advice.KafkaConsumerPollAdvice;
 import com.redeye.kafexporter.acquisitor.kafka.advice.ProducerConfigAdvice;
+import com.redeye.kafexporter.acquisitor.kafka.advice.RequestContextAdvice;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
