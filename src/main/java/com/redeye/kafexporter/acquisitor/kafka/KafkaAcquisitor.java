@@ -48,7 +48,7 @@ public class KafkaAcquisitor {
 
 	
 	/** Kafka JMX 데이터 수집 객체 */
-	private static final JMXService svc = new JMXService();
+	private static final JMXService jmx = new JMXService();
 	
 	
 	/**
@@ -186,7 +186,7 @@ public class KafkaAcquisitor {
 	 */
 	public static Map<String, Map<String, Object>> getSystemMetrics() throws Exception {
 		
-		return KafkaAcquisitor.svc.getByQuery(
+		return KafkaAcquisitor.jmx.getByQuery(
 			"java.lang:type=OperatingSystem",
 			"SystemCpuLoad",
 			"FreePhysicalMemorySize"
@@ -211,7 +211,7 @@ public class KafkaAcquisitor {
 		Map<String, Map<String, Object>> metricsMap = new HashMap<>();
 		
 		for(String query: queryList) {
-			metricsMap.putAll(KafkaAcquisitor.svc.getByQuery(query));
+			metricsMap.putAll(KafkaAcquisitor.jmx.getByQuery(query));
 		}
 		
 		return metricsMap;
@@ -258,7 +258,7 @@ public class KafkaAcquisitor {
 		Map<String, Map<String, Object>> metricsMap = new HashMap<>();
 		
 		for(String query: queryList) {
-			metricsMap.putAll(KafkaAcquisitor.svc.getByQuery(query));
+			metricsMap.putAll(KafkaAcquisitor.jmx.getByQuery(query));
 		}
 		
 		return metricsMap;
@@ -290,7 +290,7 @@ public class KafkaAcquisitor {
 		Map<String, Map<String, Object>> metricsMap = new HashMap<>();
 		
 		for(String query: queryList) {
-			metricsMap.putAll(KafkaAcquisitor.svc.getByQuery(query));
+			metricsMap.putAll(KafkaAcquisitor.jmx.getByQuery(query));
 		}
 		
 		return metricsMap;
