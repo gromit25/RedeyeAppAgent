@@ -3,9 +3,10 @@ package com.redeye.kafexporter.acquisitor.kafka;
 import java.lang.instrument.Instrumentation;
 
 import com.redeye.kafexporter.acquisitor.kafka.advice.ConsumerConfigAdvice;
+import com.redeye.kafexporter.acquisitor.kafka.advice.KafkaConfigAdvice;
+import com.redeye.kafexporter.acquisitor.kafka.advice.KafkaConsumerAdvice;
 import com.redeye.kafexporter.acquisitor.kafka.advice.KafkaConsumerCommitAsyncAdvice;
 import com.redeye.kafexporter.acquisitor.kafka.advice.KafkaConsumerCommitSyncAdvice;
-import com.redeye.kafexporter.acquisitor.kafka.advice.KafkaConsumerConstructorAdvice;
 import com.redeye.kafexporter.acquisitor.kafka.advice.KafkaConsumerPollAdvice;
 import com.redeye.kafexporter.acquisitor.kafka.advice.ProducerConfigAdvice;
 import com.redeye.kafexporter.acquisitor.kafka.advice.RequestContextAdvice;
@@ -99,7 +100,7 @@ public class KafkaTransformer {
 				(builder, typeDescription, classLoader, module, protectionDomain) -> { 
 					return builder
 						.constructor(ElementMatchers.any())
-						.intercept(Advice.to(KafkaConsumerConstructorAdvice.class))
+						.intercept(Advice.to(KafkaConsumerAdvice.class))
 						.visit(
 							Advice
 								.to(KafkaConsumerPollAdvice.class)
@@ -130,7 +131,7 @@ public class KafkaTransformer {
 				(builder, typeDescription, classLoader, module, protectionDomain) -> { 
 					return builder
 						.constructor(ElementMatchers.any())
-						.intercept(Advice.to(KafkaConsumerConstructorAdvice.class));
+						.intercept(Advice.to(KafkaConsumerAdvice.class));
 				}
 			)
 			.installOn(inst);

@@ -243,9 +243,28 @@ public class JMXService implements Closeable {
 		Object value = this.get(objectNameStr, attrNameStr);
 		return returnType.cast(value);
 	}
+	
 
 	/**
-	 * 주어진 ObjectName Pattern과 일치하는 Object Name의 속성 값 맵을 반환
+	 * 쿼리 목록 수행 결과 Object Name의 속성 값 맵을 반환
+	 * 
+	 * @param queryList 검색할 ObjectName 쿼리
+	 * @param attrNameAry 속성 명 목록 
+	 * @return 속성 값 맵 반환(K: Object Name, V: 속성명-값 맵)
+	 */
+	public Map<String, Map<String, Object>> getByQuery(List<String> queryList, String... attrNameAry) throws Exception {
+		
+		Map<String, Map<String, Object>> metricsMap = new HashMap<>();
+		
+		for(String query: queryList) {
+			metricsMap.putAll(this.getByQuery(query));
+		}
+		
+		return metricsMap;
+	}
+
+	/**
+	 * 쿼리 수행 결과 Object Name의 속성 값 맵을 반환
 	 * 
 	 * @param query 검색할 ObjectName 쿼리
 	 * @param attrName 속성 명 목록 

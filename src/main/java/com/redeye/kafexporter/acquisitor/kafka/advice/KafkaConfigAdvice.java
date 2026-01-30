@@ -3,6 +3,8 @@ package com.redeye.kafexporter.acquisitor.kafka.advice;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import com.redeye.kafexporter.acquisitor.kafka.KafkaAcquisitor;
+
 import net.bytebuddy.asm.Advice;
 
 /**

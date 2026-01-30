@@ -1,6 +1,5 @@
 package com.redeye.kafexporter.acquisitor.kafka;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -143,7 +142,7 @@ public class KafkaAcquisitor {
 	 * @param configMap 브로커 설정 맵
 	 */
 	public static void setBrokerConfigMap(Map<String, Object> configMap) {
-		KafkaAcquisitor.brokerConfigMap = configMap
+		KafkaAcquisitor.brokerConfigMap = configMap;
 	}
 	
 	/**
@@ -164,12 +163,12 @@ public class KafkaAcquisitor {
 		
 		// 클라이언트 아이디가 프로듀서일 경우 프로듀서 설정 값을 반환
 		if(clientType == ClientType.PRODUCER) {
-			return Collector.producerConfigMap.get(clientId);
+			return KafkaAcquisitor.producerConfigMap.get(clientId);
 		}
 		
 		// 클라이언트 아이디가 컨슈머일 경우 컨슈머 설정 값을 반환
 		if(clientType == ClientType.CONSUMER) {
-			return Collector.consumerConfigMap.get(clientId);
+			return KafkaAcquisitor.consumerConfigMap.get(clientId);
 		}
 		
 		// 둘다 아닐 경우 빈 값 반환
@@ -240,13 +239,7 @@ public class KafkaAcquisitor {
 			"kafka.network:type=*,name=*"
 		);
 		
-		Map<String, Map<String, Object>> metricsMap = new HashMap<>();
-		
-		for(String query: queryList) {
-			metricsMap.putAll(KafkaAcquisitor.jmx.getByQuery(query));
-		}
-		
-		return metricsMap;
+		return KafkaAcquisitor.jmx.getByQuery(queryList);
 	}
 	
 	/**
@@ -286,14 +279,8 @@ public class KafkaAcquisitor {
 			"kafka.producer:type=producer-metrics,client-id=" + clientId
 		);
 		
-		// 성능 조회
-		Map<String, Map<String, Object>> metricsMap = new HashMap<>();
-		
-		for(String query: queryList) {
-			metricsMap.putAll(KafkaAcquisitor.jmx.getByQuery(query));
-		}
-		
-		return metricsMap;
+		// 성능 조회 및 반환
+		return KafkaAcquisitor.jmx.getByQuery(queryList);
 	}
 	
 	/**
@@ -318,13 +305,7 @@ public class KafkaAcquisitor {
 			"kafka.consumer:type=consumer-coordinator-metrics,client-id=" + clientId
 		);
 		
-		// 성능 조회
-		Map<String, Map<String, Object>> metricsMap = new HashMap<>();
-		
-		for(String query: queryList) {
-			metricsMap.putAll(KafkaAcquisitor.jmx.getByQuery(query));
-		}
-		
-		return metricsMap;
+		// 성능 조회 및 반환
+		return KafkaAcquisitor.jmx.getByQuery(queryList);
 	}
 }

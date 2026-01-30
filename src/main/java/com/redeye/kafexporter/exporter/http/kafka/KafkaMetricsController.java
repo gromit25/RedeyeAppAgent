@@ -50,8 +50,9 @@ public class KafkaMetricsController {
 	 * @return 컨슈머 래그 성능 정보
 	 */
 	@RequestHandler(path = "/broker/lag")
-	public static String getConsumerGroupLag() throws Exception {
-		return JSONUtil.toJSON(KafkaAcquisitor.getConsumerLag());
+	public static String getConsumerLag() throws Exception {
+		return "{}";
+//		return JSONUtil.toJSON(KafkaAcquisitor.getConsumerLag());
 	}
 	
 	/**

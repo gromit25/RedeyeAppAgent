@@ -42,7 +42,7 @@ public class ClientTimeAdvice {
 		try {
 			
 			// 클라이언트 아이디 획득
-			String clientId = KafkaConsumerConstructorAdvice.getClientId(consumer);
+			String clientId = KafkaConsumerAdvice.getClientId(consumer);
 			if(clientId == null) {
 				return;
 			}
