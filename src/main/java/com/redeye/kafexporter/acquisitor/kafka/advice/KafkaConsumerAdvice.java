@@ -12,7 +12,7 @@ import net.bytebuddy.asm.Advice;
  * 
  * @author jmsohn
  */
-public class KafkaConsumerConstructorAdvice {
+public class KafkaConsumerAdvice {
 
 	
 	/** Key: 프로듀서/컨슈머 toString 값, Value: 클라이언트 아이디 값 */
