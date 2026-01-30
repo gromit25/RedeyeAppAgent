@@ -59,7 +59,7 @@ public class KafkaAcquisitor {
 	 */
 	public static void init() {
 		
-		//
+		// 통계 데몬 기동
 		KafkaAcquisitor.poolTimeStatDaemon.start();
 		KafkaAcquisitor.commitSyncTimeStatDaemon.start();
 		KafkaAcquisitor.commitAsyncTimeStatDaemon.start();
