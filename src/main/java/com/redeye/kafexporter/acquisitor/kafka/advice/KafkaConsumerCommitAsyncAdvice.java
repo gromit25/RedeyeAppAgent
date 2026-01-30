@@ -10,9 +10,9 @@ import net.bytebuddy.asm.Advice;
 public class KafkaConsumerCommitAsyncAdvice extends ClientTimeAdvice {
 	
 	/**
+	 * KafkaConsumer.commitAsyncn 호출 후
 	 * 
-	 * 
-	 * @param consumer
+	 * @param consumer 컨슈머 객체
 	 */
 	@Advice.OnMethodExit
 	public static void onExit(@Advice.This Object consumer) {
