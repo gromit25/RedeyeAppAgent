@@ -15,7 +15,7 @@ import net.bytebuddy.asm.Advice;
 public class KafkaConsumerAdvice {
 
 	
-	/** Key: 프로듀서/컨슈머 toString 값, Value: 클라이언트 아이디 값 */
+	/** 클라이언트(프로듀서/컨슈머) 별 클라이언트 아이디 (key: 프로듀서/컨슈머 객체 toString 값, value: 클라이언트 아이디 값) */
 	public static Map<String, String> clientIdMap = new ConcurrentHashMap<>();
 	
 
