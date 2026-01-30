@@ -134,7 +134,16 @@ public class KafkaAcquisitor {
 	 * @return 브로커 설정 맵
 	 */
 	public static Map<String, Object> getBrokerConfigMap() {
-		return brokerConfigMap;
+		return KafkaAcquisitor.brokerConfigMap;
+	}
+
+	/**
+	 * 브로커 설정 맵 설정
+	 * 
+	 * @param configMap 브로커 설정 맵
+	 */
+	public static void setBrokerConfigMap(Map<String, Object> configMap) {
+		KafkaAcquisitor.brokerConfigMap = configMap
 	}
 	
 	/**
