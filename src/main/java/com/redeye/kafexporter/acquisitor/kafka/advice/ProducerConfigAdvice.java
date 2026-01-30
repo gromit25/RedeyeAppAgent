@@ -41,7 +41,7 @@ public class ProducerConfigAdvice {
 	 * @param config 생성된 Kafka ProducerConfig 객체
 	 */
 	@Advice.OnMethodExit
-	public static void onConstructorExit(@Advice.This Object config) {
+	public static void onExit(@Advice.This Object config) {
 
 		try {
 
