@@ -10,7 +10,7 @@ import net.bytebuddy.asm.Advice;
 public class KafkaConsumerPollAdvice extends ClientTimeAdvice {
 
 	/**
-	 * KafkaConsumer.poll 진입 전
+	 * KafkaConsumer.poll 수행 후
 	 *
 	 * @param consumer 컨슈머 객체
 	 */
