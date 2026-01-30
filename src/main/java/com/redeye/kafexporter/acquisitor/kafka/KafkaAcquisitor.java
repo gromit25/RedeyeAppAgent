@@ -28,7 +28,10 @@ public class KafkaAcquisitor {
 		PRODUCER,
 		CONSUMER;
 	}
+
 	
+	/** 브로커 설정 맵 (key: 프로퍼티 명, value: 설정 값) */
+	public static Map<String, Object> brokerConfigMap;
 
 	/** 프로듀스 설정 값 맵 (key: 클라이언트 아이디, value: 설정 값 맵) */
 	static final Map<String, Map<String, Object>> producerConfigMap = new ConcurrentHashMap<>();
@@ -57,9 +60,9 @@ public class KafkaAcquisitor {
 	public static void init() {
 		
 		//
-		poolTimeStatDaemon.start();
-		commitSyncTimeStatDaemon.start();
-		commitAsyncTimeStatDaemon.start();
+		KafkaAcquisitor.poolTimeStatDaemon.start();
+		KafkaAcquisitor.commitSyncTimeStatDaemon.start();
+		KafkaAcquisitor.commitAsyncTimeStatDaemon.start();
 	}
 
 	/**
@@ -124,23 +127,43 @@ public class KafkaAcquisitor {
 	public static Set<String> getConsumerClientIdSet() {
 		return getConsumerConfigMap().keySet();
 	}
+
+	/**
+	 * 브로커 설정 맵 반환
+	 * 
+	 * @return 브로커 설정 맵
+	 */
+	public static Map<String, Object> getBrokerConfigMap() {
+		return brokerConfigMap;
+	}
 	
 	/**
+	 * 클라이언트(프로듀서/컨슈머)의 설정 맵 반환
 	 * 
-	 * 
-	 * @param clientId
-	 * @return
+	 * @param clientId 클라이언트 아이디
+	 * @return 설정 맵
 	 */
 	public static Map<String, Object> getConfigMap(String clientId) {
-		
-		if(producerConfigMap != null && producerConfigMap.containsKey(clientId) == true) {
-			return producerConfigMap.get(clientId);
+
+		// 입력 값 검증
+		if(StringUtil.isBlank(clientId) == true) {
+			return Map.of();
 		}
 		
-		if(consumerConfigMap != null && consumerConfigMap.containsKey(clientId) == true) {
-			return consumerConfigMap.get(clientId);
+		// 클라이언트 아이디의 클라이언트 타입 획득
+		ClientType clientType = getClientType(clientId);
+		
+		// 클라이언트 아이디가 프로듀서일 경우 프로듀서 설정 값을 반환
+		if(clientType == ClientType.PRODUCER) {
+			return Collector.producerConfigMap.get(clientId);
 		}
 		
+		// 클라이언트 아이디가 컨슈머일 경우 컨슈머 설정 값을 반환
+		if(clientType == ClientType.CONSUMER) {
+			return Collector.consumerConfigMap.get(clientId);
+		}
+		
+		// 둘다 아닐 경우 빈 값 반환
 		return Map.of();
 	}
 	
