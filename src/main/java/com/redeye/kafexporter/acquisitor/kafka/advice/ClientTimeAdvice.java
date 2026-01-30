@@ -11,7 +11,8 @@ import com.redeye.kafexporter.acquisitor.kafka.stat.TimeStatDaemon;
  * @author jmsohn
  */
 public class ClientTimeAdvice {
-	
+
+	// 아래의 멤버 변수는 public 이어야 함 - SpringBoot 클래스로더에서 문제가 생김
 	
 	/** 시간 데이터 전송용 큐 */
 	public static BlockingQueue<ClientTimeDTO> queue;
