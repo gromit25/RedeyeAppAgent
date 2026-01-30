@@ -25,7 +25,7 @@ public class KafkaConsumerConstructorAdvice {
 	 * @param consumer 컨슈머 객체
 	 */
 	@Advice.OnMethodExit
-	public static void onConstructorExit(@Advice.This Object consumer) {
+	public static void onExit(@Advice.This Object consumer) {
 		
 		// 입력 값 검증
 		if(consumer == null) {
