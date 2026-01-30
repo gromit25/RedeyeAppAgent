@@ -33,6 +33,18 @@ public class KafkaTransformer {
 			throw new IllegalArgumentException("'inst' is null.");
 		}
 
+		// Kafka KafkaConfig 생성자 호출 어드바이스 설정
+		new AgentBuilder.Default()
+			.type(ElementMatchers.named("kafka.server.KafkaConfig"))
+			.transform(
+				(builder, typeDescription, classLoader, module, protectedDomain) -> {
+					return builder
+						.constructor(ElementMatchers.any())
+						.intercept(Advice.to(KafkaConfigAdvice.class));
+				}
+			)
+        	.installOn(inst);
+
 		// Kafka 요청 컨택스트 어드바이스 설정
 		new AgentBuilder.Default()
 			.type(ElementMatchers.named("org.apache.kafka.common.requests.RequestContext"))
