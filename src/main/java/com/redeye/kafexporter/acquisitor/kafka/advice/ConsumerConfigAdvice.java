@@ -41,7 +41,7 @@ public class ConsumerConfigAdvice {
 	 * @param config 생성된 Kafka ConsumerConfig 객체
 	 */
 	@Advice.OnMethodExit
-	public static void onConstructorExit(@Advice.This Object config) {
+	public static void onExit(@Advice.This Object config) {
 
 		try {
 
