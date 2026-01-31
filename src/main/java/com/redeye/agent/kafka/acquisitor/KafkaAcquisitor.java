@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.redeye.agent.kafka.ClientType;
 import com.redeye.agent.kafka.stat.TimeStatDaemon;
 import com.redeye.agent.util.StringUtil;
 import com.redeye.agent.util.jmx.JMXService;
@@ -17,18 +18,6 @@ import com.redeye.agent.util.jmx.JMXService;
 public class KafkaAcquisitor {
 
 
-	/**
-	 * kafka 클라이언트 타입
-	 * 
-	 * @author jmsohn
-	 */
-	public enum ClientType {
-		NONE,
-		PRODUCER,
-		CONSUMER;
-	}
-
-	
 	/** 클라이언트 아이피:아이디 문자열 셋 - 클라이언트 접속 확인용 */
 	public static Set<String> clientIpIdSet = ConcurrentHashMap.newKeySet();
 	
