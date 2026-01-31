@@ -16,7 +16,7 @@ import com.redeye.agent.util.http.service.HttpService;
  * 
  * @author jmsohn
  */
-public class KafExporter {
+public class RedeyeAgent {
 	
 	
 	/** http exporter 서비스*/
