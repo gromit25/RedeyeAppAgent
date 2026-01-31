@@ -47,8 +47,13 @@ public class ClientTimeAdvice {
 				return;
 			}
 
-			// 큐에 데이터 전송
-			queue.put(new ClientTimeDTO(clientId, System.currentTimeMillis()));
+			// 큐에 클라이언트 아이디 및 현재 시간 전송
+			ClientTimeAdvice.queue.put(
+				new ClientTimeDTO(
+					clientId,	// 클라이언트 아이디
+					System.currentTimeMillis()	// 현재 시간
+				)
+			);
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();
