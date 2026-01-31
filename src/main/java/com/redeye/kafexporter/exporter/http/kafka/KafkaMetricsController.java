@@ -28,8 +28,8 @@ public class KafkaMetricsController {
 		
 		metricsMap.put("system", KafkaAcquisitor.getSystemMetrics());
 		metricsMap.put("broker", KafkaAcquisitor.getBrokerMetrics());
-		metricsMap.put("producer", KafkaAcquisitor.getProducerMetrics(null));
-		metricsMap.put("consumer", KafkaAcquisitor.getConsumerMetrics(null));
+		metricsMap.put("producer", KafkaAcquisitor.getProducerMetrics("*"));
+		metricsMap.put("consumer", KafkaAcquisitor.getConsumerMetrics("*"));
 		
 		return JSONUtil.toJSON(metricsMap);
 	}
