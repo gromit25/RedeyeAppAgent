@@ -18,9 +18,6 @@ import com.redeye.agent.util.jmx.JMXService;
 public class KafkaAcquisitor {
 
 
-	/** 클라이언트 아이피:아이디 문자열 셋 - 클라이언트 접속 확인용 */
-	public static Set<String> clientIpIdSet = ConcurrentHashMap.newKeySet();
-	
 	/** 브로커 설정 맵 (key: 프로퍼티 명, value: 설정 값) */
 	public static Map<String, Object> brokerConfigMap;
 
@@ -39,6 +36,10 @@ public class KafkaAcquisitor {
 	
 	/** 비동기 시간 통계 데몬 */
 	final static TimeStatDaemon commitAsyncTimeStatDaemon = new TimeStatDaemon();
+	
+	
+	/** 클라이언트 접속 정보 맵 - (key: 클라이언트 아이피:아이디 문자열, value: 최초 접속시간 */
+	public final static Map<String, Long> clientConnectMap = new ConcurrentHashMap<>();
 
 	
 	/** Kafka JMX 데이터 수집 객체 */

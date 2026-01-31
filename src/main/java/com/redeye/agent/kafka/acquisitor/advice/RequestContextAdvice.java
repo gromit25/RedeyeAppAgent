@@ -48,8 +48,9 @@ public class RequestContextAdvice {
 			String clientId = clientIdMethod.invoke(requestContext).toString();
 			
 			// 클라이언트 아이피:아이디 정보 저장
-			KafkaAcquisitor.clientIpIdSet.add(
-				KafkaUtil.makeClientIpIdPair(clientAddr.getHostAddress(), clientId)
+			KafkaAcquisitor.clientConnectMap.put(
+				KafkaUtil.makeClientIpIdPair(clientAddr.getHostAddress(), clientId),
+				System.currentTimeMillis()
 			);
 			
 		} catch(Exception ex) {
