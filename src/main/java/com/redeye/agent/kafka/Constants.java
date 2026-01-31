@@ -1,4 +1,4 @@
-package com.redeye.agent.kafka.acquisitor;
+package com.redeye.agent.kafka;
 
 /**
  * Kafka 정보 수집기 상수 목록

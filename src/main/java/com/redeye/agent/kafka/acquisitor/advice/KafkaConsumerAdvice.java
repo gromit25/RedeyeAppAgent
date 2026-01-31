@@ -3,7 +3,7 @@ package com.redeye.agent.kafka.acquisitor.advice;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.redeye.agent.kafka.acquisitor.Constants;
+import com.redeye.agent.kafka.Constants;
 
 import net.bytebuddy.asm.Advice;
 
