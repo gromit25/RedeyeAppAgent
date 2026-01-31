@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.GroupListing;
@@ -15,6 +17,8 @@ import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 
 import com.redeye.kafexporter.util.jmx.JMXService;
+
+import lombok.Data;
 
 /**
  * Kafka 유틸리티 클래스
@@ -170,5 +174,72 @@ public class KafkaUtil {
 		}
 
 		return lag;
+	}
+	
+	/**
+	 * 클라이언트 아이피:아이디 쌍 문자열 생성 및 반환
+	 * 
+	 * @param clientIp 클라이언트 아이피
+	 * @param clientId 클라이언트 아이디
+	 * @return 생성된 클라이언트 아이피:아이디 쌍 문자열
+	 */
+	public static String makeClientIpIdPair(String clientIp, String clientId) {
+		return new StringBuffer()
+			.append(clientIp)
+			.append(":")
+			.append(clientId)
+			.toString();
+	}
+	
+	/**
+	 * 클라이언트 아이피, 아이디 쌍 Value Object
+	 * 
+	 * @author jmsohn
+	 */
+	@Data
+	public static class ClientIpIdVO {
+		
+		/** 클라이인트 아이피 */
+		private final String ip;
+		
+		/** 클라이언트 아이디 */
+		private final String id;
+		
+		/**
+		 * 생성자
+		 * 
+		 * @param ip 클라이언트 아이피
+		 * @param id 클라이언트 아이디
+		 */
+		private ClientIpIdVO(String ip, String id) {
+			this.ip = ip;
+			this.id = id;
+		}
+	}
+	
+	/** 클라이언트 아이피:아이디 패턴 */
+	private static Pattern clientIpIdP = Pattern.compile("(?<ip>[^\\:]*)\\:(?<id>.*)");
+	
+	/**
+	 * 클라이언트 아이피, 아이디 쌍 문자열을 파싱하여 반환
+	 * 
+	 * @param clientIpIdPair 클라이언트 아이피, 아이디 쌍 문자열
+	 * @return 클라이언트 아이피, 아이디 쌍 객체
+	 */
+	public static ClientIpIdVO parseClientIpId(String clientIpIdPair) {
+		
+		if(StringUtil.isBlank(clientIpIdPair) == true) {
+			throw new IllegalArgumentException("'clientIpIdPair' is blank or null.");
+		}
+		
+		Matcher clientIpIdM = clientIpIdP.matcher(clientIpIdPair);
+		if(clientIpIdM.matches() == false) {
+			throw new IllegalArgumentException("not matched: " + clientIpIdPair);
+		}
+		
+		return new ClientIpIdVO(
+			clientIpIdM.group("ip"),
+			clientIpIdM.group("id")
+		);
 	}
 }

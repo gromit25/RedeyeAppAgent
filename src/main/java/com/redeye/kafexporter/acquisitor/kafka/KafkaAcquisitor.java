@@ -29,6 +29,9 @@ public class KafkaAcquisitor {
 	}
 
 	
+	/** 클라이언트 아이피:아이디 문자열 셋 - 클라이언트 접속 확인용 */
+	public static Set<String> clientIpIdSet = ConcurrentHashMap.newKeySet();
+	
 	/** 브로커 설정 맵 (key: 프로퍼티 명, value: 설정 값) */
 	public static Map<String, Object> brokerConfigMap;
 
