@@ -55,6 +55,9 @@ public class RedeyeAgent {
 	 */
 	private static void startHttpExporterService(String hostPortArgs) throws Exception {
 		
+		// ------------------------
+		// 서버 기동을 위한 옵션 획득
+		
 		// export 서버명 변수
 		String host = "localhost";
 		
@@ -85,6 +88,7 @@ public class RedeyeAgent {
 			);
 		
 		// -----------------------------
+		// Http 서비스 기동
 		
 		// Http 서버 생성
 		service = new HttpService(host, port, threadCount);
