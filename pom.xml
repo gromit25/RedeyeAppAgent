@@ -83,7 +83,7 @@
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
 						<manifestEntries>
-							<Premain-Class>com.redeye.kafexporter.KafExporter</Premain-Class>
+							<Premain-Class>com.redeye.agent.KafExporter</Premain-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Can-Retransform-Classes>true</Can-Retransform-Classes>
 						</manifestEntries>
