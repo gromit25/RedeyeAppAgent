@@ -4,6 +4,7 @@ import java.lang.instrument.Instrumentation;
 
 import com.redeye.agent.kafka.acquisitor.advice.broker.KafkaConfigAdvice;
 import com.redeye.agent.kafka.acquisitor.advice.broker.RequestContextAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.broker.SaslServerAuthenticatorAuthenticateAdvice;
 import com.redeye.agent.kafka.acquisitor.advice.consumer.ConsumerConfigAdvice;
 import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerAdvice;
 import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerCommitAsyncAdvice;
@@ -33,6 +34,8 @@ public class KafkaTransformer {
 		if(inst == null) {
 			throw new IllegalArgumentException("'inst' is null.");
 		}
+		
+		// ---- 브로커 어드바이스 설정
 
 		// Kafka KafkaConfig 생성자 호출 어드바이스 설정
 		new AgentBuilder.Default()
@@ -58,6 +61,21 @@ public class KafkaTransformer {
 			)
 			.installOn(inst);
 		
+		// Kafka 인증 메소드 어드바이스 설정
+		new AgentBuilder.Default()
+			.type(ElementMatchers.named("org.apache.kafka.common.security.authenticator.SaslServerAuthenticator"))
+			.transform(
+				(builder, typeDescription, classLoader, module, protectedDomain) -> {
+					return builder
+    					.method(ElementMatchers.named("authenticate"))
+    					.intercept(Advice.to(SaslServerAuthenticatorAuthenticateAdvice.class));
+				}
+			)
+			.installOn(inst);
+
+
+		// ---- 프로듀서 관련 어드바이스 설정
+		
 		// Kafka ProducerConfig 생성자 호출 어드바이스 설정
 		ProducerConfigAdvice.init(KafkaAcquisitor.producerConfigMap);
 			
@@ -71,6 +89,9 @@ public class KafkaTransformer {
 				}
 			)
         	.installOn(inst);
+		
+		
+		// ---- 컨슈머 관련 어드바이스 설정
 		
 		// Kafka ConsumerConfig 생성자 호출 어드바이스 설정
 		ConsumerConfigAdvice.init(KafkaAcquisitor.consumerConfigMap);
