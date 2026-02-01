@@ -1,4 +1,6 @@
-package com.redeye.agent.kafka.acquisitor.advice;
+package com.redeye.agent.kafka.acquisitor.advice.consumer;
+
+import com.redeye.agent.kafka.acquisitor.advice.ClientTimeAdvice;
 
 import net.bytebuddy.asm.Advice;
 

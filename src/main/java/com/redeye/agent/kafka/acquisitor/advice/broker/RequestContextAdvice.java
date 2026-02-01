@@ -1,4 +1,4 @@
-package com.redeye.agent.kafka.acquisitor.advice;
+package com.redeye.agent.kafka.acquisitor.advice.broker;
 
 import java.lang.reflect.Method;
 import java.net.InetAddress;

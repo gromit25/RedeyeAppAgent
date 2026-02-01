@@ -320,8 +320,18 @@ public class KafkaAcquisitor {
 	 */
 	public static void putClientConn(String clientIp, String clientId) {
 		
+		// 클라이언트 아이피:아이디 키를 만듦
+		String clientIpId = KafkaUtil.makeClientIpIdPair(clientIp, clientId);
+		
+		// 만일 기존에 이미 있으면 업데이트 하지 않음
+		// 최초 접속 시간을 기록하기 위함
+		if(KafkaAcquisitor.clientConnMap.containsKey(clientIpId) == true) {
+			return;
+		}
+		
+		// 신규 접속 정보 저장
 		KafkaAcquisitor.clientConnMap.put(
-			KafkaUtil.makeClientIpIdPair(clientIp, clientId),
+			clientIpId,
 			System.currentTimeMillis()
 		);
 	}

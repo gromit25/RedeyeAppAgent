@@ -2,6 +2,7 @@ package com.redeye.agent.kafka.acquisitor.advice;
 
 import java.util.concurrent.BlockingQueue;
 
+import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerAdvice;
 import com.redeye.agent.kafka.model.ClientTimeDTO;
 import com.redeye.agent.kafka.stat.TimeStatDaemon;
 

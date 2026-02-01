@@ -2,14 +2,14 @@ package com.redeye.agent.kafka.acquisitor;
 
 import java.lang.instrument.Instrumentation;
 
-import com.redeye.agent.kafka.acquisitor.advice.ConsumerConfigAdvice;
-import com.redeye.agent.kafka.acquisitor.advice.KafkaConfigAdvice;
-import com.redeye.agent.kafka.acquisitor.advice.KafkaConsumerAdvice;
-import com.redeye.agent.kafka.acquisitor.advice.KafkaConsumerCommitAsyncAdvice;
-import com.redeye.agent.kafka.acquisitor.advice.KafkaConsumerCommitSyncAdvice;
-import com.redeye.agent.kafka.acquisitor.advice.KafkaConsumerPollAdvice;
-import com.redeye.agent.kafka.acquisitor.advice.ProducerConfigAdvice;
-import com.redeye.agent.kafka.acquisitor.advice.RequestContextAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.broker.KafkaConfigAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.broker.RequestContextAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.consumer.ConsumerConfigAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerCommitAsyncAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerCommitSyncAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerPollAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.provider.ProducerConfigAdvice;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;

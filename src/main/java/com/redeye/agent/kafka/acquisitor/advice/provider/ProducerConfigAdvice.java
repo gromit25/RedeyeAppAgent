@@ -1,4 +1,4 @@
-package com.redeye.agent.kafka.acquisitor.advice;
+package com.redeye.agent.kafka.acquisitor.advice.provider;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -8,12 +8,12 @@ import com.redeye.agent.kafka.Constants;
 import net.bytebuddy.asm.Advice;
 
 /**
- * ConsumerConfig 생성자 어드바이스 클래스
+ * ProducerConfig 생성자 어드바이스 클래스
  * 
  * @author jmsohn
  */
-public class ConsumerConfigAdvice {
-
+public class ProducerConfigAdvice {
+	
 	// 아래의 멤버 변수는 public 이어야 함 - SpringBoot 클래스로더에서 문제가 생김
 	
 	/**
@@ -25,20 +25,20 @@ public class ConsumerConfigAdvice {
 	/** 클라이언트 아이디 */
 	public static ThreadLocal<String> clientIdContext = ThreadLocal.withInitial(() -> Constants.DEFAULT_CLIENT_ID);
 
-	
+
 	/**
 	 * 초기화
 	 *
 	 * @param configMap
 	 */
 	public static void init(Map<String, Map<String, Object>> configMap) {
-		ConsumerConfigAdvice.configMap = configMap;
+		ProducerConfigAdvice.configMap = configMap;
 	}
 	
 	/**
 	 * Kafka ConsumerConfig 생성 이후 호출
 	 * 
-	 * @param config 생성된 Kafka ConsumerConfig 객체
+	 * @param config 생성된 Kafka ProducerConfig 객체
 	 */
 	@Advice.OnMethodExit
 	public static void onExit(@Advice.This Object config) {
@@ -73,8 +73,7 @@ public class ConsumerConfigAdvice {
 	}
 	
 	/**
-	 * 현재 스레드에 설정된 클라이언트 아이디를 반환<br>
-	 * 주의! 한번 호출되면 호출 이후 데이터 삭제됨
+	 * 현재 스레드에 설정된 클라이언트 아이디를 반환
 	 * 
 	 * @return 클라이언트 아이디
 	 */

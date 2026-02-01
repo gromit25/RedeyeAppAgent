@@ -4,6 +4,7 @@ import java.lang.instrument.Instrumentation;
 
 import com.redeye.agent.kafka.acquisitor.KafkaAcquisitor;
 import com.redeye.agent.kafka.acquisitor.KafkaTransformer;
+import com.redeye.agent.kafka.exporter.service.KafkaBrokerController;
 import com.redeye.agent.kafka.exporter.service.KafkaClientController;
 import com.redeye.agent.kafka.exporter.service.KafkaConfigController;
 import com.redeye.agent.kafka.exporter.service.KafkaMetricsController;
@@ -97,6 +98,7 @@ public class RedeyeAgent {
 		service.addController(new KafkaClientController());
 		service.addController(new KafkaConfigController());
 		service.addController(new KafkaMetricsController());
+		service.addController(new KafkaBrokerController());
 		
 		// Http 서버 기동
 		service.start();

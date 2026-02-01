@@ -1,4 +1,4 @@
-package com.redeye.agent.kafka.acquisitor.advice;
+package com.redeye.agent.kafka.acquisitor.advice.consumer;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
