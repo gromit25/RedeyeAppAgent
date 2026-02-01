@@ -318,7 +318,7 @@ public class KafkaAcquisitor {
 	 * @param clientIp 클라이언트 아이피
 	 * @param clientId 클라이언트 아이디
 	 */
-	public static void putClinetConn(String clientIp, String clientId) {
+	public static void putClientConn(String clientIp, String clientId) {
 		
 		KafkaAcquisitor.clientConnMap.put(
 			KafkaUtil.makeClientIpIdPair(clientIp, clientId),
