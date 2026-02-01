@@ -24,7 +24,7 @@ public class RequestContextAdvice {
 		
 		// 입력값 검증
 		if(requestContext == null) {
-			System.out.println("requestContext is null.");
+			System.out.println("'requestContext' is null.");
 			return;
 		}
 		

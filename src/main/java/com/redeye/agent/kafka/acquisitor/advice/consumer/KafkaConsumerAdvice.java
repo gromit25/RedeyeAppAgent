@@ -20,7 +20,7 @@ public class KafkaConsumerAdvice {
 	
 
 	/**
-	 * KafkaConsumer 생성자 호출 후
+	 * KafkaConsumer 생성자 호출 후 콜백 메소드
 	 * 
 	 * @param consumer 컨슈머 객체
 	 */

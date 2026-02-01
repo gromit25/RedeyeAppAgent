@@ -31,7 +31,9 @@ public class KafkaConfigAdvice {
 				return;
 			}
 			
-			KafkaAcquisitor.setBrokerConfigMap((Map<String, Object>)valuesMethod.invoke(config));
+			KafkaAcquisitor.setBrokerConfigMap(
+				(Map<String, Object>)valuesMethod.invoke(config)
+			);
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();

@@ -12,7 +12,7 @@ import net.bytebuddy.asm.Advice;
 public class KafkaConsumerCommitAsyncAdvice extends ClientTimeAdvice {
 	
 	/**
-	 * KafkaConsumer.commitAsyncn 호출 후
+	 * KafkaConsumer.commitAsyncn 호출 후 콜백 메소드
 	 * 
 	 * @param consumer 컨슈머 객체
 	 */

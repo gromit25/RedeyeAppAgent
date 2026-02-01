@@ -95,10 +95,10 @@ public class RedeyeAgent {
 		service = new HttpService(host, port, threadCount);
 		
 		// kafka 컨트롤러 추가
+		service.addController(new KafkaBrokerController());
 		service.addController(new KafkaClientController());
 		service.addController(new KafkaConfigController());
 		service.addController(new KafkaMetricsController());
-		service.addController(new KafkaBrokerController());
 		
 		// Http 서버 기동
 		service.start();

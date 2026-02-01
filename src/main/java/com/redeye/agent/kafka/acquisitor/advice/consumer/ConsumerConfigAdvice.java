@@ -36,7 +36,7 @@ public class ConsumerConfigAdvice {
 	}
 	
 	/**
-	 * Kafka ConsumerConfig 생성 이후 호출
+	 * Kafka ConsumerConfig 생성 후 콜백 메소드
 	 * 
 	 * @param config 생성된 Kafka ConsumerConfig 객체
 	 */
@@ -62,10 +62,10 @@ public class ConsumerConfigAdvice {
 			String clientId = configValueMap.get(Constants.CLIENT_ID).toString();
 			
 			// 프로듀서 설정 맵에 추가
-			configMap.put(clientId, configValueMap);
+			ConsumerConfigAdvice.configMap.put(clientId, configValueMap);
 			
 			// 클라이언트 아이디 설정
-			clientIdContext.set(clientId);
+			ConsumerConfigAdvice.clientIdContext.set(clientId);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,8 +80,8 @@ public class ConsumerConfigAdvice {
 	 */
 	public static String getClientId() {
 		
-		String clientId = clientIdContext.get();
-		clientIdContext.remove();
+		String clientId = ConsumerConfigAdvice.clientIdContext.get();
+		ConsumerConfigAdvice.clientIdContext.remove();
 		
 		return clientId;
 	}

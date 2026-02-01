@@ -62,10 +62,10 @@ public class ProducerConfigAdvice {
 			String clientId = configValueMap.get(Constants.CLIENT_ID).toString();
 			
 			// 프로듀서 설정 맵에 추가
-			configMap.put(clientId, configValueMap);
+			ProducerConfigAdvice.configMap.put(clientId, configValueMap);
 			
 			// 클라이언트 아이디 설정
-			clientIdContext.set(clientId);
+			ProducerConfigAdvice.clientIdContext.set(clientId);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,8 +79,8 @@ public class ProducerConfigAdvice {
 	 */
 	public static String getClientId() {
 		
-		String clientId = clientIdContext.get();
-		clientIdContext.remove();
+		String clientId = ProducerConfigAdvice.clientIdContext.get();
+		ProducerConfigAdvice.clientIdContext.remove();
 		
 		return clientId;
 	}
