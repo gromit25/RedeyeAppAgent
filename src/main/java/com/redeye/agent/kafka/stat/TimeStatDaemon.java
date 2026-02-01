@@ -47,7 +47,7 @@ public class TimeStatDaemon {
 				Long prePollTime = clientTimeMap.get(data.getClientId());
 				
 				// 시간 저장
-				clientTimeMap.put(data.getClientId(), data.getTime());
+				clientTimeMap.put(data.getClientId(), data.getTimestamp());
 				
 				// 통계 정보 저장
 				Parameter timeStat = clientTimeStatMap.computeIfAbsent(
@@ -55,7 +55,7 @@ public class TimeStatDaemon {
 				);
 				
 				if(prePollTime != null) {
-					long interval = data.getTime() - prePollTime;
+					long interval = data.getTimestamp() - prePollTime;
 					timeStat.add(interval);
 				}
 				

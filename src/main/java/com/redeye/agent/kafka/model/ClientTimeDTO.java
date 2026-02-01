@@ -16,18 +16,18 @@ public class ClientTimeDTO {
 	
 	/** 시간 */
 	@Getter
-	private final long time;
+	private final long timestamp;
 	
 	
 	/**
 	 * 생성자
 	 * 
 	 * @param clientId Kafka 클라이언트 아이디
-	 * @param time 시간
+	 * @param timestamp 시간
 	 */
-	public ClientTimeDTO(String clientId, long time) {
+	public ClientTimeDTO(String clientId, long timestamp) {
 		this.clientId = clientId;
-		this.time = time;
+		this.timestamp = timestamp;
 	}
 	
 	/**
@@ -39,7 +39,7 @@ public class ClientTimeDTO {
 		return new StringBuilder()
 			.append(this.clientId)
 			.append(": ")
-			.append(this.time)
+			.append(this.timestamp)
 			.toString();
 	}
 }
