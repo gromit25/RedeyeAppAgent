@@ -20,6 +20,6 @@ public class KafkaBrokerController {
 	 */
 	@RequestHandler(path = "/client/connect")
 	public String getClientConnectList() {
-		return JSONUtil.toJSON(KafkaAcquisitor.clientConnectMap);
+		return JSONUtil.toJSON(KafkaAcquisitor.getClientConnMap());
 	}
 }

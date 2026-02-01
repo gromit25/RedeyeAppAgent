@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.redeye.agent.kafka.ClientType;
 import com.redeye.agent.kafka.stat.TimeStatDaemon;
+import com.redeye.agent.util.KafkaUtil;
 import com.redeye.agent.util.StringUtil;
 import com.redeye.agent.util.jmx.JMXService;
 
@@ -19,7 +20,7 @@ public class KafkaAcquisitor {
 
 
 	/** 브로커 설정 맵 (key: 프로퍼티 명, value: 설정 값) */
-	public static Map<String, Object> brokerConfigMap;
+	static Map<String, Object> brokerConfigMap;
 
 	/** 프로듀스 설정 값 맵 (key: 클라이언트 아이디, value: 설정 값 맵) */
 	static final Map<String, Map<String, Object>> producerConfigMap = new ConcurrentHashMap<>();
@@ -39,7 +40,7 @@ public class KafkaAcquisitor {
 	
 	
 	/** 클라이언트 접속 정보 맵 - (key: 클라이언트 아이피:아이디 문자열, value: 최초 접속시간 */
-	public final static Map<String, Long> clientConnectMap = new ConcurrentHashMap<>();
+	final static Map<String, Long> clientConnMap = new ConcurrentHashMap<>();
 
 	
 	/** Kafka JMX 데이터 수집 객체 */
@@ -300,5 +301,28 @@ public class KafkaAcquisitor {
 		
 		// 성능 조회 및 반환
 		return KafkaAcquisitor.jmx.getByQuery(queryList);
+	}
+	
+	/**
+	 * 클라이언트 접속 정보 맵 반환
+	 * 
+	 * @return 클라이언트 접속 정보 맵 
+	 */
+	public static Map<String, Long> getClientConnMap() {
+		return KafkaAcquisitor.clientConnMap;
+	}
+
+	/**
+	 * 클라이언트 접속 정보 저장
+	 * 
+	 * @param clientIp 클라이언트 아이피
+	 * @param clientId 클라이언트 아이디
+	 */
+	public static void putClinetConn(String clientIp, String clientId) {
+		
+		KafkaAcquisitor.clientConnMap.put(
+			KafkaUtil.makeClientIpIdPair(clientIp, clientId),
+			System.currentTimeMillis()
+		);
 	}
 }

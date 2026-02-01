@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 
 import com.redeye.agent.kafka.acquisitor.KafkaAcquisitor;
-import com.redeye.agent.util.KafkaUtil;
 
 import net.bytebuddy.asm.Advice;
 
@@ -48,10 +47,7 @@ public class RequestContextAdvice {
 			String clientId = clientIdMethod.invoke(requestContext).toString();
 			
 			// 클라이언트 아이피:아이디 정보 저장
-			KafkaAcquisitor.clientConnectMap.put(
-				KafkaUtil.makeClientIpIdPair(clientAddr.getHostAddress(), clientId),
-				System.currentTimeMillis()
-			);
+			KafkaAcquisitor.putClinetConn(clientAddr.getHostAddress(), clientId);
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();
