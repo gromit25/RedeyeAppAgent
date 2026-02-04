@@ -87,35 +87,36 @@ public class KafkaAcquisitor {
 	}
 	
 	/**
+	 * 프로듀서 클라이언트 아이디 별 설정 맵 반환
 	 * 
-	 * 
-	 * @return
+	 * @return 프로듀서 클라이언트 아이디 별 설정 맵 
 	 */
 	public static Map<String, Map<String, Object>> getProducerConfigMap() {
-		return producerConfigMap;
+		return KafkaAcquisitor.producerConfigMap;
 	}
 	
 	/**
+	 * 컨슈머 클라이언트 아이디 별 설정 맵 
 	 * 
-	 * 
-	 * @return
+	 * @return 컨슈머 클라이언트 아이디 별 설정 맵
 	 */
 	public static Map<String, Map<String, Object>> getConsumerConfigMap() {
-		return consumerConfigMap;
+		return KafkaAcquisitor.consumerConfigMap;
 	}
 	
 	/**
+	 * 프로듀서 클라이언트 아이디 셋 반환
 	 * 
-	 * @return
+	 * @return 프로듀서 클라이언트 아이디 셋
 	 */
 	public static Set<String> getProducerClientIdSet() {
 		return getProducerConfigMap().keySet();
 	}
 	
 	/**
+	 * 컨슈머 클라이언트 아이디 셋 반환
 	 * 
-	 * 
-	 * @return
+	 * @return 컨슈머 클라이언트 아이디 셋
 	 */
 	public static Set<String> getConsumerClientIdSet() {
 		return getConsumerConfigMap().keySet();
