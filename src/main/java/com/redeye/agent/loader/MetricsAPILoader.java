@@ -24,9 +24,9 @@ public class MetricsAPILoader {
 	 */
 	private final String basePath;
 	
-	/** API 저장 로더 목록 */
-	private final List<APILoader> loaderList;
-
+	/** 크론잡에서 로드를 수행하는 잡 객체 */
+	private LoaderJob loaderJob;
+	
 	/** 스케쥴에 따라 저장 API를 실행하는 크론잡 */
 	private CronJob cronJob;
 	
@@ -46,53 +46,80 @@ public class MetricsAPILoader {
 		
 		// 입력값 검증
 		if(StringUtil.isBlank(basePath) == true) {
-			throw new IllegalArgumentException("'basePath(RE_LOADER_API_SERVER env)' is null or blank.");
+			throw new IllegalArgumentException("'basePath' is null or blank.");
 		}
 		
 		if(StringUtil.isBlank(schedule) == true) {
-			throw new IllegalArgumentException("'schedule(RE_LOADER_SCHEDULE env)' is null or blank.");
-		}
-		
-		if(loaderList == null) {
-			throw new IllegalArgumentException("'loaderList' is null.");
-		}
-		
-		if(loaderList.size() == 0) {
-			throw new IllegalArgumentException("'loaderList' has no element.");
+			throw new IllegalArgumentException("'schedule' is null or blank.");
 		}
 		
 		// 기준 패스 설정
 		this.basePath = basePath;
 		
-		// API 저장 로더 목록 설정
-		this.loaderList = loaderList;
+		// 크론잡에서 로드를 수행하는 잡 객체 및 크론잡 생성
+		this.loaderJob = new LoaderJob(loaderList);
+		this.cronJob = new CronJob(schedule, this.loaderJob);
+	}
+	
+	/**
+	 * 크론잡에서 로드를 수행하는 잡 클래스<br>
+	 * 가 로더들을 멀티스레드로 수행시키기 위한 클래스
+	 * 
+	 * @author jmsohn
+	 */
+	class LoaderJob implements Job {
 		
-		// 크론잡 생성
-		this.cronJob = new CronJob(
-			schedule,
-			new Job() {
+
+		/** API 호출 작업 실행시 사용할 스레드 풀 */
+		private ExecutorService pool;
+		
+		/** API 저장 로더 목록 */
+		private final List<APILoader> loaderList;
+		
+		
+		/**
+		 * 생성자
+		 * 
+		 * @param loaderList API 저장 로더 목록
+		 */
+		LoaderJob(List<APILoader> loaderList) {
+			
+			// 입력값 저장
+			if(loaderList == null) {
+				throw new IllegalArgumentException("'loaderList' is null.");
+			}
+			
+			if(loaderList.size() == 0) {
+				throw new IllegalArgumentException("'loaderList' has no element.");
+			}
+			
+			// API 저장 로더 목록 설정
+			this.loaderList = loaderList;
+			this.pool = Executors.newFixedThreadPool(this.loaderList.size());
+		}
+		
+		@Override
+		public void run(long startTime, long nextTime) {
+			
+			// 목록의 각 로더들을 하나씩 멀티스레드로 수행함
+			for(APILoader loader: loaderList) {
 				
-				/** API 호출 작업 실행시 사용할 스레드 풀 */
-				private ExecutorService pool = Executors.newFixedThreadPool(loaderList.size());
-				
-				@Override
-				public void run(long startTime, long nextTime) {
+				pool.execute(new Runnable() {
 					
-					//
-					for(APILoader loader: loaderList) {
-						
-						//
-						pool.execute(new Runnable() {
-							
-							@Override
-							public void run() {
-								loader.load(basePath, startTime, nextTime);
-							}
-						});
+					@Override
+					public void run() {
+						loader.load(basePath, startTime, nextTime);
 					}
-				}
-			} // End of Job Class
-		);
+				});
+			}
+		}
+		
+		/**
+		 * 멀티 스레드 중단 메소드
+		 */
+		void stop() {
+			this.pool.shutdown();
+		}
 	}
 	
 	/**

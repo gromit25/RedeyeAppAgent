@@ -1,6 +1,8 @@
 package com.redeye.agent;
 
 import java.lang.instrument.Instrumentation;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.util.List;
 
 import com.redeye.agent.kafka.acquisitor.KafkaAcquisitor;
@@ -151,7 +153,11 @@ public class RedeyeAgent {
 
 			@Override
 			public void load(String basePath, long startTime, long endTime) {
-				System.out.println("### DEBUG LOADER: " + basePath + ", " + startTime);
+				
+				ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
+				int threadCount = threadBean.getThreadCount();
+				
+				System.out.println("### DEBUG LOADER: " + basePath + ", " + startTime + ", " + threadCount);
 			}
 		});
 		
