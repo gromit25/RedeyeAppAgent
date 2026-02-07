@@ -68,7 +68,7 @@ public class RedeyeAgent {
 		// 서버 기동 여부 확인
 		String useLoader = getEnv("RE_EXPORTER", "N");
 		if("Y".equalsIgnoreCase(useLoader) == false) {
-			System.out.println("'RE_EXPORTER' is disabled.");
+			System.out.println("http exporter is disabled.");
 			return;
 		}
 		
@@ -122,7 +122,7 @@ public class RedeyeAgent {
 		// Http 서버 기동
 		service.start();
 		
-		System.out.println("http exporter server(" + service.getHostStr() + ") is started.");
+		System.out.println("http exporter(" + service.getHostStr() + ") is started.");
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class RedeyeAgent {
 		// 로더 기동 여부 확인
 		String useLoader = getEnv("RE_LOADER", "N");
 		if("Y".equalsIgnoreCase(useLoader) == false) {
-			System.out.println("'RE_LOADER' is disabled.");
+			System.out.println("metrics api loader is disabled.");
 			return;
 		}
 		
