@@ -1,6 +1,7 @@
 package com.redeye.agent;
 
 import java.lang.instrument.Instrumentation;
+import java.util.List;
 
 import com.redeye.agent.kafka.acquisitor.KafkaAcquisitor;
 import com.redeye.agent.kafka.acquisitor.KafkaTransformer;
@@ -8,6 +9,8 @@ import com.redeye.agent.kafka.exporter.service.KafkaBrokerController;
 import com.redeye.agent.kafka.exporter.service.KafkaClientController;
 import com.redeye.agent.kafka.exporter.service.KafkaConfigController;
 import com.redeye.agent.kafka.exporter.service.KafkaMetricsController;
+import com.redeye.agent.loader.APILoader;
+import com.redeye.agent.loader.MetricsAPILoader;
 import com.redeye.agent.util.StringUtil;
 import com.redeye.agent.util.WebUtil;
 import com.redeye.agent.util.http.service.HttpService;
@@ -22,6 +25,9 @@ public class RedeyeAgent {
 	
 	/** http exporter 서비스*/
 	private static HttpService service;
+	
+	/** API를 통한 성능 정보 저장 크론잡 객체 */
+	private static MetricsAPILoader loader;
 	
 	
 	/**
@@ -41,8 +47,10 @@ public class RedeyeAgent {
 			KafkaAcquisitor.init();
 			
 			// exporter 서비스 기동
-			startHttpExporterService(args);
-			System.out.println("http exporter server(" + service.getHostStr() + ") is started.");
+			startExporterService();
+			
+			// 로더 서비스 기동
+			startLoaderService();
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -51,41 +59,50 @@ public class RedeyeAgent {
 	
 	/**
 	 * http exporter 서비스 기동
-	 * 
-	 * @param hostPortArgs 기동할 호스트:포트 문자열
 	 */
-	private static void startHttpExporterService(String hostPortArgs) throws Exception {
+	private static void startExporterService() throws Exception {
+		
+		// ------------------------
+		// 서버 기동 여부 확인
+		String useLoader = getEnv("RE_EXPORTER", "N");
+		if("Y".equalsIgnoreCase(useLoader) == false) {
+			System.out.println("'RE_EXPORTER' is disabled.");
+			return;
+		}
 		
 		// ------------------------
 		// 서버 기동을 위한 옵션 획득
 		
+		// RE_EXPORTER_SERVER
+		String hostPort = getEnv("RE_EXPORTER_SERVER", "0.0.0.0:0");
+		
 		// export 서버명 변수
-		String host = "localhost";
+		String host = "0.0.0.0";
 		
 		// export 서버 포트 변수
 		int port = 0; // 설정 값이 없는 경우, 서버에서 비어 있는 랜덤 포트를 사용
 		
 		// exporter 호스트 및 포트 번호 획득
 		// 없을 경우 기본 설정 값 사용
-		if(StringUtil.isBlank(hostPortArgs) == false) {
+		if(StringUtil.isBlank(hostPort) == false) {
 
-			if(hostPortArgs.matches("[0-9]+") == true) {
+			if(hostPort.matches("[0-9]+") == true) {
 				
-				port = Integer.parseInt(hostPortArgs);
+				port = Integer.parseInt(hostPort);
 				
 			} else {
 				
-				String[] hostPort = WebUtil.parseHostPort(hostPortArgs);
+				String[] hostPortAry = WebUtil.parseHostPort(hostPort);
 				
-				host = hostPort[0];
-				port = Integer.parseInt(hostPort[1]);
+				host = hostPortAry[0];
+				port = Integer.parseInt(hostPortAry[1]);
 			}
 		}
 		
 		// exporter 서버의 스레드 개수 설정
 		int threadCount = Integer
 			.parseInt(
-				getEnv("AGENT_EXPORTER_THREAD_COUNT", "-1")
+				getEnv("RE_EXPORTER_THREAD_COUNT", "-1")
 			);
 		
 		// -----------------------------
@@ -102,6 +119,48 @@ public class RedeyeAgent {
 		
 		// Http 서버 기동
 		service.start();
+		
+		System.out.println("http exporter server(" + service.getHostStr() + ") is started.");
+	}
+	
+	/**
+	 * API 호출 로더 기동
+	 */
+	private static void startLoaderService() throws Exception {
+		
+		// ------------------------
+		// 로더 기동 여부 확인
+		String useLoader = getEnv("RE_LOADER", "N");
+		if("Y".equalsIgnoreCase(useLoader) == false) {
+			System.out.println("'RE_LOADER' is disabled.");
+			return;
+		}
+		
+		// ------------------------
+		// 로더 기동을 위한 옵션 획득
+		
+		// 호출할 API의 기준 패스 획득
+		String basePath = getEnv("RE_LOADER_API_SERVER", null);
+		
+		// API 호출 스케쥴 획득
+		String schedule = getEnv("RE_LOADER_SCHEDULE", null);
+		
+		// ------------------------
+		// API 호출 로더 목록 설정 - 현재 테스트용
+		List<APILoader> loaderList = List.of(new APILoader() {
+
+			@Override
+			public void load(String basePath, long startTime, long endTime) {
+				System.out.println("### DEBUG LOADER: " + basePath + ", " + startTime);
+			}
+		});
+		
+		// ------------------------
+		// API 호출 로더 생성 및 기동
+		loader = new MetricsAPILoader(basePath, schedule, loaderList);
+		loader.start();
+		
+		System.out.println("metrics api loader started.");
 	}
 	
 	/**
