@@ -23,7 +23,7 @@ import com.redeye.agent.util.http.service.HttpService;
  * @author jmsohn
  */
 public class RedeyeAgent {
-	
+
 	
 	/** http exporter 서비스*/
 	private static HttpService service;
@@ -41,6 +41,9 @@ public class RedeyeAgent {
 	public static void premain(String args, Instrumentation inst) {
 		
 		try {
+			
+			// 환경 변수 획득 및 설정
+			Config.init();
 
 			// kafka 메소드 변환
 			KafkaTransformer.addKafkaTransformer(inst);
@@ -66,7 +69,7 @@ public class RedeyeAgent {
 		
 		// ------------------------
 		// 서버 기동 여부 확인
-		String useLoader = getEnv("RE_EXPORTER", "N");
+		String useLoader = Config.EXPORTER_YN.value;
 		if("Y".equalsIgnoreCase(useLoader) == false) {
 			System.out.println("http exporter is disabled.");
 			return;
@@ -75,16 +78,16 @@ public class RedeyeAgent {
 		// ------------------------
 		// 서버 기동을 위한 옵션 획득
 		
-		// RE_EXPORTER_SERVER
-		String hostPort = getEnv("RE_EXPORTER_SERVER", "0.0.0.0:0");
+		// 익스포터 서버 환경 변수 설정값 획득
+		String hostPort = Config.EXPORTER_SERVER.value;
 		
-		// export 서버명 변수
+		// 익스포터 서버명 변수
 		String host = "0.0.0.0";
 		
-		// export 서버 포트 변수
+		// 익스포터 서버 포트 변수
 		int port = 0; // 설정 값이 없는 경우, 서버에서 비어 있는 랜덤 포트를 사용
 		
-		// exporter 호스트 및 포트 번호 획득
+		// 익스포터 호스트 및 포트 번호 획득
 		// 없을 경우 기본 설정 값 사용
 		if(StringUtil.isBlank(hostPort) == false) {
 
@@ -101,10 +104,10 @@ public class RedeyeAgent {
 			}
 		}
 		
-		// exporter 서버의 스레드 개수 설정
+		// 익스포터 서버의 스레드 개수 설정
 		int threadCount = Integer
 			.parseInt(
-				getEnv("RE_EXPORTER_THREAD_COUNT", "-1")
+				Config.EXPORTER_THREAD_COUNT.value
 			);
 		
 		// -----------------------------
@@ -132,7 +135,7 @@ public class RedeyeAgent {
 		
 		// ------------------------
 		// 로더 기동 여부 확인
-		String useLoader = getEnv("RE_LOADER", "N");
+		String useLoader = Config.LOADER_YN.value;
 		if("Y".equalsIgnoreCase(useLoader) == false) {
 			System.out.println("metrics api loader is disabled.");
 			return;
@@ -142,10 +145,10 @@ public class RedeyeAgent {
 		// 로더 기동을 위한 옵션 획득
 		
 		// 호출할 API의 기준 패스 획득
-		String basePath = getEnv("RE_LOADER_API_SERVER", null);
+		String basePath = Config.LOADER_API_SERVER.value;
 		
 		// API 호출 스케쥴 획득
-		String schedule = getEnv("RE_LOADER_SCHEDULE", null);
+		String schedule = Config.LOADER_SCHEDULE.value;
 		
 		// ------------------------
 		// API 호출 로더 목록 설정 - 현재 테스트용
@@ -167,23 +170,5 @@ public class RedeyeAgent {
 		loader.start();
 		
 		System.out.println("metrics api loader started.");
-	}
-	
-	/**
-	 * 환경 변수 설정 값 반환
-	 * 
-	 * @param name 환경 변수 명
-	 * @param defaultValue 환경 변수 미설정시 반환할 값
-	 * @return 환경 변수 설정 값
-	 */
-	private static String getEnv(String name, String defaultValue) {
-		
-		String value = System.getenv(name);
-		
-		if(StringUtil.isBlank(value) == true) {
-			return defaultValue;
-		} else {
-			return value;
-		}
 	}
 }
