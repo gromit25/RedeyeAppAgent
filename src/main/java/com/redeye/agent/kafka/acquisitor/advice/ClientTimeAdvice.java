@@ -20,9 +20,10 @@ public class ClientTimeAdvice {
 	
 	
 	/**
-	 * 초기화
+	 * 초기화<br>
+	 * 시간 통계 데몬의 큐와 연결
 	 *
-	 * @param queue
+	 * @param timeStatDaemon 시간 통계 데몬
 	 */
 	public static void init(TimeStatDaemon timeStatDaemon) {
 		ClientTimeAdvice.queue = timeStatDaemon.getQueue();

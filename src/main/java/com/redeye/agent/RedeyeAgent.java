@@ -1,21 +1,17 @@
 package com.redeye.agent;
 
 import java.lang.instrument.Instrumentation;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.redeye.agent.kafka.acquisitor.KafkaAcquisitor;
-import com.redeye.agent.kafka.acquisitor.KafkaTransformer;
-import com.redeye.agent.kafka.exporter.service.KafkaBrokerController;
-import com.redeye.agent.kafka.exporter.service.KafkaClientController;
-import com.redeye.agent.kafka.exporter.service.KafkaConfigController;
-import com.redeye.agent.kafka.exporter.service.KafkaMetricsController;
+import com.redeye.agent.kafka.KafkaContext;
 import com.redeye.agent.loader.APILoader;
 import com.redeye.agent.loader.MetricsAPILoader;
 import com.redeye.agent.util.StringUtil;
 import com.redeye.agent.util.WebUtil;
 import com.redeye.agent.util.http.service.HttpService;
+import com.redeye.agent.util.http.service.annotation.Controller;
 
 /**
  * kafka 정보 수집기 클래스
@@ -25,12 +21,25 @@ import com.redeye.agent.util.http.service.HttpService;
 public class RedeyeAgent {
 
 	
+	/** 컨텍스트 목록 */
+	private static List<Context> contextList; 
+	
 	/** http exporter 서비스*/
 	private static HttpService service;
 	
 	/** API를 통한 성능 정보 저장 크론잡 객체 */
 	private static MetricsAPILoader loader;
 	
+
+	// 클래스 로딩시 초기화
+	static {
+		
+		// Exporter 컨텍스트 목록 초기화
+		contextList = new CopyOnWriteArrayList<>();
+		
+		// Kafka Exporter 컨텍스트 추가
+		contextList.add(new KafkaContext());
+	}
 	
 	/**
 	 * 메인 메소드
@@ -45,11 +54,8 @@ public class RedeyeAgent {
 			// 환경 변수 획득 및 설정
 			Config.init();
 
-			// kafka 메소드 변환
-			KafkaTransformer.addKafkaTransformer(inst);
-			
-			// kafka 정보 수집기 초기화
-			KafkaAcquisitor.init();
+			// 컨택스트 객체 초기화 메소드 호출
+			initContext();
 			
 			// exporter 서비스 기동
 			startExporterService();
@@ -57,8 +63,33 @@ public class RedeyeAgent {
 			// 로더 서비스 기동
 			startLoaderService();
 			
+			// 클래스 변환기(transformer) 추가
+			addTransformer(inst);
+			
 		} catch(Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 컨택스트 객체 초기화 메소드 호출
+	 */
+	private static void initContext() {
+		
+		for(Context context: contextList) {
+			context.init();
+		}
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param inst java 인스트루먼트 클래스
+	 */
+	private static void addTransformer(Instrumentation inst) {
+		
+		for(Context context: contextList) {
+			context.addTransformer(inst);;
 		}
 	}
 	
@@ -116,11 +147,19 @@ public class RedeyeAgent {
 		// Http 서버 생성
 		service = new HttpService(host, port, threadCount);
 		
-		// kafka 컨트롤러 추가
-		service.addController(new KafkaBrokerController());
-		service.addController(new KafkaClientController());
-		service.addController(new KafkaConfigController());
-		service.addController(new KafkaMetricsController());
+		// 컨텍스트의 컨트롤러 추가
+		for(Context context: contextList) {
+			for(Object controller: context.getWebControllerList()) {
+				
+				// Contoller 어노테이션이 붙은 경우만 등록함
+				Controller controllerAnnotation = controller.getClass().getAnnotation(Controller.class);
+				if(controllerAnnotation == null) {
+					continue;
+				}
+				
+				service.addController(controllerAnnotation);
+			}
+		}
 		
 		// Http 서버 기동
 		service.start();
@@ -151,18 +190,12 @@ public class RedeyeAgent {
 		String schedule = Config.LOADER_SCHEDULE.value;
 		
 		// ------------------------
-		// API 호출 로더 목록 설정 - 현재 테스트용
-		List<APILoader> loaderList = List.of(new APILoader() {
-
-			@Override
-			public void load(String basePath, long startTime, long endTime) {
-				
-				ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
-				int threadCount = threadBean.getThreadCount();
-				
-				System.out.println("### DEBUG LOADER: " + basePath + ", " + startTime + ", " + threadCount);
-			}
-		});
+		// API 호출 로더 목록 설정
+		List<APILoader> loaderList = new ArrayList<>();
+		
+		for(Context context: contextList) {
+			loaderList.addAll(context.getAPILoaderList());
+		}
 		
 		// ------------------------
 		// API 호출 로더 생성 및 기동

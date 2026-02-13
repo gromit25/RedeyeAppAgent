@@ -20,23 +20,23 @@ public class KafkaAcquisitor {
 
 
 	/** 브로커 설정 맵 (key: 프로퍼티 명, value: 설정 값) */
-	static Map<String, Object> brokerConfigMap;
+	public static Map<String, Object> brokerConfigMap;
 
 	/** 프로듀스 설정 값 맵 (key: 클라이언트 아이디, value: 설정 값 맵) */
-	static final Map<String, Map<String, Object>> producerConfigMap = new ConcurrentHashMap<>();
+	public static final Map<String, Map<String, Object>> producerConfigMap = new ConcurrentHashMap<>();
 
 	/** 컨슈머 설정 값 맵 (key: 클라이언트 아이디, value: 설정 값 맵) */
-	static final Map<String, Map<String, Object>> consumerConfigMap = new ConcurrentHashMap<>();
+	public static final Map<String, Map<String, Object>> consumerConfigMap = new ConcurrentHashMap<>();
 
 	
 	/** 폴링 시간 통계 데몬 */
-	final static TimeStatDaemon poolTimeStatDaemon = new TimeStatDaemon();
+	public final static TimeStatDaemon poolTimeStatDaemon = new TimeStatDaemon();
 	
 	/** 동기 커밋 시간 통계 데몬 */
-	final static TimeStatDaemon commitSyncTimeStatDaemon = new TimeStatDaemon();
+	public final static TimeStatDaemon commitSyncTimeStatDaemon = new TimeStatDaemon();
 	
 	/** 비동기 시간 통계 데몬 */
-	final static TimeStatDaemon commitAsyncTimeStatDaemon = new TimeStatDaemon();
+	public final static TimeStatDaemon commitAsyncTimeStatDaemon = new TimeStatDaemon();
 	
 	
 	/** 클라이언트 접속 정보 맵 - (key: 클라이언트 아이피:아이디 문자열, value: 최초 접속시간 */

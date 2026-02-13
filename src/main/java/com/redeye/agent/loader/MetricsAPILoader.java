@@ -3,7 +3,6 @@ package com.redeye.agent.loader;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import com.redeye.agent.util.CronJob;
 import com.redeye.agent.util.CronJob.Job;
