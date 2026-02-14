@@ -6,9 +6,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.redeye.agent.kafka.ClientType;
-import com.redeye.agent.kafka.stat.TimeStatDaemon;
 import com.redeye.agent.util.KafkaUtil;
 import com.redeye.agent.util.StringUtil;
+import com.redeye.agent.util.elapsedstat.ElapsedStatDaemon;
 import com.redeye.agent.util.jmx.JMXService;
 
 /**
@@ -30,13 +30,13 @@ public class KafkaAcquisitor {
 
 	
 	/** 폴링 시간 통계 데몬 */
-	public final static TimeStatDaemon poolTimeStatDaemon = new TimeStatDaemon();
+	public final static ElapsedStatDaemon poolTimeStatDaemon = new ElapsedStatDaemon();
 	
 	/** 동기 커밋 시간 통계 데몬 */
-	public final static TimeStatDaemon commitSyncTimeStatDaemon = new TimeStatDaemon();
+	public final static ElapsedStatDaemon commitSyncTimeStatDaemon = new ElapsedStatDaemon();
 	
 	/** 비동기 시간 통계 데몬 */
-	public final static TimeStatDaemon commitAsyncTimeStatDaemon = new TimeStatDaemon();
+	public final static ElapsedStatDaemon commitAsyncTimeStatDaemon = new ElapsedStatDaemon();
 	
 	
 	/** 클라이언트 접속 정보 맵 - (key: 클라이언트 아이피:아이디 문자열, value: 최초 접속시간 */

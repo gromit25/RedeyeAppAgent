@@ -38,7 +38,7 @@ public abstract class AbstractDaemon {
 	/**
 	 * 데몬 스레드 생성 및 실행
 	 */
-	public synchronized void run() {
+	public synchronized void start() {
 		
 		// 이미 실행 중이면 반환
 		if(this.isAlive() == true) {
