@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.redeye.agent.jdbc.JDBCContext;
 import com.redeye.agent.kafka.KafkaContext;
 import com.redeye.agent.loader.APILoader;
 import com.redeye.agent.loader.MetricsAPILoader;
@@ -14,7 +15,7 @@ import com.redeye.agent.util.http.service.HttpService;
 import com.redeye.agent.util.http.service.annotation.Controller;
 
 /**
- * kafka 정보 수집기 클래스
+ * 에이전트 클래스
  * 
  * @author jmsohn
  */
@@ -37,7 +38,10 @@ public class RedeyeAgent {
 		// Exporter 컨텍스트 목록 초기화
 		contextList = new CopyOnWriteArrayList<>();
 		
-		// Kafka Exporter 컨텍스트 추가
+		// JDBC 컨텍스트 추가
+		contextList.add(new JDBCContext());
+		
+		// Kafka 컨텍스트 추가
 		contextList.add(new KafkaContext());
 	}
 	
