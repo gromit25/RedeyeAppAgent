@@ -9,12 +9,12 @@ import com.redeye.agent.util.CronJob.Job;
 import com.redeye.agent.util.StringUtil;
 
 /**
- * 성능 정보 저장용 로더 클래스<br>
- * 외부 API 로 성능 정보 저장
+ * 성능 정보 저장용 로더 실행 클래스<br>
+ * 외부 API 호출하여 성능 정보 저장
  * 
  * @author jmsohn
  */
-public class MetricsAPILoader {
+public class APILoaderJob {
 	
 	
 	/**
@@ -37,7 +37,7 @@ public class MetricsAPILoader {
 	 * @param schedule 저장 API 실행 스케쥴
 	 * @param loaderList API 저장 로더 목록
 	 */
-	public MetricsAPILoader(
+	public APILoaderJob(
 		String basePath,
 		String schedule,
 		List<APILoader> loaderList
@@ -126,7 +126,7 @@ public class MetricsAPILoader {
 	 * 
 	 * @return 현재 객체
 	 */
-	public MetricsAPILoader start() {
+	public APILoaderJob start() {
 		
 		this.cronJob.start();
 		
@@ -138,7 +138,7 @@ public class MetricsAPILoader {
 	 * 
 	 * @return 현재 객체
 	 */
-	public MetricsAPILoader stop() {
+	public APILoaderJob stop() {
 		
 		this.cronJob.stop();
 		
