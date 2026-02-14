@@ -6,7 +6,9 @@ import java.util.List;
 import com.redeye.agent.loader.APILoader;
 
 /**
- * 외부 데이터 표출 및 저장 컨택스트 인터페이스 클래스
+ * 컨택스트 인터페이스 클래스<br>
+ * 초기화 및 클래스 변환<br>
+ * 외부 데이터 표출 및 저장 컨택스트 정보 반환
  * 
  * @author jmsohn
  */
