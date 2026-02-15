@@ -14,7 +14,7 @@ import com.redeye.agent.util.StringUtil;
  * 
  * @author jmsohn
  */
-public class APILoaderExecutor {
+public class APILoaderCronJob {
 	
 	
 	/**
@@ -37,7 +37,7 @@ public class APILoaderExecutor {
 	 * @param schedule 저장 API 실행 스케쥴
 	 * @param loaderList API 저장 로더 목록
 	 */
-	public APILoaderExecutor(
+	public APILoaderCronJob(
 		String basePath,
 		String schedule,
 		List<APILoader> loaderList
@@ -126,7 +126,7 @@ public class APILoaderExecutor {
 	 * 
 	 * @return 현재 객체
 	 */
-	public APILoaderExecutor start() {
+	public APILoaderCronJob start() {
 		
 		this.cronJob.start();
 		
@@ -138,7 +138,7 @@ public class APILoaderExecutor {
 	 * 
 	 * @return 현재 객체
 	 */
-	public APILoaderExecutor stop() {
+	public APILoaderCronJob stop() {
 		
 		this.cronJob.stop();
 		
