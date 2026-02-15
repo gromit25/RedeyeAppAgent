@@ -1,4 +1,4 @@
-package com.redeye.agent.jdbc.acquisitor.advice.datasource;
+package com.redeye.agent.jdbc.acquisitor.advice.drivermanager;
 
 import net.bytebuddy.asm.Advice;
 
@@ -7,7 +7,7 @@ import net.bytebuddy.asm.Advice;
  * 
  * @author jmsohn
  */
-public class DataSourceAdvice {
+public class DriverManagerAdvice {
 	
 	/**
 	 * 
