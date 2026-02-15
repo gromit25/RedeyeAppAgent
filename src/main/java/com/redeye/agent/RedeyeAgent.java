@@ -8,7 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import com.redeye.agent.jdbc.JDBCContext;
 import com.redeye.agent.kafka.KafkaContext;
 import com.redeye.agent.loader.APILoader;
-import com.redeye.agent.loader.APILoaderJob;
+import com.redeye.agent.loader.APILoaderExecutor;
 import com.redeye.agent.util.StringUtil;
 import com.redeye.agent.util.WebUtil;
 import com.redeye.agent.util.http.service.HttpService;
@@ -29,7 +29,7 @@ public class RedeyeAgent {
 	private static HttpService service;
 	
 	/** API를 통한 성능 정보 저장 크론잡 객체 */
-	private static APILoaderJob loader;
+	private static APILoaderExecutor loader;
 	
 
 	// 클래스 로딩시 초기화
@@ -203,7 +203,7 @@ public class RedeyeAgent {
 		
 		// ------------------------
 		// API 호출 로더 생성 및 기동
-		loader = new APILoaderJob(basePath, schedule, loaderList);
+		loader = new APILoaderExecutor(basePath, schedule, loaderList);
 		loader.start();
 		
 		System.out.println("metrics api loader started.");
