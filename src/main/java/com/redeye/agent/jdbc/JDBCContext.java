@@ -43,8 +43,8 @@ public class JDBCContext implements Context {
 						.method(
 							ElementMatchers.named("getConnection")
 							.and(
-								ElementMatchers.takesArguments(1)
-								.or(ElementMatchers.takesArguments(3))
+								ElementMatchers.takesArguments(1)	// url
+								.or(ElementMatchers.takesArguments(3))	// url, id, pwd
 							)
 						)
 						.intercept(Advice.to(DriverManagerAdvice.class));
