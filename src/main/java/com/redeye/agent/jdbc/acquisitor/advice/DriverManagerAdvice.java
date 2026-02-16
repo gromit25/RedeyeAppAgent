@@ -12,7 +12,7 @@ public class DriverManagerAdvice {
 	/**
 	 * DriverManager.getConnection 어드바이스 클래스
 	 */
-	public static class getConnectionAdvice {
+	public static class getConnection {
 		
 		/**
 		 * getConnection 호출 후 콜백 메소드

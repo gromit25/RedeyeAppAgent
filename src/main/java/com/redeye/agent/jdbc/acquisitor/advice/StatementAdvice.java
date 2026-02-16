@@ -12,7 +12,7 @@ public class StatementAdvice {
 	/**
 	 * 
 	 */
-	public static class executeQueryAdvice {
+	public static class executeQuery {
 		
 		/**
 		 * 

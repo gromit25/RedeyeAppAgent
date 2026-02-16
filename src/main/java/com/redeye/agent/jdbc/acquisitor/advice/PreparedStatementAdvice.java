@@ -12,7 +12,7 @@ public class PreparedStatementAdvice {
 	/**
 	 * 
 	 */
-	public static class setStringAdvice {
+	public static class setString {
 		
 		/**
 		 * 
@@ -26,7 +26,7 @@ public class PreparedStatementAdvice {
 	/**
 	 * 
 	 */
-	public static class setIntAdvice {
+	public static class setInt {
 		
 		/**
 		 * 
@@ -40,7 +40,7 @@ public class PreparedStatementAdvice {
 	/**
 	 * 
 	 */
-	public static class setLongAdvice {
+	public static class setLong {
 		
 		/**
 		 * 
@@ -54,7 +54,7 @@ public class PreparedStatementAdvice {
 	/**
 	 * 
 	 */
-	public static class setFloatAdvice {
+	public static class setFloat {
 		
 		/**
 		 * 
@@ -82,7 +82,7 @@ public class PreparedStatementAdvice {
 	/**
 	 * 
 	 */
-	public static class executeAdvice {
+	public static class execute {
 		
 		/**
 		 * 
@@ -96,7 +96,7 @@ public class PreparedStatementAdvice {
 	/**
 	 * 
 	 */
-	public static class executeUpdateAdvice {
+	public static class executeUpdate {
 		
 		/**
 		 * 
@@ -110,7 +110,7 @@ public class PreparedStatementAdvice {
 	/**
 	 * 
 	 */
-	public static class executeQueryAdvice {
+	public static class executeQuery {
 		
 		/**
 		 * 

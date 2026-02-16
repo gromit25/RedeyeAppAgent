@@ -12,7 +12,7 @@ public class ConnectionAdvice {
 	/**
 	 * 
 	 */
-	public static class commitAdvice {
+	public static class commit {
 		
 		/**
 		 * 
