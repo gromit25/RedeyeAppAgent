@@ -6,6 +6,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.redeye.agent.kafka.ClientType;
+import com.redeye.agent.kafka.acquisitor.advice.consumer.ConsumerConfigAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerCommitAsyncAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerCommitSyncAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.consumer.KafkaConsumerPollAdvice;
+import com.redeye.agent.kafka.acquisitor.advice.provider.ProducerConfigAdvice;
 import com.redeye.agent.util.KafkaUtil;
 import com.redeye.agent.util.StringUtil;
 import com.redeye.agent.util.elapsedstat.ElapsedStatDaemon;
@@ -46,11 +51,23 @@ public class KafkaAcquisitor {
 	/** Kafka JMX 데이터 수집 객체 */
 	private static final JMXService jmx = new JMXService();
 	
-	
+
 	/**
 	 * 초기화
 	 */
 	public static void init() {
+		
+		//
+		// ProducerConfig 생성자 호출 어드바이스 설정
+		ProducerConfigAdvice.init(KafkaAcquisitor.producerConfigMap);
+		
+		// ConsumerConfig 생성자 호출 어드바이스 설정
+		ConsumerConfigAdvice.init(KafkaAcquisitor.consumerConfigMap);
+
+		// 컨슈머 관련 초기화
+		KafkaConsumerPollAdvice.init(KafkaAcquisitor.poolTimeStatDaemon);
+		KafkaConsumerCommitSyncAdvice.init(KafkaAcquisitor.commitSyncTimeStatDaemon);
+		KafkaConsumerCommitAsyncAdvice.init(KafkaAcquisitor.commitAsyncTimeStatDaemon);
 		
 		// 통계 데몬 기동
 		KafkaAcquisitor.poolTimeStatDaemon.start();

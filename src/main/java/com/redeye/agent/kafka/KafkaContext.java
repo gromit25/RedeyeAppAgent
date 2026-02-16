@@ -84,12 +84,9 @@ public class KafkaContext implements Context {
 			)
 			.installOn(inst);
 
-
+		
 		// ---- 프로듀서 관련 어드바이스 설정
 		
-		// Kafka ProducerConfig 생성자 호출 어드바이스 설정
-		ProducerConfigAdvice.init(KafkaAcquisitor.producerConfigMap);
-			
 		new AgentBuilder.Default()
 			.type(ElementMatchers.named("org.apache.kafka.clients.producer.ProducerConfig"))
 			.transform(
@@ -104,9 +101,6 @@ public class KafkaContext implements Context {
 		
 		// ---- 컨슈머 관련 어드바이스 설정
 		
-		// Kafka ConsumerConfig 생성자 호출 어드바이스 설정
-		ConsumerConfigAdvice.init(KafkaAcquisitor.consumerConfigMap);
-		
 		new AgentBuilder.Default()
 			.type(ElementMatchers.named("org.apache.kafka.clients.consumer.ConsumerConfig"))
 			.transform(
@@ -119,13 +113,6 @@ public class KafkaContext implements Context {
 			.installOn(inst);
 		
 		// KafkaConsumer의 생성자 호출 어드바이스 설정
-		
-		// 초기화
-		KafkaConsumerPollAdvice.init(KafkaAcquisitor.poolTimeStatDaemon);
-		KafkaConsumerCommitSyncAdvice.init(KafkaAcquisitor.commitSyncTimeStatDaemon);
-		KafkaConsumerCommitAsyncAdvice.init(KafkaAcquisitor.commitAsyncTimeStatDaemon);
-
-		// 설정 수행
 		new AgentBuilder.Default()
 			.type(ElementMatchers.named("org.apache.kafka.clients.consumer.KafkaConsumer"))
 			.transform(

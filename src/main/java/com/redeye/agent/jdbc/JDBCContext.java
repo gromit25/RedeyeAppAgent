@@ -6,8 +6,8 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.redeye.agent.Context;
-import com.redeye.agent.jdbc.acquisitor.advice.datasource.DataSourceAdvice;
-import com.redeye.agent.jdbc.acquisitor.advice.drivermanager.DriverManagerAdvice;
+import com.redeye.agent.jdbc.acquisitor.advice.DataSourceAdvice;
+import com.redeye.agent.jdbc.acquisitor.advice.DriverManagerAdvice;
 import com.redeye.agent.loader.APILoader;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
