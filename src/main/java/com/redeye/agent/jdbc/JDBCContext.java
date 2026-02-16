@@ -47,7 +47,7 @@ public class JDBCContext implements Context {
 								.or(ElementMatchers.takesArguments(3))	// url, id, pwd
 							)
 						)
-						.intercept(Advice.to(DriverManagerAdvice.class));
+						.intercept(Advice.to(DriverManagerAdvice.getConnectionAdvice.class));
 				}
 			)
         	.installOn(inst);
@@ -66,7 +66,7 @@ public class JDBCContext implements Context {
 								.or(ElementMatchers.takesArguments(2))
 							)
 						)
-						.intercept(Advice.to(DataSourceAdvice.class));
+						.intercept(Advice.to(DataSourceAdvice.getConnectionAdvice.class));
 				}
 			)
         	.installOn(inst);
