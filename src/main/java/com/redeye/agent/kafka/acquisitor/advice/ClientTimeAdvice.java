@@ -34,7 +34,7 @@ public class ClientTimeAdvice {
 	 * 
 	 * @param consumer 클라이언트 객체
 	 */
-	protected static void sendCurTime(Object consumer) {
+	public static void sendCurTime(Object consumer) {
 		
 		// 입력 값 및 큐 검사
 		if(consumer == null || queue == null) {
