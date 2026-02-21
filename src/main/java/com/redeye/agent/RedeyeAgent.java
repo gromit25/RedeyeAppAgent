@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.redeye.agent.jdbc.JDBCContext;
-import com.redeye.agent.kafka.KafkaContext;
+import com.redeye.agent.domain.jdbc.JDBCContext;
+import com.redeye.agent.domain.kafka.KafkaContext;
 import com.redeye.agent.loader.APILoader;
 import com.redeye.agent.loader.APILoaderCronJob;
 import com.redeye.agent.util.StringUtil;
