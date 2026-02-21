@@ -35,7 +35,7 @@ public class RedeyeAgent {
 	// 클래스 로딩시 초기화
 	static {
 		
-		// Exporter 컨텍스트 목록 초기화
+		// 컨텍스트 목록 초기화
 		contextList = new CopyOnWriteArrayList<>();
 		
 		// JDBC 컨텍스트 추가
