@@ -26,7 +26,7 @@ public class ConnectionAdvice {
 	/**
 	 * 
 	 */
-	public static class rollbackAdvice {
+	public static class rollback {
 
 		/**
 		 * 
@@ -40,7 +40,7 @@ public class ConnectionAdvice {
 	/**
 	 * 
 	 */
-	public static class closeAdvice {
+	public static class close {
 		
 		/**
 		 * 
