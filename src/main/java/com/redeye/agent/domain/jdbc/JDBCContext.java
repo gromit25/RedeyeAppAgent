@@ -117,6 +117,51 @@ public class JDBCContext implements Context {
 				(builder, typeDescription, classLoader, module, protectedDomain) -> {
 					return builder
 							
+						// setString
+						.method(
+							ElementMatchers.named("setString")
+							.and(
+								ElementMatchers.takesArguments(2)
+							)
+						)
+						.intercept(Advice.to(PreparedStatementAdvice.setString.class))
+						
+						// setInt
+						.method(
+							ElementMatchers.named("setInt")
+							.and(
+								ElementMatchers.takesArguments(2)
+							)
+						)
+						.intercept(Advice.to(PreparedStatementAdvice.setInt.class))
+						
+						// setLong
+						.method(
+							ElementMatchers.named("setLong")
+							.and(
+								ElementMatchers.takesArguments(2)
+							)
+						)
+						.intercept(Advice.to(PreparedStatementAdvice.setLong.class))
+						
+						// setFloat
+						.method(
+							ElementMatchers.named("setFloat")
+							.and(
+								ElementMatchers.takesArguments(2)
+							)
+						)
+						.intercept(Advice.to(PreparedStatementAdvice.setFloat.class))
+						
+						// setDouble
+						.method(
+							ElementMatchers.named("setDouble")
+							.and(
+								ElementMatchers.takesArguments(2)
+							)
+						)
+						.intercept(Advice.to(PreparedStatementAdvice.setDouble.class))
+							
 						// execute
 						.method(
 							ElementMatchers.named("execute")
