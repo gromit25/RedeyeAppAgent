@@ -45,10 +45,6 @@ public class JDBCContext implements Context {
 					return builder
 						.method(
 							ElementMatchers.named("getConnection")
-							.and(
-								ElementMatchers.takesArguments(1)	// url
-								.or(ElementMatchers.takesArguments(3))	// url, id, pwd
-							)
 						)
 						.intercept(Advice.to(DriverManagerAdvice.getConnection.class));
 				}
@@ -63,47 +59,40 @@ public class JDBCContext implements Context {
 					return builder
 						.method(
 							ElementMatchers.named("getConnection")
-							.and(
-								ElementMatchers.takesArguments(0)
-								.or(ElementMatchers.takesArguments(2))
-							)
 						)
 						.intercept(Advice.to(DataSourceAdvice.getConnection.class));
 				}
 			)
         	.installOn(inst);
 		
-		// 
+		//
 		new AgentBuilder.Default()
 			.type(ElementMatchers.isSubTypeOf(Connection.class))
 			.transform(
 				(builder, typeDescription, classLoader, module, protectedDomain) -> {
 					return builder
 							
+						// prepareStatement
+						.method(
+							ElementMatchers.named("prepareStatement")
+						)
+						.intercept(Advice.to(ConnectionAdvice.prepareStatement.class))
+						
 						// commit
 						.method(
 							ElementMatchers.named("commit")
-							.and(
-								ElementMatchers.takesArguments(0)
-							)
 						)
 						.intercept(Advice.to(ConnectionAdvice.commit.class))
 					
 						// rollback
 						.method(
 							ElementMatchers.named("rollback")
-							.and(
-								ElementMatchers.takesArguments(0)
-							)
 						)
 						.intercept(Advice.to(ConnectionAdvice.rollback.class))
 						
-						// rollback
+						// close
 						.method(
 							ElementMatchers.named("close")
-							.and(
-								ElementMatchers.takesArguments(0)
-							)
 						)
 						.intercept(Advice.to(ConnectionAdvice.close.class))
 						;
@@ -118,82 +107,27 @@ public class JDBCContext implements Context {
 				(builder, typeDescription, classLoader, module, protectedDomain) -> {
 					return builder
 							
-						// setString
+						// 파라미터 바인딩
 						.method(
-							ElementMatchers.named("setString")
-							.and(
-								ElementMatchers.takesArguments(2)
+							ElementMatchers.namedOneOf(
+								"setString",
+								"setInt",
+								"setLong",
+								"setFloat",
+								"setDouble"
 							)
 						)
-						.intercept(Advice.to(PreparedStatementAdvice.setString.class))
+						.intercept(Advice.to(PreparedStatementAdvice.setValue.class))
 						
-						// setInt
+						// 쿼리 수행
 						.method(
-							ElementMatchers.named("setInt")
-							.and(
-								ElementMatchers.takesArguments(2)
-							)
-						)
-						.intercept(Advice.to(PreparedStatementAdvice.setInt.class))
-						
-						// setLong
-						.method(
-							ElementMatchers.named("setLong")
-							.and(
-								ElementMatchers.takesArguments(2)
-							)
-						)
-						.intercept(Advice.to(PreparedStatementAdvice.setLong.class))
-						
-						// setFloat
-						.method(
-							ElementMatchers.named("setFloat")
-							.and(
-								ElementMatchers.takesArguments(2)
-							)
-						)
-						.intercept(Advice.to(PreparedStatementAdvice.setFloat.class))
-						
-						// setDouble
-						.method(
-							ElementMatchers.named("setDouble")
-							.and(
-								ElementMatchers.takesArguments(2)
-							)
-						)
-						.intercept(Advice.to(PreparedStatementAdvice.setDouble.class))
-							
-						// execute
-						.method(
-							ElementMatchers.named("execute")
-							.and(
-								ElementMatchers.takesArguments(0)
-								.or(ElementMatchers.takesArguments(1))
-								.or(ElementMatchers.takesArguments(2))
+							ElementMatchers.namedOneOf(
+								"execute",
+								"executeUpdate",
+								"executeQuery"
 							)
 						)
 						.intercept(Advice.to(PreparedStatementAdvice.execute.class))
-						
-						// executeUpdate
-						.method(
-							ElementMatchers.named("executeUpdate")
-							.and(
-								ElementMatchers.takesArguments(0)
-								.or(ElementMatchers.takesArguments(1))
-								.or(ElementMatchers.takesArguments(2))
-							)
-						)
-						.intercept(Advice.to(PreparedStatementAdvice.executeUpdate.class))
-						
-						// executeQuery
-						.method(
-							ElementMatchers.named("executeQuery")
-							.and(
-								ElementMatchers.takesArguments(0)
-								.or(ElementMatchers.takesArguments(1))
-							)
-						)
-						.intercept(Advice.to(PreparedStatementAdvice.executeQuery.class))
 						;
 				}
 			)

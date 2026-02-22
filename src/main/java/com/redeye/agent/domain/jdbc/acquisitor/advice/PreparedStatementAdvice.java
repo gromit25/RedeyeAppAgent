@@ -1,84 +1,93 @@
 package com.redeye.agent.domain.jdbc.acquisitor.advice;
 
+import java.lang.reflect.Method;
+
 import net.bytebuddy.asm.Advice;
 
 /**
- * 
+ * PreparedStatement 어드바이스 클래스<br>
+ * 모든 속성 및 메소드는 public 이어야 함 - 스프링부트 클래스 로더 때문
  * 
  * @author jmsohn
  */
 public class PreparedStatementAdvice {
 	
 	/**
-	 * 
+	 * 반복 호출에 따른 처리를 위한 상태<br>
+	 * executeQuery의 경우에 ORM 툴이나 스프링 부트에 의해 반복 호출이 발생함<br>
+	 * 따라서, 단순히 execute onExit에서 성능 측정을 하게 되면<br>
+	 * 실제로 한번 발생한 쿼리가 여러번 발생한 것으로 오인됨
 	 */
-	public static class setString {
+	public enum StackStatus {
 		
-		/**
-		 * 
-		 */
-		@Advice.OnMethodExit
-		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setString: ");
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public static class setInt {
+		/** 쿼리 호출 상태 */
+		INVOKE_QUERY,
 		
-		/**
-		 * 
-		 */
-		@Advice.OnMethodExit
-		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setInt: ");
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public static class setLong {
-		
-		/**
-		 * 
-		 */
-		@Advice.OnMethodExit
-		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setLong: ");
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public static class setFloat {
-		
-		/**
-		 * 
-		 */
-		@Advice.OnMethodExit
-		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setFloat: ");
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public static class setDouble {
-		
-		/**
-		 * 
-		 */
-		@Advice.OnMethodExit
-		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setDouble: ");
-		}
+		/** 쿼리 호출 완료 상태 */
+		EXIT_QUERY
 	}
 	
+	
+	/** 반복 호출 상태 */
+	public static ThreadLocal<StackStatus> stackStatus = ThreadLocal.withInitial(() -> StackStatus.EXIT_QUERY);
+	
+	/** 쿼리 시작 시간 */
+	public static ThreadLocal<Long> startTime = ThreadLocal.withInitial(() -> System.currentTimeMillis());
+	
+	
+	/**
+	 * 반복 호출 상태 설정
+	 * 
+	 * @param newStatus 설정할 상태
+	 */
+	public static void setStackStatus(StackStatus newStatus) {
+		stackStatus.set(newStatus);
+	}
+	
+	/**
+	 * 반복 호출 상태 반환
+	 * 
+	 * @return 반복 호출 상태
+	 */
+	public static StackStatus getStackStatus() {
+		return stackStatus.get();
+	}
+	
+	/**
+	 * 쿼리 시작 시간을 현재 시간으로 설정
+	 */
+	public static void resetStartTime() {
+		startTime.set(System.currentTimeMillis());
+	}
+	
+	/**
+	 * 쿼리 시작 시간 반환
+	 * 
+	 * @return 쿼리 시작 시간
+	 */
+	public static long getStartTime() {
+		return startTime.get();
+	}
+	
+	/**
+	 * 쿼리의 바인딩 변수 설정시 어드바이스 클래스
+	 */
+	public static class setValue {
+		
+		/**
+		 * 
+		 */
+		@Advice.OnMethodEnter
+		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
+			
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setValue: " + method);
+			
+			for(Object arg: args) {
+				System.out.println("ARGS : " + arg);
+			}
+		}
+	}
+
 	/**
 	 * 
 	 */
@@ -87,37 +96,29 @@ public class PreparedStatementAdvice {
 		/**
 		 * 
 		 */
-		@Advice.OnMethodExit
-		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.execute: ");
+		@Advice.OnMethodEnter
+		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
+			
+			setStackStatus(StackStatus.INVOKE_QUERY);
+			resetStartTime();
+			
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.execute on Enter: " + method);
 		}
-	}
-	
-	/**
-	 * 
-	 */
-	public static class executeUpdate {
 		
 		/**
 		 * 
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.executeUpdate: ");
+			
+			if(getStackStatus() != StackStatus.INVOKE_QUERY) {
+				return;
+			}
+			
+			setStackStatus(StackStatus.EXIT_QUERY);
+			long elapsedTime = System.currentTimeMillis() - getStartTime();
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.execute on Exit: " + elapsedTime);
+			System.out.println("*** SQL: " + ConnectionAdvice.getSql());
 		}
-	}
-	
-	/**
-	 * 
-	 */
-	public static class executeQuery {
-		
-		/**
-		 * 
-		 */
-		@Advice.OnMethodExit
-		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.executeQuery: ");
-		}
-	}
+	} // End of execute class
 }

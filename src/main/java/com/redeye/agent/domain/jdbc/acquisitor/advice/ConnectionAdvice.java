@@ -1,5 +1,7 @@
 package com.redeye.agent.domain.jdbc.acquisitor.advice;
 
+import java.lang.reflect.Method;
+
 import net.bytebuddy.asm.Advice;
 
 /**
@@ -8,6 +10,39 @@ import net.bytebuddy.asm.Advice;
  * @author jmsohn
  */
 public class ConnectionAdvice {
+	
+	
+	/** */
+	public static ThreadLocal<String> sql = ThreadLocal.withInitial(() -> "");
+	
+	
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
+	public static String getSql() {
+		return sql.get();
+	}
+	
+	/**
+	 * 
+	 */
+	public static class prepareStatement {
+		
+		/**
+		 * 
+		 */
+		@Advice.OnMethodEnter
+		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
+			
+			System.out.println("*** DEBUG 100 in ConnectionAdvice.prepareStatement: ");
+			
+			if(args.length > 0) {
+				sql.set(args[0].toString());
+			}
+		}
+	}
 	
 	/**
 	 * 
@@ -19,7 +54,7 @@ public class ConnectionAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in ConnectionAdvice.commitAdvice: ");
+			System.out.println("*** DEBUG 100 in ConnectionAdvice.commit: ");
 		}
 	}
 
@@ -33,7 +68,7 @@ public class ConnectionAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in ConnectionAdvice.rollbackAdvice: ");
+			System.out.println("*** DEBUG 100 in ConnectionAdvice.rollback: ");
 		}
 	}
 
