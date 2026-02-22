@@ -47,7 +47,7 @@ public class ConnectionAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in ConnectionAdvice.closeAdvice: ");
+			System.out.println("*** DEBUG 100 in ConnectionAdvice.close: ");
 		}
 	}
 }

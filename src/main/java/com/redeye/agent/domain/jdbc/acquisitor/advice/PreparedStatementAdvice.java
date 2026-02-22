@@ -19,7 +19,7 @@ public class PreparedStatementAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setStringAdvice: ");
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setString: ");
 		}
 	}
 
@@ -33,7 +33,7 @@ public class PreparedStatementAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setIntAdvice: ");
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setInt: ");
 		}
 	}
 
@@ -47,7 +47,7 @@ public class PreparedStatementAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setLongAdvice: ");
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setLong: ");
 		}
 	}
 
@@ -61,7 +61,7 @@ public class PreparedStatementAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setFloatAdvice: ");
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setFloat: ");
 		}
 	}
 
@@ -89,7 +89,7 @@ public class PreparedStatementAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.executeAdvice: ");
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.execute: ");
 		}
 	}
 	
@@ -103,7 +103,7 @@ public class PreparedStatementAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.executeUpdateAdvice: ");
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.executeUpdate: ");
 		}
 	}
 	
@@ -117,7 +117,7 @@ public class PreparedStatementAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.executeQueryAdvice: ");
+			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.executeQuery: ");
 		}
 	}
 }

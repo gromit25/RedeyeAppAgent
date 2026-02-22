@@ -2,6 +2,7 @@ package com.redeye.agent.domain.jdbc;
 
 import java.lang.instrument.Instrumentation;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -112,7 +113,7 @@ public class JDBCContext implements Context {
 		
 		//
 		new AgentBuilder.Default()
-			.type(ElementMatchers.named("java.sql.PreparedStatement"))
+			.type(ElementMatchers.isSubTypeOf(PreparedStatement.class))
 			.transform(
 				(builder, typeDescription, classLoader, module, protectedDomain) -> {
 					return builder
