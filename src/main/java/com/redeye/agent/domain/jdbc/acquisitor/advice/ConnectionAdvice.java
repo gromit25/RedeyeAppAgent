@@ -35,9 +35,8 @@ public class ConnectionAdvice {
 		 */
 		@Advice.OnMethodEnter
 		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
-			
-			System.out.println("*** DEBUG 100 in ConnectionAdvice.prepareStatement: ");
-			
+
+			// sql 있는 경우 쿼리 설정
 			if(args.length > 0) {
 				sql.set(args[0].toString());
 			}

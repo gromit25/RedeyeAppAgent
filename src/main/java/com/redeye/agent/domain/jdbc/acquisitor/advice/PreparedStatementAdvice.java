@@ -12,24 +12,25 @@ import net.bytebuddy.asm.Advice;
  */
 public class PreparedStatementAdvice {
 	
+	
 	/**
 	 * 반복 호출에 따른 처리를 위한 상태<br>
 	 * executeQuery의 경우에 ORM 툴이나 스프링 부트에 의해 반복 호출이 발생함<br>
 	 * 따라서, 단순히 execute onExit에서 성능 측정을 하게 되면<br>
 	 * 실제로 한번 발생한 쿼리가 여러번 발생한 것으로 오인됨
 	 */
-	public enum StackStatus {
+	public enum InvokeStatus {
 		
-		/** 쿼리 호출 상태 */
-		INVOKE_QUERY,
+		/** 호출 상태 */
+		INVOKE_ENTER,
 		
-		/** 쿼리 호출 완료 상태 */
-		EXIT_QUERY
+		/** 호출 완료 상태 */
+		INVOKE_EXIT
 	}
 	
 	
 	/** 반복 호출 상태 */
-	public static ThreadLocal<StackStatus> stackStatus = ThreadLocal.withInitial(() -> StackStatus.EXIT_QUERY);
+	public static ThreadLocal<InvokeStatus> invokeStatus = ThreadLocal.withInitial(() -> InvokeStatus.INVOKE_EXIT);
 	
 	/** 쿼리 시작 시간 */
 	public static ThreadLocal<Long> startTime = ThreadLocal.withInitial(() -> System.currentTimeMillis());
@@ -40,8 +41,8 @@ public class PreparedStatementAdvice {
 	 * 
 	 * @param newStatus 설정할 상태
 	 */
-	public static void setStackStatus(StackStatus newStatus) {
-		stackStatus.set(newStatus);
+	public static void setInvokeStatus(InvokeStatus newStatus) {
+		invokeStatus.set(newStatus);
 	}
 	
 	/**
@@ -49,8 +50,8 @@ public class PreparedStatementAdvice {
 	 * 
 	 * @return 반복 호출 상태
 	 */
-	public static StackStatus getStackStatus() {
-		return stackStatus.get();
+	public static InvokeStatus getInvokeStatus() {
+		return invokeStatus.get();
 	}
 	
 	/**
@@ -75,7 +76,7 @@ public class PreparedStatementAdvice {
 	public static class setValue {
 		
 		/**
-		 * 
+		 * 바인딩 변수 설정 전 콜백
 		 */
 		@Advice.OnMethodEnter
 		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
@@ -89,34 +90,39 @@ public class PreparedStatementAdvice {
 	}
 
 	/**
-	 * 
+	 * 쿼리 실행시 어드바이스 클래스
 	 */
 	public static class execute {
 		
 		/**
+		 * 쿼리 실행 전 콜백
 		 * 
+		 * @param method
+		 * @param args
 		 */
 		@Advice.OnMethodEnter
 		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
 			
-			setStackStatus(StackStatus.INVOKE_QUERY);
+			setInvokeStatus(InvokeStatus.INVOKE_ENTER);
 			resetStartTime();
 			
 			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.execute on Enter: " + method);
 		}
 		
 		/**
-		 * 
+		 * 쿼리 실행 후 콜백
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
 			
-			if(getStackStatus() != StackStatus.INVOKE_QUERY) {
+			if(getInvokeStatus() != InvokeStatus.INVOKE_ENTER) {
 				return;
 			}
 			
-			setStackStatus(StackStatus.EXIT_QUERY);
+			setInvokeStatus(InvokeStatus.INVOKE_EXIT);
+			
 			long elapsedTime = System.currentTimeMillis() - getStartTime();
+			
 			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.execute on Exit: " + elapsedTime);
 			System.out.println("*** SQL: " + ConnectionAdvice.getSql());
 		}

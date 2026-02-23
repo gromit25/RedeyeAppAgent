@@ -1,4 +1,4 @@
-package com.redeye.agent.domain.kafka.acquisitor.advice;
+package com.redeye.agent.domain.common;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -11,7 +11,7 @@ import com.redeye.agent.util.elapsedstat.ElapsedTimeDTO;
  * 
  * @author jmsohn
  */
-public class ClientTimeAdvice {
+public class ElapsedTimeAdvice {
 
 	// 아래의 멤버 변수는 public 이어야 함 - SpringBoot 클래스로더에서 문제가 생김
 	
@@ -26,7 +26,7 @@ public class ClientTimeAdvice {
 	 * @param timeStatDaemon 시간 통계 데몬
 	 */
 	public static void init(ElapsedStatDaemon timeStatDaemon) {
-		ClientTimeAdvice.queue = timeStatDaemon.getQueue();
+		ElapsedTimeAdvice.queue = timeStatDaemon.getQueue();
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class ClientTimeAdvice {
 			}
 
 			// 큐에 클라이언트 아이디 및 현재 시간 전송
-			ClientTimeAdvice.queue.put(
+			ElapsedTimeAdvice.queue.put(
 				new ElapsedTimeDTO(
 					clientId,	// 클라이언트 아이디
 					System.currentTimeMillis()	// 현재 시간

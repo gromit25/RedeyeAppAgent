@@ -37,7 +37,7 @@ public class JDBCContext implements Context {
 			throw new IllegalArgumentException("'inst' is null.");
 		}
 		
-		// 
+		// DriverManager 클래스 관련 변환
 		new AgentBuilder.Default()
 			.type(ElementMatchers.named("java.sql.DriverManager"))
 			.transform(
@@ -51,7 +51,7 @@ public class JDBCContext implements Context {
 			)
         	.installOn(inst);
 		
-		// 
+		// DataSource 클래스 관련 변환
 		new AgentBuilder.Default()
 			.type(ElementMatchers.isSubTypeOf(DataSource.class))
 			.transform(
@@ -65,7 +65,7 @@ public class JDBCContext implements Context {
 			)
         	.installOn(inst);
 		
-		//
+		// Connection 관련 변환
 		new AgentBuilder.Default()
 			.type(ElementMatchers.isSubTypeOf(Connection.class))
 			.transform(
@@ -100,7 +100,7 @@ public class JDBCContext implements Context {
 			)
         	.installOn(inst);
 		
-		//
+		// PreparedStatement 클래스 관련 변환
 		new AgentBuilder.Default()
 			.type(ElementMatchers.isSubTypeOf(PreparedStatement.class))
 			.transform(
