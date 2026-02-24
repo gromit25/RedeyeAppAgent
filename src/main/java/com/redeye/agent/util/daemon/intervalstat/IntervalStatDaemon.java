@@ -11,7 +11,8 @@ import com.redeye.agent.util.stat.Parameter;
 import lombok.Getter;
 
 /**
- * 실행 시간 통계 데몬 클래스
+ * 실행 시간 통계 데몬 클래스<br>
+ * 이전 등록된 시간과 현재 시간을 뺀 간격을 사용한 통계
  * 
  * @author jmsohn
  */
@@ -94,12 +95,12 @@ public class IntervalStatDaemon {
 	}
 	
 	/**
-	 * 클라이언트 아이디의 통계정보 반환
+	 * 통계 아이디의 통계정보 반환
 	 * 
-	 * @param clientId 클라이언트 아이디
+	 * @param id 통계 아이디
 	 * @return 통계 정보
 	 */
-	public Parameter getStat(String clientId) {
-		return this.getStat().get(clientId);
+	public Parameter getStat(String id) {
+		return this.getStat().get(id);
 	}
 }

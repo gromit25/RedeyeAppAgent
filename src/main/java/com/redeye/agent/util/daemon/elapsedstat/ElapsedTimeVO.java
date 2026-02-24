@@ -10,7 +10,7 @@ import lombok.Getter;
 public class ElapsedTimeVO {
 	
 	
-	/** 구분 아이디 */
+	/** 통계 아이디 */
 	@Getter
 	private final String id;
 	
