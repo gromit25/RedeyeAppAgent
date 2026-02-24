@@ -18,6 +18,14 @@ public class KafkaConsumerPollAdvice extends IntervalTimeAdvice {
 	 */
 	@Advice.OnMethodExit
 	public static void onExit(@Advice.This Object consumer) {
-		sendCurTime(consumer);
+		
+		// 클라이언트 아이디 획득
+		String clientId = KafkaConsumerAdvice.getClientId(consumer);
+		if(clientId == null) {
+			return;
+		}
+		
+		// 처리자에게 현재 시간 정보 전송
+		put(clientId);
 	}
 }
