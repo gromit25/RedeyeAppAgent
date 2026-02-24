@@ -37,9 +37,11 @@ public class ConnectionAdvice {
 		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
 
 			// sql 있는 경우 쿼리 설정
-			if(args.length > 0) {
-				sql.set(args[0].toString());
+			if(args.length == 0) {
+				return;
 			}
+			
+			sql.set(args[0].toString());
 		}
 	}
 	

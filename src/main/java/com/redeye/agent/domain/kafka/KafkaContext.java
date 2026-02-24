@@ -9,12 +9,9 @@ import com.redeye.agent.Context;
 import com.redeye.agent.domain.kafka.acquisitor.KafkaAcquisitor;
 import com.redeye.agent.domain.kafka.acquisitor.advice.broker.KafkaConfigAdvice;
 import com.redeye.agent.domain.kafka.acquisitor.advice.broker.RequestContextAdvice;
-import com.redeye.agent.domain.kafka.acquisitor.advice.broker.SaslServerAuthenticatorAuthenticateAdvice;
+import com.redeye.agent.domain.kafka.acquisitor.advice.broker.SaslServerAuthenticatorAdvice;
 import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.ConsumerConfigAdvice;
 import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerAdvice;
-import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerCommitAsyncAdvice;
-import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerCommitSyncAdvice;
-import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerPollAdvice;
 import com.redeye.agent.domain.kafka.acquisitor.advice.provider.ProducerConfigAdvice;
 import com.redeye.agent.domain.kafka.exporter.service.KafkaBrokerController;
 import com.redeye.agent.domain.kafka.exporter.service.KafkaClientController;
@@ -55,7 +52,7 @@ public class KafkaContext implements Context {
 				(builder, typeDescription, classLoader, module, protectedDomain) -> {
 					return builder
 						.constructor(ElementMatchers.any())
-						.intercept(Advice.to(KafkaConfigAdvice.class));
+						.intercept(Advice.to(KafkaConfigAdvice.constructor.class));
 				}
 			)
         	.installOn(inst);
@@ -67,7 +64,7 @@ public class KafkaContext implements Context {
 				(builder, typeDescription, classLoader, module, protectedDomain) -> {
 					return builder
 						.constructor(ElementMatchers.any())
-						.intercept(Advice.to(RequestContextAdvice.class));
+						.intercept(Advice.to(RequestContextAdvice.constructor.class));
 				}
 			)
 			.installOn(inst);
@@ -79,7 +76,7 @@ public class KafkaContext implements Context {
 				(builder, typeDescription, classLoader, module, protectedDomain) -> {
 					return builder
     					.method(ElementMatchers.named("authenticate"))
-    					.intercept(Advice.to(SaslServerAuthenticatorAuthenticateAdvice.class));
+    					.intercept(Advice.to(SaslServerAuthenticatorAdvice.authenticate.class));
 				}
 			)
 			.installOn(inst);
@@ -93,7 +90,7 @@ public class KafkaContext implements Context {
 				(builder, typeDescription, classLoader, module, protectedDomain) -> {
 					return builder
 						.constructor(ElementMatchers.any())
-						.intercept(Advice.to(ProducerConfigAdvice.class));
+						.intercept(Advice.to(ProducerConfigAdvice.constructor.class));
 				}
 			)
         	.installOn(inst);
@@ -107,7 +104,7 @@ public class KafkaContext implements Context {
 				(builder, typeDescription, classLoader, module, protectedDomain) -> {
 					return builder
 						.constructor(ElementMatchers.any())
-						.intercept(Advice.to(ConsumerConfigAdvice.class));
+						.intercept(Advice.to(ConsumerConfigAdvice.constructor.class));
 				}
 			)
 			.installOn(inst);
@@ -119,10 +116,10 @@ public class KafkaContext implements Context {
 				(builder, typeDescription, classLoader, module, protectionDomain) -> { 
 					return builder
 						.constructor(ElementMatchers.any())
-						.intercept(Advice.to(KafkaConsumerAdvice.class))
+						.intercept(Advice.to(KafkaConsumerAdvice.constructor.class))
 						.visit(
 							Advice
-								.to(KafkaConsumerPollAdvice.class)
+								.to(KafkaConsumerAdvice.poll.class)
 								.on(
 									ElementMatchers
 										.named("poll")
@@ -131,14 +128,15 @@ public class KafkaContext implements Context {
 						)
 						.visit(
 							Advice
-								.to(KafkaConsumerCommitAsyncAdvice.class)
-								.on(ElementMatchers.named("commitAsync"))
+								.to(KafkaConsumerAdvice.commitSync.class)
+								.on(ElementMatchers.named("commitSync"))
 						)
 						.visit(
 							Advice
-								.to(KafkaConsumerCommitSyncAdvice.class)
-								.on(ElementMatchers.named("commitSync"))
-						);
+								.to(KafkaConsumerAdvice.commitAsync.class)
+								.on(ElementMatchers.named("commitAsync"))
+						)
+						;
 				}
 			)
 			.installOn(inst);

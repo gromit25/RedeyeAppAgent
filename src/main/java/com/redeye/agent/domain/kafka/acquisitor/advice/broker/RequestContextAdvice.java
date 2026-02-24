@@ -15,42 +15,48 @@ import net.bytebuddy.asm.Advice;
 public class RequestContextAdvice {
 
 	/**
-	 * RequestContext 객체 생성 후 콜백되는 메소드
-	 * 
-	 * @param requestContext kafka의 클라이언트 접속 정보 객체
+	 * RequestContext 생성자 어드바이스 클래스
 	 */
-	@Advice.OnMethodExit
-	public static void onExit(@Advice.This Object requestContext) {
+	public static class constructor {
 		
-		// 입력값 검증
-		if(requestContext == null) {
-			System.out.println("'requestContext' is null.");
-			return;
-		}
-		
-		try {
+		/**
+		 * RequestContext 객체 생성 후 콜백되는 메소드
+		 * 
+		 * @param requestContext kafka의 클라이언트 접속 정보 객체
+		 */
+		@Advice.OnMethodExit
+		public static void onExit(@Advice.This Object requestContext) {
 			
-			// 클라이언트 아이피 획득
-			Method clientAddressMethod = requestContext.getClass().getMethod("clientAddress");
-			if(clientAddressMethod == null) {
-				return;
-			}
-
-			InetAddress clientAddr = (InetAddress)clientAddressMethod.invoke(requestContext);
-
-			// 클라이언트 아이디 획득
-			Method clientIdMethod = requestContext.getClass().getMethod("clientId");
-			if(clientIdMethod == null) {
+			// 입력값 검증
+			if(requestContext == null) {
+				System.out.println("'requestContext' is null.");
 				return;
 			}
 			
-			String clientId = clientIdMethod.invoke(requestContext).toString();
-			
-			// 클라이언트 아이피:아이디 정보 저장
-			KafkaAcquisitor.putClientConn(clientAddr.getHostAddress(), clientId);
-			
-		} catch(Exception ex) {
-			ex.printStackTrace();
+			try {
+				
+				// 클라이언트 아이피 획득
+				Method clientAddressMethod = requestContext.getClass().getMethod("clientAddress");
+				if(clientAddressMethod == null) {
+					return;
+				}
+	
+				InetAddress clientAddr = (InetAddress)clientAddressMethod.invoke(requestContext);
+	
+				// 클라이언트 아이디 획득
+				Method clientIdMethod = requestContext.getClass().getMethod("clientId");
+				if(clientIdMethod == null) {
+					return;
+				}
+				
+				String clientId = clientIdMethod.invoke(requestContext).toString();
+				
+				// 클라이언트 아이피:아이디 정보 저장
+				KafkaAcquisitor.putClientConn(clientAddr.getHostAddress(), clientId);
+				
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 }

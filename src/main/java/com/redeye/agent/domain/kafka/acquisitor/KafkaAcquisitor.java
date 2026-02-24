@@ -6,9 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.redeye.agent.domain.kafka.ClientType;
 import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.ConsumerConfigAdvice;
-import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerCommitAsyncAdvice;
-import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerCommitSyncAdvice;
-import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerPollAdvice;
+import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerAdvice;
 import com.redeye.agent.domain.kafka.acquisitor.advice.provider.ProducerConfigAdvice;
 import com.redeye.agent.util.KafkaUtil;
 import com.redeye.agent.util.StringUtil;
@@ -64,9 +62,9 @@ public class KafkaAcquisitor {
 		ConsumerConfigAdvice.init(KafkaAcquisitor.consumerConfigMap);
 
 		// 컨슈머 관련 초기화
-		KafkaConsumerPollAdvice.init(KafkaAcquisitor.poolTimeStatDaemon);
-		KafkaConsumerCommitSyncAdvice.init(KafkaAcquisitor.commitSyncTimeStatDaemon);
-		KafkaConsumerCommitAsyncAdvice.init(KafkaAcquisitor.commitAsyncTimeStatDaemon);
+		KafkaConsumerAdvice.poll.init(KafkaAcquisitor.poolTimeStatDaemon);
+		KafkaConsumerAdvice.commitSync.init(KafkaAcquisitor.commitSyncTimeStatDaemon);
+		KafkaConsumerAdvice.commitAsync.init(KafkaAcquisitor.commitAsyncTimeStatDaemon);
 		
 		// 통계 데몬 기동
 		KafkaAcquisitor.poolTimeStatDaemon.start();

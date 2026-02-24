@@ -8,7 +8,7 @@ import com.redeye.agent.domain.kafka.Constants;
 import net.bytebuddy.asm.Advice;
 
 /**
- * ConsumerConfig 생성자 어드바이스 클래스
+ * ConsumerConfig 어드바이스 클래스
  * 
  * @author jmsohn
  */
@@ -36,43 +36,6 @@ public class ConsumerConfigAdvice {
 	}
 	
 	/**
-	 * Kafka ConsumerConfig 생성 후 콜백 메소드
-	 * 
-	 * @param config 생성된 Kafka ConsumerConfig 객체
-	 */
-	@Advice.OnMethodExit
-	public static void onExit(@Advice.This Object config) {
-
-		try {
-
-			// 설정 값을 가져옴
-			Method valuesMethod = config.getClass().getMethod("values");
-			if(valuesMethod == null) {
-				return;
-			}
-			
-			@SuppressWarnings("unchecked")
-			Map<String, Object> configValueMap = (Map<String, Object>)valuesMethod.invoke(config);
-
-			// 클라이언트 아이디 획득
-			if(configValueMap == null || configValueMap.containsKey(Constants.CLIENT_ID) == false) {
-				return;
-			}
-
-			String clientId = configValueMap.get(Constants.CLIENT_ID).toString();
-			
-			// 프로듀서 설정 맵에 추가
-			ConsumerConfigAdvice.configMap.put(clientId, configValueMap);
-			
-			// 클라이언트 아이디 설정
-			ConsumerConfigAdvice.clientIdContext.set(clientId);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
 	 * 현재 스레드에 설정된 클라이언트 아이디를 반환<br>
 	 * 주의! 한번 호출되면 호출 이후 데이터 삭제됨
 	 * 
@@ -84,5 +47,48 @@ public class ConsumerConfigAdvice {
 		ConsumerConfigAdvice.clientIdContext.remove();
 		
 		return clientId;
+	}
+	
+	/**
+	 * ConsumerConfig 생성자 어드바이스 클래스
+	 */
+	public static class constructor {
+		
+		/**
+		 * Kafka ConsumerConfig 생성 후 콜백 메소드
+		 * 
+		 * @param config 생성된 Kafka ConsumerConfig 객체
+		 */
+		@Advice.OnMethodExit
+		public static void onExit(@Advice.This Object config) {
+	
+			try {
+	
+				// 설정 값을 가져옴
+				Method valuesMethod = config.getClass().getMethod("values");
+				if(valuesMethod == null) {
+					return;
+				}
+				
+				@SuppressWarnings("unchecked")
+				Map<String, Object> configValueMap = (Map<String, Object>)valuesMethod.invoke(config);
+	
+				// 클라이언트 아이디 획득
+				if(configValueMap == null || configValueMap.containsKey(Constants.CLIENT_ID) == false) {
+					return;
+				}
+	
+				String clientId = configValueMap.get(Constants.CLIENT_ID).toString();
+				
+				// 프로듀서 설정 맵에 추가
+				ConsumerConfigAdvice.configMap.put(clientId, configValueMap);
+				
+				// 클라이언트 아이디 설정
+				ConsumerConfigAdvice.clientIdContext.set(clientId);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
