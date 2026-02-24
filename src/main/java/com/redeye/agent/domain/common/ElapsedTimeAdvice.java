@@ -7,7 +7,7 @@ import com.redeye.agent.util.daemon.elapsedstat.ElapsedStatDaemon;
 import com.redeye.agent.util.daemon.elapsedstat.ElapsedTimeVO;
 
 /**
- * 
+ * 수행 시간 처리 어드바이스 상위(공통) 클래스
  * 
  * @author jmsohn
  */
