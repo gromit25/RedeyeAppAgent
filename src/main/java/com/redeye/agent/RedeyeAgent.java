@@ -206,6 +206,6 @@ public class RedeyeAgent {
 		loader = new APILoaderCronJob(basePath, schedule, loaderList);
 		loader.start();
 		
-		System.out.println("metrics api loader started.");
+		System.out.println("metrics api loader is started.");
 	}
 }
