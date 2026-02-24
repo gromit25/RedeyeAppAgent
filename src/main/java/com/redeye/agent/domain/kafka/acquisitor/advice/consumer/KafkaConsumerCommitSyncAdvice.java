@@ -1,6 +1,6 @@
 package com.redeye.agent.domain.kafka.acquisitor.advice.consumer;
 
-import com.redeye.agent.domain.common.ElapsedTimeAdvice;
+import com.redeye.agent.domain.common.IntervalTimeAdvice;
 
 import net.bytebuddy.asm.Advice;
 
@@ -9,7 +9,7 @@ import net.bytebuddy.asm.Advice;
  * 
  * @author jmsohn
  */
-public class KafkaConsumerCommitSyncAdvice extends ElapsedTimeAdvice {
+public class KafkaConsumerCommitSyncAdvice extends IntervalTimeAdvice {
 	
 	/**
 	 * KafkaConsumer.commitSyncn 호출 후 콜백 메소드

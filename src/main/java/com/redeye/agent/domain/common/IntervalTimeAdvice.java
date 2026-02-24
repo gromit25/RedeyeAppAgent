@@ -11,7 +11,7 @@ import com.redeye.agent.util.daemon.intervalstat.IntervalTimeVO;
  * 
  * @author jmsohn
  */
-public class ElapsedTimeAdvice {
+public class IntervalTimeAdvice {
 
 	// 아래의 멤버 변수는 public 이어야 함 - SpringBoot 클래스로더에서 문제가 생김
 	
@@ -26,7 +26,7 @@ public class ElapsedTimeAdvice {
 	 * @param timeStatDaemon 시간 통계 데몬
 	 */
 	public static void init(IntervalStatDaemon timeStatDaemon) {
-		ElapsedTimeAdvice.queue = timeStatDaemon.getQueue();
+		IntervalTimeAdvice.queue = timeStatDaemon.getQueue();
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class ElapsedTimeAdvice {
 			}
 
 			// 큐에 클라이언트 아이디 및 현재 시간 전송
-			ElapsedTimeAdvice.queue.put(
+			IntervalTimeAdvice.queue.put(
 				new IntervalTimeVO(
 					clientId,	// 클라이언트 아이디
 					System.currentTimeMillis()	// 현재 시간

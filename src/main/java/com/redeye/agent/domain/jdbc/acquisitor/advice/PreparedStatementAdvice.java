@@ -2,7 +2,7 @@ package com.redeye.agent.domain.jdbc.acquisitor.advice;
 
 import java.lang.reflect.Method;
 
-import com.redeye.agent.domain.common.ElapsedTimeAdvice;
+import com.redeye.agent.domain.common.IntervalTimeAdvice;
 import com.redeye.agent.domain.common.InvokeStatus;
 
 import net.bytebuddy.asm.Advice;
@@ -13,7 +13,7 @@ import net.bytebuddy.asm.Advice;
  * 
  * @author jmsohn
  */
-public class PreparedStatementAdvice extends ElapsedTimeAdvice {
+public class PreparedStatementAdvice extends IntervalTimeAdvice {
 	
 
 	/** 반복 호출 상태 */
