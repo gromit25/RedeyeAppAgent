@@ -148,7 +148,7 @@ public class KafkaContext implements Context {
 				(builder, typeDescription, classLoader, module, protectionDomain) -> { 
 					return builder
 						.constructor(ElementMatchers.any())
-						.intercept(Advice.to(KafkaConsumerAdvice.class));
+						.intercept(Advice.to(KafkaConsumerAdvice.constructor.class));
 				}
 			)
 			.installOn(inst);
