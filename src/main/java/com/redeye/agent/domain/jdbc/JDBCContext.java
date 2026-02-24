@@ -8,6 +8,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.redeye.agent.Context;
+import com.redeye.agent.domain.jdbc.acquisitor.JDBCAcquisitor;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.ConnectionAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.DataSourceAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.DriverManagerAdvice;
@@ -27,6 +28,7 @@ public class JDBCContext implements Context {
 
 	@Override
 	public void init() {
+		JDBCAcquisitor.init();
 	}
 
 	@Override

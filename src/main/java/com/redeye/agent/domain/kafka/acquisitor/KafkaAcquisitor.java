@@ -1,6 +1,5 @@
 package com.redeye.agent.domain.kafka.acquisitor;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,7 +12,7 @@ import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerPol
 import com.redeye.agent.domain.kafka.acquisitor.advice.provider.ProducerConfigAdvice;
 import com.redeye.agent.util.KafkaUtil;
 import com.redeye.agent.util.StringUtil;
-import com.redeye.agent.util.elapsedstat.ElapsedStatDaemon;
+import com.redeye.agent.util.daemon.intervalstat.IntervalStatDaemon;
 import com.redeye.agent.util.jmx.JMXService;
 
 /**
@@ -35,13 +34,13 @@ public class KafkaAcquisitor {
 
 	
 	/** 폴링 시간 통계 데몬 */
-	public final static ElapsedStatDaemon poolTimeStatDaemon = new ElapsedStatDaemon();
+	public final static IntervalStatDaemon poolTimeStatDaemon = new IntervalStatDaemon();
 	
 	/** 동기 커밋 시간 통계 데몬 */
-	public final static ElapsedStatDaemon commitSyncTimeStatDaemon = new ElapsedStatDaemon();
+	public final static IntervalStatDaemon commitSyncTimeStatDaemon = new IntervalStatDaemon();
 	
 	/** 비동기 시간 통계 데몬 */
-	public final static ElapsedStatDaemon commitAsyncTimeStatDaemon = new ElapsedStatDaemon();
+	public final static IntervalStatDaemon commitAsyncTimeStatDaemon = new IntervalStatDaemon();
 	
 	
 	/** 클라이언트 접속 정보 맵 - (key: 클라이언트 아이피:아이디 문자열, value: 최초 접속시간 */
@@ -243,15 +242,13 @@ public class KafkaAcquisitor {
 	 */
 	public static Map<String, Map<String, Object>> getBrokerMetrics() throws Exception {
 		
-		List<String> queryList = List.of(
+		return KafkaAcquisitor.jmx.getByQuery(
 			"kafka.log:type=*,name=*,topic=*,partition=*",
 			"kafka.server:type=*,name=*",
 			"kafka.controller:type=*,name=*",
 			"kafka.coordinator.group:type=*,name=*",
 			"kafka.network:type=*,name=*"
 		);
-		
-		return KafkaAcquisitor.jmx.getByQuery(queryList);
 	}
 	
 	/**
@@ -286,13 +283,10 @@ public class KafkaAcquisitor {
 			clientId = "*";
 		}
 		
-		// 조회 쿼리 목록
-		List<String> queryList = List.of(
+		// 성능 조회 및 반환
+		return KafkaAcquisitor.jmx.getByQuery(
 			"kafka.producer:type=producer-metrics,client-id=" + clientId
 		);
-		
-		// 성능 조회 및 반환
-		return KafkaAcquisitor.jmx.getByQuery(queryList);
 	}
 	
 	/**
@@ -309,16 +303,13 @@ public class KafkaAcquisitor {
 			clientId = "*";
 		}
 		
-		// 조회 쿼리 목록
-		List<String> queryList = List.of(
+		// 성능 조회 및 반환
+		return KafkaAcquisitor.jmx.getByQuery(
 			"kafka.consumer:type=consumer-metrics,client-id=" + clientId,
 			"kafka.consumer:type=consumer-fetch-manager-metrics,client-id=" + clientId,
 			"kafka.consumer:type=consumer-topic-metrics,client-id=" + clientId,
 			"kafka.consumer:type=consumer-coordinator-metrics,client-id=" + clientId
 		);
-		
-		// 성능 조회 및 반환
-		return KafkaAcquisitor.jmx.getByQuery(queryList);
 	}
 	
 	/**

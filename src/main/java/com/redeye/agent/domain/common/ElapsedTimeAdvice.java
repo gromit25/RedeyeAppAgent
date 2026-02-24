@@ -3,8 +3,8 @@ package com.redeye.agent.domain.common;
 import java.util.concurrent.BlockingQueue;
 
 import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerAdvice;
-import com.redeye.agent.util.elapsedstat.ElapsedStatDaemon;
-import com.redeye.agent.util.elapsedstat.ElapsedTimeDTO;
+import com.redeye.agent.util.daemon.intervalstat.IntervalStatDaemon;
+import com.redeye.agent.util.daemon.intervalstat.IntervalTimeVO;
 
 /**
  * kafka 클라이언트의 시간 처리 관련 어드바이스 상위(공통) 클래스
@@ -16,7 +16,7 @@ public class ElapsedTimeAdvice {
 	// 아래의 멤버 변수는 public 이어야 함 - SpringBoot 클래스로더에서 문제가 생김
 	
 	/** 시간 데이터 전송용 큐 */
-	public static BlockingQueue<ElapsedTimeDTO> queue;
+	public static BlockingQueue<IntervalTimeVO> queue;
 	
 	
 	/**
@@ -25,7 +25,7 @@ public class ElapsedTimeAdvice {
 	 *
 	 * @param timeStatDaemon 시간 통계 데몬
 	 */
-	public static void init(ElapsedStatDaemon timeStatDaemon) {
+	public static void init(IntervalStatDaemon timeStatDaemon) {
 		ElapsedTimeAdvice.queue = timeStatDaemon.getQueue();
 	}
 	
@@ -51,7 +51,7 @@ public class ElapsedTimeAdvice {
 
 			// 큐에 클라이언트 아이디 및 현재 시간 전송
 			ElapsedTimeAdvice.queue.put(
-				new ElapsedTimeDTO(
+				new IntervalTimeVO(
 					clientId,	// 클라이언트 아이디
 					System.currentTimeMillis()	// 현재 시간
 				)

@@ -1,4 +1,4 @@
-package com.redeye.agent.util.elapsedstat;
+package com.redeye.agent.util.daemon.intervalstat;
 
 import lombok.Getter;
 
@@ -7,14 +7,14 @@ import lombok.Getter;
  * 
  * @author jmsohn
  */
-public class ElapsedTimeDTO {
+public class IntervalTimeVO {
 	
 	
 	/** 구분 아이디 */
 	@Getter
 	private final String id;
 	
-	/** 시간 */
+	/** 발생 시간 */
 	@Getter
 	private final long timestamp;
 	
@@ -23,9 +23,9 @@ public class ElapsedTimeDTO {
 	 * 생성자
 	 * 
 	 * @param id 아이디
-	 * @param timestamp 시간
+	 * @param timestamp 발생 시간
 	 */
-	public ElapsedTimeDTO(String id, long timestamp) {
+	public IntervalTimeVO(String id, long timestamp) {
 		this.id = id;
 		this.timestamp = timestamp;
 	}
@@ -38,7 +38,7 @@ public class ElapsedTimeDTO {
 		
 		return new StringBuilder()
 			.append(this.id)
-			.append(": ")
+			.append(":")
 			.append(this.timestamp)
 			.toString();
 	}

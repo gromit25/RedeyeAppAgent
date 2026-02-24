@@ -1,5 +1,7 @@
 package com.redeye.agent.domain.jdbc.acquisitor.advice;
 
+import com.redeye.agent.domain.common.ElapsedTimeAdvice;
+
 import net.bytebuddy.asm.Advice;
 
 /**
@@ -7,7 +9,7 @@ import net.bytebuddy.asm.Advice;
  * 
  * @author jmsohn
  */
-public class StatementAdvice {
+public class StatementAdvice extends ElapsedTimeAdvice {
 
 	/**
 	 * 

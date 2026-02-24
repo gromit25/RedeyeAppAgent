@@ -1,4 +1,4 @@
-package com.redeye.agent.util.elapsedstat;
+package com.redeye.agent.util.daemon.intervalstat;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -15,41 +15,41 @@ import lombok.Getter;
  * 
  * @author jmsohn
  */
-public class ElapsedStatDaemon {
+public class IntervalStatDaemon {
 	
 	
 	/** 클라이언트 아이디별 최종 시간 데이터 - key: 클라이언트 아이디, value: 시간 데이터 */
-	private final Map<String, Long> elapsedTimeMap = new ConcurrentHashMap<>();
+	private final Map<String, Long> intervalTimeMap = new ConcurrentHashMap<>();
 	
 	/** 클라이언트 아이디별 시간 통계 데이터 - key: 클라이언트 아이디, value: 시간 통계 데이터 */
-	private final Map<String, Parameter> elapsedTimeStatMap = new ConcurrentHashMap<>();
+	private final Map<String, Parameter> intervalTimeStatMap = new ConcurrentHashMap<>();
 
 	/** 시간 수집 큐 - 클라이언트 별 시간 데이터를 수신하는 큐 */
 	@Getter
-	private final BlockingQueue<ElapsedTimeDTO> queue = new LinkedBlockingQueue<>();
+	private final BlockingQueue<IntervalTimeVO> queue = new LinkedBlockingQueue<>();
 
 	/** 통계 생성 데몬 - 시간 수집 큐에서 데이터를 받아 통계 데이터를 생성하는 데몬 */
-	private QueueDaemon<ElapsedTimeDTO> elapsedStatDaemon = null;
+	private QueueDaemon<IntervalTimeVO> intervalStatDaemon = null;
 	
 	
 	/**
 	 * 생성자
 	 */
-	public ElapsedStatDaemon() {
+	public IntervalStatDaemon() {
 		
 		// 통계 생성 데몬 생성
-		this.elapsedStatDaemon = new QueueDaemon<>(
+		this.intervalStatDaemon = new QueueDaemon<>(
 			this.queue,
 			data -> {
 				
 				// 기존 값 저장 
-				Long prePollTime = elapsedTimeMap.get(data.getId());
+				Long prePollTime = intervalTimeMap.get(data.getId());
 				
 				// 시간 저장
-				elapsedTimeMap.put(data.getId(), data.getTimestamp());
+				intervalTimeMap.put(data.getId(), data.getTimestamp());
 				
 				// 통계 정보 저장
-				Parameter timeStat = elapsedTimeStatMap.computeIfAbsent(
+				Parameter timeStat = intervalTimeStatMap.computeIfAbsent(
 					data.getId(), key -> new Parameter()
 				);
 				
@@ -69,8 +69,8 @@ public class ElapsedStatDaemon {
 	 * 
 	 * @return 현재 객체
 	 */
-	public ElapsedStatDaemon start() {
-		this.elapsedStatDaemon.start();
+	public IntervalStatDaemon start() {
+		this.intervalStatDaemon.start();
 		return this;
 	}
 	
@@ -79,8 +79,8 @@ public class ElapsedStatDaemon {
 	 * 
 	 * @return 현재 객체
 	 */
-	public ElapsedStatDaemon stop() {
-		this.elapsedStatDaemon.stop();
+	public IntervalStatDaemon stop() {
+		this.intervalStatDaemon.stop();
 		return this;
 	}
 	
@@ -90,7 +90,7 @@ public class ElapsedStatDaemon {
 	 * @return 통계정보 맵
 	 */
 	public Map<String, Parameter> getStat() {
-		return this.elapsedTimeStatMap;
+		return this.intervalTimeStatMap;
 	}
 	
 	/**
