@@ -1,9 +1,11 @@
 package com.redeye.agent.util.daemon.elapsedstat;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Consumer;
 
 import com.redeye.agent.util.daemon.QueueDaemon;
 import com.redeye.agent.util.stat.Parameter;
@@ -86,12 +88,19 @@ public class ElapsedStatDaemon {
 	}
 	
 	/**
-	 * 통계 아이디의 통계정보 반환
+	 * 통계 데이터 삭제하면서 처리 수행
 	 * 
-	 * @param id 통계 아이디
-	 * @return 통계 정보
+	 * @param consumer 통계 데이터 처리 객체
 	 */
-	public Parameter getStat(String id) {
-		return this.getStat().get(id);
+	public void flush(Consumer<Parameter> consumer) {
+		
+		for(String id: this.getStat().keySet()) {
+			
+			// 통계 정보 확보 및 삭제
+			Parameter stat = this.getStat().remove(id);
+			
+			// 통계 정보 처리 수행
+			consumer.accept(stat);
+		}
 	}
 }
