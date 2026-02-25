@@ -55,7 +55,7 @@ public class ConnectionAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in ConnectionAdvice.commit: ");
+			// TODO
 		}
 	}
 
@@ -69,7 +69,7 @@ public class ConnectionAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in ConnectionAdvice.rollback: ");
+			// TODO
 		}
 	}
 
@@ -83,7 +83,7 @@ public class ConnectionAdvice {
 		 */
 		@Advice.OnMethodExit
 		public static void onExit() {
-			System.out.println("*** DEBUG 100 in ConnectionAdvice.close: ");
+			// TODO
 		}
 	}
 }

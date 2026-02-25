@@ -66,9 +66,16 @@ public enum Config {
 		true
 	),
 	
+	APP_PACKAGE(
+		"RE_APP_PACKAGE",
+		"",
+		"어플리케이션 패키지명 - ex) com.redeye",
+		false
+	),
+	
 	//---------------------------
 	
-	/** */
+	/** 익스포터 서비스 사용 여부 */
 	EXPORTER_YN(
 		"RE_EXPORTER",
 		"N",
@@ -76,7 +83,7 @@ public enum Config {
 		false
 	),
 	
-	/** */
+	/** 익스포터 서비스 서버명(ip), 포트 설정 */
 	EXPORTER_SERVER(
 		"RE_EXPORTER_SERVER",
 		"0.0.0.0:0",
@@ -84,6 +91,7 @@ public enum Config {
 		false
 	),
 	
+	/** 익스포터 서버의 스레드 개수 */
 	EXPORTER_THREAD_COUNT(
 		"RE_EXPORTER_THREAD_COUNT",
 		"-1",
@@ -93,15 +101,15 @@ public enum Config {
 	
 	//---------------------------
 	
-	/** */
+	/** 성능 정보 로더 사용 여부 */
 	LOADER_YN(
 		"RE_LOADER",
 		"N",
-		"로더 사용 여부(Y/N)",
+		"성능 정보 로더 사용 여부(Y/N)",
 		false
 	),
 	
-	/** */
+	/** 로더에서 호출할 API의 기준 패스 */
 	LOADER_API_SERVER(
 		"RE_LOADER_API_SERVER",
 		null,
@@ -109,7 +117,7 @@ public enum Config {
 		false
 	),
 	
-	/** */
+	/** API 호출 스케쥴 */
 	LOADER_SCHEDULE(
 		"RE_LOADER_SCHEDULE",
 		"*/10 * * * * *",

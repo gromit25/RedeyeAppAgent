@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import com.redeye.agent.domain.common.ElapsedTimeAdvice;
 import com.redeye.agent.domain.common.InvokeStatus;
+import com.redeye.agent.domain.jdbc.JDBCUtil;
 
 import net.bytebuddy.asm.Advice;
 
@@ -115,7 +116,7 @@ public class PreparedStatementAdvice extends ElapsedTimeAdvice {
 			long elapsedTime = System.currentTimeMillis() - getStartTime();
 			
 			// 쿼리 수행 시간을 통계 처리자에게 전송
-			put(ConnectionAdvice.getSql(), elapsedTime);
+			put(JDBCUtil.getSqlId(), elapsedTime);
 		}
 	} // End of execute class
 }
