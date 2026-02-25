@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * 
+ * 어드바이스 유틸리티 클래스
  * 
  * @author jmsohn
  */
@@ -43,9 +43,9 @@ public class AdviceUtil {
 	
 	
 	/**
+	 * 현재 스레드의 Loc 정보를 반환
 	 * 
-	 * 
-	 * @return
+	 * @return 현재 스레드의 Loc 정보
 	 */
 	public static Loc getLoc() {
 		
