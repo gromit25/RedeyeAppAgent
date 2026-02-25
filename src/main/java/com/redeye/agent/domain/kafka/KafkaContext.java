@@ -174,10 +174,10 @@ public class KafkaContext implements Context {
 				@Override
 				public void load(String basePath, long startTime, long endTime) {
 					
-					ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
-					int threadCount = threadBean.getThreadCount();
-					
-					System.out.println("### DEBUG LOADER: " + basePath + ", " + startTime + ", " + threadCount);
+//					ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
+//					int threadCount = threadBean.getThreadCount();
+//					
+//					System.out.println("### DEBUG LOADER: " + basePath + ", " + startTime + ", " + threadCount);
 				}
 			}
 		);

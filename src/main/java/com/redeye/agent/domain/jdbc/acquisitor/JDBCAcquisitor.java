@@ -2,6 +2,7 @@ package com.redeye.agent.domain.jdbc.acquisitor;
 
 import com.redeye.agent.domain.jdbc.acquisitor.advice.PreparedStatementAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.StatementAdvice;
+import com.redeye.agent.util.daemon.elapsedstat.ElapsedStatDaemon;
 import com.redeye.agent.util.daemon.intervalstat.IntervalStatDaemon;
 
 /**
@@ -13,7 +14,7 @@ public class JDBCAcquisitor {
 	
 	
 	/** sql 수행 시간 통계 데몬 */
-	public final static IntervalStatDaemon sqlStatDaemon = new IntervalStatDaemon();
+	public final static ElapsedStatDaemon sqlStatDaemon = new ElapsedStatDaemon();
 	
 	
 	/**

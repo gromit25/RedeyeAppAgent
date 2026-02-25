@@ -105,14 +105,14 @@ public enum Config {
 	LOADER_API_SERVER(
 		"RE_LOADER_API_SERVER",
 		null,
-		"로더에서 호출할 API의 기준 패스 - http://localhost:8080",
+		"로더에서 호출할 API의 기준 패스 - ex) http://localhost:8080",
 		false
 	),
 	
 	/** */
 	LOADER_SCHEDULE(
 		"RE_LOADER_SCHEDULE",
-		null,
+		"*/10 * * * * *",
 		"API 호출 스케쥴",
 		false
 	);

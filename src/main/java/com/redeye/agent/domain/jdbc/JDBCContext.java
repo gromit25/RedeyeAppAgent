@@ -1,6 +1,8 @@
 package com.redeye.agent.domain.jdbc;
 
 import java.lang.instrument.Instrumentation;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -143,6 +145,14 @@ public class JDBCContext implements Context {
 
 	@Override
 	public List<APILoader> getAPILoaderList() {
-		return List.of();
+		return List.of(
+			new APILoader() {
+
+				@Override
+				public void load(String basePath, long startTime, long endTime) {
+					System.out.println("### DEBUG LOADER: \n" + JDBCAcquisitor.sqlStatDaemon.getStat());
+				}
+			}
+		);
 	}
 }
