@@ -103,6 +103,8 @@ public class PreparedStatementAdvice extends ElapsedTimeAdvice {
 		public static void onExit() {
 			
 			// 호출 상태 확인
+			// 반복 호출에 의해 여러번 호출된 것으로 계산되는 것을 방지하기 위함
+			// INVOKE_ENTER -> INVOKE_EXIT 상태 변경시에만 한번 호출된 것으로 계산
 			if(getInvokeStatus() != InvokeStatus.INVOKE_ENTER) {
 				return;
 			}

@@ -18,11 +18,15 @@ public class JDBCAcquisitor {
 	
 	
 	/**
-	 * 초기화
+	 * 초기화 및 기동
 	 */
 	public static void init() {
 		
+		// 어드바이스 초기화
 		PreparedStatementAdvice.init(sqlStatDaemon);
 		StatementAdvice.init(sqlStatDaemon);
+		
+		// sql 통계 데몬 기동
+		sqlStatDaemon.start();
 	}
 }
