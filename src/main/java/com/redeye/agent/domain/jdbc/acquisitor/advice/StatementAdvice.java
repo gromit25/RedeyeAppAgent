@@ -1,7 +1,6 @@
 package com.redeye.agent.domain.jdbc.acquisitor.advice;
 
 import com.redeye.agent.domain.common.ElapsedTimeAdvice;
-import com.redeye.agent.domain.common.IntervalTimeAdvice;
 
 import net.bytebuddy.asm.Advice;
 
