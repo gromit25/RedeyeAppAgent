@@ -150,7 +150,14 @@ public class JDBCContext implements Context {
 
 				@Override
 				public void load(String basePath, long startTime, long endTime) {
-					System.out.println("### DEBUG LOADER: \n" + JDBCAcquisitor.sqlStatDaemon.getStat());
+					JDBCAcquisitor.sqlStatDaemon.flush(
+						(id, stat) -> {
+							System.out.println("### ID:");
+							System.out.println(id);
+							System.out.println("### STAT:");
+							System.out.println(stat);
+						}
+					);
 				}
 			}
 		);

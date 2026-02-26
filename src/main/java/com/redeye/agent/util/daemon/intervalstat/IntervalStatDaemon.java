@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import com.redeye.agent.util.daemon.QueueDaemon;
 import com.redeye.agent.util.stat.Parameter;
@@ -100,7 +100,7 @@ public class IntervalStatDaemon {
 	 * 
 	 * @param consumer 통계 데이터 처리 객체
 	 */
-	public void flush(Consumer<Parameter> consumer) {
+	public void flush(BiConsumer<String, Parameter> consumer) {
 		
 		for(String id: this.getStat().keySet()) {
 			
@@ -108,7 +108,7 @@ public class IntervalStatDaemon {
 			Parameter stat = this.getStat().remove(id);
 			
 			// 통계 정보 처리 수행
-			consumer.accept(stat);
+			consumer.accept(id, stat);
 		}
 	}
 }
