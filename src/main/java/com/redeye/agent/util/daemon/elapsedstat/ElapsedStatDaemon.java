@@ -21,10 +21,10 @@ import lombok.Getter;
 public class ElapsedStatDaemon {
 	
 	
-	/** 클라이언트 아이디별 최종 시간 데이터 - key: 클라이언트 아이디, value: 시간 데이터 */
+	/** 통계 아이디별 최종 시간 데이터 - key: 통계 아이디, value: 시간 데이터 */
 	private final Map<String, Long> elapsedTimeMap = new ConcurrentHashMap<>();
 	
-	/** 클라이언트 아이디별 시간 통계 데이터 - key: 클라이언트 아이디, value: 시간 통계 데이터 */
+	/** 통계 아이디별 시간 통계 데이터 - key: 통계 아이디, value: 시간 통계 데이터 */
 	private final Map<String, Parameter> elapsedTimeStatMap = new ConcurrentHashMap<>();
 
 	/** 시간 수집 큐 - 클라이언트 별 시간 데이터를 수신하는 큐 */
