@@ -6,7 +6,7 @@ import com.redeye.agent.util.daemon.elapsedstat.ElapsedStatDaemon;
 import com.redeye.agent.util.daemon.intervalstat.IntervalStatDaemon;
 
 /**
- * JDBC 수집기
+ * JDBC 성능 정보 수집기
  * 
  * @author jmsohn
  */
