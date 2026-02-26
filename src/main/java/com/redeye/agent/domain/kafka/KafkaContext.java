@@ -1,8 +1,6 @@
 package com.redeye.agent.domain.kafka;
 
 import java.lang.instrument.Instrumentation;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
 import java.util.List;
 
 import com.redeye.agent.Context;

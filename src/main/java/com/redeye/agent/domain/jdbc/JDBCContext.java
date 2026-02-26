@@ -1,8 +1,6 @@
 package com.redeye.agent.domain.jdbc;
 
 import java.lang.instrument.Instrumentation;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
