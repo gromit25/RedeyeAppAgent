@@ -20,7 +20,7 @@ import net.bytebuddy.asm.Advice;
 import net.bytebuddy.matcher.ElementMatchers;
 
 /**
- * 
+ * JDBC 컨텍스트 클래스
  * 
  * @author jmsohn
  */

@@ -68,12 +68,7 @@ public class PreparedStatementAdvice extends ElapsedTimeAdvice {
 		 */
 		@Advice.OnMethodEnter
 		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
-			
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.setValue: " + method);
-			
-			for(Object arg: args) {
-				System.out.println("ARGS : " + arg);
-			}
+			// TODO
 		}
 	}
 

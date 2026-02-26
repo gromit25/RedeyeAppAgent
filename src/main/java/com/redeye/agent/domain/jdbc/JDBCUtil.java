@@ -4,25 +4,26 @@ import com.redeye.agent.domain.common.AdviceUtil;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.ConnectionAdvice;
 
 /**
- * 
+ * JDBC 관련 유틸리티 클래스
  * 
  * @author jmsohn
  */
 public class JDBCUtil {
 
 	/**
+	 * sql 아이디 생성 후 반환
 	 * 
-	 * 
-	 * @return
+	 * @param sql sql
+	 * @return sql 아이디
 	 */
 	public static String getSqlId(String sql) {
 		return AdviceUtil.getLoc() + ":" + sql;
 	}
 	
 	/**
+	 * sql 아이디 생성 후 반환
 	 * 
-	 * 
-	 * @return
+	 * @return sql 아이디
 	 */
 	public static String getSqlId() {
 		return getSqlId(ConnectionAdvice.getSql());
