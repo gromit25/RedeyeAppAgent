@@ -4,6 +4,8 @@ import java.lang.instrument.Instrumentation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
@@ -13,6 +15,7 @@ import com.redeye.agent.domain.jdbc.acquisitor.advice.ConnectionAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.DataSourceAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.DriverManagerAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.PreparedStatementAdvice;
+import com.redeye.agent.domain.jdbc.loader.SqlStatLoader;
 import com.redeye.agent.loader.APILoader;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -143,21 +146,6 @@ public class JDBCContext implements Context {
 
 	@Override
 	public List<APILoader> getAPILoaderList() {
-		return List.of(
-			new APILoader() {
-
-				@Override
-				public void load(String basePath, long startTime, long endTime) {
-					JDBCAcquisitor.sqlStatDaemon.flush(
-						(id, stat) -> {
-							System.out.println("### ID:");
-							System.out.println(id);
-							System.out.println("### STAT:");
-							System.out.println(stat);
-						}
-					);
-				}
-			}
-		);
+		return List.of(new SqlStatLoader());
 	}
 }
