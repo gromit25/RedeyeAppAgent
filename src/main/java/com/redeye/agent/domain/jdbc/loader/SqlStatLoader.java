@@ -92,7 +92,7 @@ public class SqlStatLoader implements APILoader {
 		json.append(",\"sumX\":").append(stat.getSum());
 		json.append(",\"sumX2\":").append(stat.getSquaredSum());
 		json.append(",\"sumX3\":").append(stat.getCubedSum());
-		json.append(",\"sum4X\":").append(stat.getFourthPoweredSum());
+		json.append(",\"sumX4\":").append(stat.getFourthPoweredSum());
 		json.append(",\"minX\":").append(stat.getMin());
 		json.append(",\"maxX\":").append(stat.getMax());
 		json.append("}");
