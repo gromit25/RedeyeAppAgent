@@ -1,16 +1,13 @@
 package com.redeye.agent.domain.jdbc.loader;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.redeye.agent.Config;
 import com.redeye.agent.domain.jdbc.acquisitor.JDBCAcquisitor;
 import com.redeye.agent.loader.APILoader;
+import com.redeye.agent.util.HttpUtil;
+import com.redeye.agent.util.LogUtil;
 import com.redeye.agent.util.stat.Parameter;
 
 /**
@@ -42,18 +39,48 @@ public class SqlStatLoader implements APILoader {
 				if(idM.matches() == false) {
 					return;
 				}
+				
+				// 전송할 url 패스 생성
+				final String path = makePath(basePath);
 
 				// 전송할 JSON 메시지 생성
-				String message = makeJsonMessage(startTime, endTime, idM, stat);
+				final String message = makeJsonMessage(startTime, endTime, idM, stat);
 				
-				// JSON 메시지 생성
+				// JSON 메시지 전송
 				try {
-					send(basePath, message);
+					
+					HttpUtil.postJSON(
+						path,
+						message,
+						(respCode, respMessage) -> {
+							if(respCode != 200) {
+								LogUtil.log("fail to send sql stat(" + respCode + "): " + path);
+							}
+						}
+					);
+					
 				} catch(Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		);
+	}
+	
+	/**
+	 * 호출 패스 생성
+	 * 
+	 * @param basePath 기본 패스
+	 * @return 생성된 패스
+	 */
+	private static String makePath(String basePath) {
+		
+		// 패스 생성
+		StringBuilder path = new StringBuilder(basePath);
+		path.append(SUBPATH)
+			.append("/").append(Config.DOMAIN_CODE.getValue())
+			.append("/").append(Config.APP_CODE.getValue());
+		
+		return path.toString();
 	}
 	
 	/**
@@ -100,55 +127,5 @@ public class SqlStatLoader implements APILoader {
 		json.append("}");
 		
 		return json.toString();
-	}
-	
-	/**
-	 * JSON 메시지 전송
-	 * 
-	 * @param basePath 기본 패스
-	 * @param message 메시지
-	 */
-	private static void send(String basePath, String message) throws Exception {
-		
-		// 패스 생성
-		StringBuilder path = new StringBuilder(basePath);
-		path.append(SUBPATH)
-			.append("/").append(Config.DOMAIN_CODE.getValue())
-			.append("/").append(Config.APP_CODE.getValue());
-		
-		//
-		URL url = new URL(path.toString());
-		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        
-		// 헤더 설정
-		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Content-Type", "application/json; utf-8");
-		conn.setRequestProperty("Accept", "application/json");
-		conn.setDoOutput(true);
-
-		// JSON 데이터 전송 (Write)
-		try(OutputStream os = conn.getOutputStream()) {
-			byte[] input = message.getBytes("utf-8");
-			os.write(input, 0, input.length);           
-		}
-
-		// 응답 코드 확인 및 데이터 읽기 (Read)
-		int code = conn.getResponseCode();
-		
-		System.out.println("### DEBUG RESPONSE CODE: " + code);
-
-		try(
-			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))
-		) {
-			
-			StringBuilder response = new StringBuilder();
-			
-			String responseLine = null;
-			while((responseLine = br.readLine()) != null) {
-				response.append(responseLine.trim());
-			}
-			
-			System.out.println("Response Body: " + response.toString());
-		}
 	}
 }

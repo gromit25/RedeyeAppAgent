@@ -9,6 +9,7 @@ import com.redeye.agent.domain.jdbc.JDBCContext;
 import com.redeye.agent.domain.kafka.KafkaContext;
 import com.redeye.agent.loader.APILoader;
 import com.redeye.agent.loader.APILoaderCronJob;
+import com.redeye.agent.util.LogUtil;
 import com.redeye.agent.util.StringUtil;
 import com.redeye.agent.util.WebUtil;
 import com.redeye.agent.util.http.service.HttpService;
@@ -106,7 +107,7 @@ public class RedeyeAgent {
 		// 서버 기동 여부 확인
 		String useLoader = Config.EXPORTER_YN.value;
 		if("Y".equalsIgnoreCase(useLoader) == false) {
-			System.out.println("http exporter is disabled.");
+			LogUtil.log("http exporter is disabled.");
 			return;
 		}
 		
@@ -168,7 +169,7 @@ public class RedeyeAgent {
 		// Http 서버 기동
 		service.start();
 		
-		System.out.println("http exporter(" + service.getHostStr() + ") is started.");
+		LogUtil.log("http exporter(" + service.getHostStr() + ") is started.");
 	}
 	
 	/**
@@ -180,7 +181,7 @@ public class RedeyeAgent {
 		// 로더 기동 여부 확인
 		String useLoader = Config.LOADER_YN.value;
 		if("Y".equalsIgnoreCase(useLoader) == false) {
-			System.out.println("metrics api loader is disabled.");
+			LogUtil.log("metrics api loader is disabled.");
 			return;
 		}
 		
@@ -206,6 +207,6 @@ public class RedeyeAgent {
 		loader = new APILoaderCronJob(basePath, schedule, loaderList);
 		loader.start();
 		
-		System.out.println("metrics api loader is started.");
+		LogUtil.log("metrics api loader is started.");
 	}
 }
