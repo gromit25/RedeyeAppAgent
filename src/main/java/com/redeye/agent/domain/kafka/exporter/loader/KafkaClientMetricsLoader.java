@@ -7,7 +7,7 @@ import com.redeye.agent.loader.APILoader;
  * 
  * @author jmsohn
  */
-public class KafkaMetricsLoader implements APILoader {
+public class KafkaClientMetricsLoader implements APILoader {
 	
 	
 	/** kafka 통계 정보 서브패스 */
