@@ -44,7 +44,7 @@ public class SqlStatLoader implements APILoader {
 				final String path = makePath(basePath);
 
 				// 전송할 JSON 메시지 생성
-				final String message = makeJsonMessage(startTime, endTime, idM, stat);
+				final String message = makeMessage(startTime, endTime, idM, stat);
 				
 				// JSON 메시지 전송
 				try {
@@ -74,13 +74,12 @@ public class SqlStatLoader implements APILoader {
 	 */
 	private static String makePath(String basePath) {
 		
-		// 패스 생성
-		StringBuilder path = new StringBuilder(basePath);
-		path.append(SUBPATH)
+		return new StringBuilder()
+			.append(basePath)
+			.append(SUBPATH)
 			.append("/").append(Config.DOMAIN_CODE.getValue())
-			.append("/").append(Config.APP_CODE.getValue());
-		
-		return path.toString();
+			.append("/").append(Config.APP_CODE.getValue())
+			.toString();
 	}
 	
 	/**
@@ -92,10 +91,14 @@ public class SqlStatLoader implements APILoader {
 	 * @param stat sql 통계 정보
 	 * @return Sql 통계 Json 메시지
 	 */
-	private static String makeJsonMessage(long startTime, long endTime, Matcher idM, Parameter stat) {
+	private static String makeMessage(long startTime, long endTime, Matcher idM, Parameter stat) {
 		
 		StringBuilder json = new StringBuilder("");
-		json.append("{\"sqlInfo\":{");
+		
+		json.append("{");
+		
+		// sql 기본 정보
+		json.append("\"sqlInfo\":{");
 		
 		json.append("\"className\":\"").append(idM.group("class")).append("\"");
 		json.append(",\"methodName\":\"").append(idM.group("method")).append("\"");
@@ -111,7 +114,7 @@ public class SqlStatLoader implements APILoader {
 
 		json.append("}");
 		
-		
+		// sql 통계 정보
 		json.append(",\"sqlStat\":{");
 		json.append("\"startTime\":").append(startTime);
 		json.append(",\"endTime\":").append(endTime);
