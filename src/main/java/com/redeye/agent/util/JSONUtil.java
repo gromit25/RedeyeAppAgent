@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.redeye.agent.util.stat.Parameter;
+
 /**
  * JSON 유틸리티 클래스
  * 
@@ -152,5 +154,36 @@ public class JSONUtil {
 				return '"' + obj.toString() + '"';
 			}
 		}
+	}
+	
+	/**
+	 * 모수 통계량(Parameter) 에 대해 JSON 문자열로 반환
+	 * 
+	 * @param stat 모수 통계량
+	 * @param startTime 통계량 수집 시작 시간
+	 * @param endTime 통계량 수집 종료 시간
+	 * @return JSON 문자열
+	 */
+	public static String toJSON(Parameter stat, long startTime, long endTime) {
+		
+		// 통계량이 없을 경우 디폴트 값으로 생성
+		if(stat == null) {
+			stat = new Parameter();
+		}
+		
+		// JSON 문자열 생성
+		StringBuilder json = new StringBuilder("{");
+		
+		json.append("\"startTime\":").append(startTime);
+		json.append(",\"endTime\":").append(endTime);
+		json.append(",\"count\":").append(stat.getCount());
+		json.append(",\"sumX\":").append(stat.getSum());
+		json.append(",\"sumX2\":").append(stat.getSquaredSum());
+		json.append(",\"sumX3\":").append(stat.getCubedSum());
+		json.append(",\"sumX4\":").append(stat.getFourthPoweredSum());
+		json.append(",\"minX\":").append(stat.getMin());
+		json.append(",\"maxX\":").append(stat.getMax());
+		
+		return json.append("}").toString();
 	}
 }

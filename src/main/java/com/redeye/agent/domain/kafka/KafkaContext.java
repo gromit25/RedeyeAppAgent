@@ -11,6 +11,7 @@ import com.redeye.agent.domain.kafka.acquisitor.advice.broker.SaslServerAuthenti
 import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.ConsumerConfigAdvice;
 import com.redeye.agent.domain.kafka.acquisitor.advice.consumer.KafkaConsumerAdvice;
 import com.redeye.agent.domain.kafka.acquisitor.advice.provider.ProducerConfigAdvice;
+import com.redeye.agent.domain.kafka.exporter.loader.KafkaClientLoader;
 import com.redeye.agent.domain.kafka.exporter.service.KafkaBrokerController;
 import com.redeye.agent.domain.kafka.exporter.service.KafkaClientController;
 import com.redeye.agent.domain.kafka.exporter.service.KafkaConfigController;
@@ -167,17 +168,7 @@ public class KafkaContext implements Context {
 	public List<APILoader> getAPILoaderList() {
 		
 		return List.of(
-			new APILoader() {
-
-				@Override
-				public void load(String basePath, long startTime, long endTime) {
-					
-//					ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
-//					int threadCount = threadBean.getThreadCount();
-//					
-//					System.out.println("### DEBUG LOADER: " + basePath + ", " + startTime + ", " + threadCount);
-				}
-			}
+			new KafkaClientLoader()
 		);
 	}
 }

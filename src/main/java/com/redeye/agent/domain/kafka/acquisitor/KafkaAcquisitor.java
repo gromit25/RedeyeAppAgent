@@ -31,13 +31,13 @@ public class KafkaAcquisitor {
 	public static final Map<String, Map<String, Object>> consumerConfigMap = new ConcurrentHashMap<>();
 
 	
-	/** 폴링 시간 통계 데몬 */
+	/** 컨슈머 폴링 시간 통계 데몬 */
 	public final static IntervalStatDaemon poolTimeStatDaemon = new IntervalStatDaemon();
 	
-	/** 동기 커밋 시간 통계 데몬 */
+	/** 프로듀서 동기 커밋 시간 통계 데몬 */
 	public final static IntervalStatDaemon commitSyncTimeStatDaemon = new IntervalStatDaemon();
 	
-	/** 비동기 시간 통계 데몬 */
+	/** 프로듀서 비동기 시간 통계 데몬 */
 	public final static IntervalStatDaemon commitAsyncTimeStatDaemon = new IntervalStatDaemon();
 	
 	
@@ -54,7 +54,6 @@ public class KafkaAcquisitor {
 	 */
 	public static void init() {
 		
-		//
 		// ProducerConfig 생성자 호출 어드바이스 설정
 		ProducerConfigAdvice.init(KafkaAcquisitor.producerConfigMap);
 		

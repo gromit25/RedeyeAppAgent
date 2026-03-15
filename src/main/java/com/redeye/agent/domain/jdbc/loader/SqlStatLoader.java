@@ -7,6 +7,7 @@ import com.redeye.agent.Config;
 import com.redeye.agent.domain.jdbc.acquisitor.JDBCAcquisitor;
 import com.redeye.agent.loader.APILoader;
 import com.redeye.agent.util.HttpUtil;
+import com.redeye.agent.util.JSONUtil;
 import com.redeye.agent.util.LogUtil;
 import com.redeye.agent.util.stat.Parameter;
 
@@ -53,6 +54,8 @@ public class SqlStatLoader implements APILoader {
 						path,
 						message,
 						(respCode, respMessage) -> {
+							
+							// 실패시 메시지 출력
 							if(respCode != 200) {
 								LogUtil.log("fail to send sql stat(" + respCode + "): " + path);
 							}
@@ -115,17 +118,8 @@ public class SqlStatLoader implements APILoader {
 		json.append("}");
 		
 		// sql 통계 정보
-		json.append(",\"sqlStat\":{");
-		json.append("\"startTime\":").append(startTime);
-		json.append(",\"endTime\":").append(endTime);
-		json.append(",\"count\":").append(stat.getCount());
-		json.append(",\"sumX\":").append(stat.getSum());
-		json.append(",\"sumX2\":").append(stat.getSquaredSum());
-		json.append(",\"sumX3\":").append(stat.getCubedSum());
-		json.append(",\"sumX4\":").append(stat.getFourthPoweredSum());
-		json.append(",\"minX\":").append(stat.getMin());
-		json.append(",\"maxX\":").append(stat.getMax());
-		json.append("}");
+		json.append(",\"sqlStat\":");
+		json.append(JSONUtil.toJSON(stat, startTime, endTime));
 		
 		json.append("}");
 		
