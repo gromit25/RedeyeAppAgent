@@ -177,8 +177,12 @@ public class JSONUtil {
 		json.append(",\"sumX2\":").append(stat.getSquaredSum());
 		json.append(",\"sumX3\":").append(stat.getCubedSum());
 		json.append(",\"sumX4\":").append(stat.getFourthPoweredSum());
-		json.append(",\"minX\":").append(stat.getMin());
-		json.append(",\"maxX\":").append(stat.getMax());
+		
+		String min = (Double.isNaN(stat.getMin()) == true)?"null":Double.toString(stat.getMin());
+		json.append(",\"minX\":").append(min);
+		
+		String max = (Double.isNaN(stat.getMax()) == true)?"null":Double.toString(stat.getMax());
+		json.append(",\"maxX\":").append(max);
 		
 		return json.append("}").toString();
 	}

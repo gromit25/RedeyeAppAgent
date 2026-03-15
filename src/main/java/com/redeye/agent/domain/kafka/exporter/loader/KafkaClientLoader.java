@@ -48,7 +48,7 @@ public class KafkaClientLoader implements APILoader {
 			.append(",\"endTime\":").append(endTime);
 		
 		// 프로듀서 정보 메시지 추가
-		json.append(", \"producer\": {");
+		json.append(",\"producer\": {");
 		
 		Set<String> producerIdSet = KafkaAcquisitor.getProducerClientIdSet();
 		for(String producerId: producerIdSet) {
@@ -58,7 +58,7 @@ public class KafkaClientLoader implements APILoader {
 		json.append("}");
 		
 		// 컨슈머 정보 메시지 추가
-		json.append(", \"consumer\": {");
+		json.append(",\"consumer\": {");
 		
 		Set<String> consumerIdSet = KafkaAcquisitor.getConsumerClientIdSet();
 		for(String consumerId: consumerIdSet) {
@@ -96,19 +96,19 @@ public class KafkaClientLoader implements APILoader {
 		
 		// 성능 정보 추가
 		json
-			.append(", \"metrics\": ")
+			.append(",\"metrics\": ")
 			.append(JSONUtil.toJSON(KafkaAcquisitor.getProducerMetrics(producerId)));
 		
 		// commitSync 간격 통계 정보 추가
 		Parameter commitSyncStat = KafkaAcquisitor.commitSyncTimeStatDaemon.getStat().remove(producerId);
 		json
-			.append(", \"commitSyncStat\": ")
+			.append(",\"commitSyncStat\": ")
 			.append(JSONUtil.toJSON(commitSyncStat));
 		
 		// commitAsync 간격 통계 정보 추가
 		Parameter commitAsyncStat = KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(producerId);
 		json
-			.append(", \"commitAsyncStat\": ")
+			.append(",\"commitAsyncStat\": ")
 			.append(JSONUtil.toJSON(commitAsyncStat));
 		
 		return json.append("}").toString();
@@ -138,13 +138,13 @@ public class KafkaClientLoader implements APILoader {
 		
 		// 성능 정보 추가
 		json
-			.append(", \"metrics\": ")
+			.append(",\"metrics\": ")
 			.append(JSONUtil.toJSON(KafkaAcquisitor.getConsumerMetrics(consumerId)));
 		
 		// 폴링 간격 통계 정보 추가
 		Parameter pollingStat = KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(consumerId);
 		json
-			.append(", \"pollingStat\": ")
+			.append(",\"pollingStat\": ")
 			.append(JSONUtil.toJSON(pollingStat));
 		
 		return json.append("}").toString();
