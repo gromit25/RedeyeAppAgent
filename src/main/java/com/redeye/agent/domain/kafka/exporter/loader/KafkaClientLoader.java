@@ -4,7 +4,9 @@ import java.util.Set;
 
 import com.redeye.agent.domain.kafka.acquisitor.KafkaAcquisitor;
 import com.redeye.agent.loader.APILoader;
+import com.redeye.agent.util.HttpUtil;
 import com.redeye.agent.util.JSONUtil;
+import com.redeye.agent.util.LogUtil;
 import com.redeye.agent.util.stat.Parameter;
 
 /**
@@ -23,18 +25,46 @@ public class KafkaClientLoader implements APILoader {
 	public void load(String basePath, long startTime, long endTime) {
 		
 		try {
-			System.out.println(makeMessage(startTime, endTime));
+			
+			String path = makePath(basePath);
+			
+			String message = makeMessage(startTime, endTime);
+					
+			HttpUtil.postJSON(
+				path,
+				message,
+				(respCode, respMessage) -> {
+					
+					// 실패시 메시지 출력
+					if(respCode != 200) {
+						LogUtil.log("fail to send sql stat(" + respCode + "): " + path);
+					}
+				}
+			);
+			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
 	/**
+	 * 호출 패스 생성
 	 * 
+	 * @param basePath 기본 패스
+	 * @return 생성된 패스
+	 */
+	private static String makePath(String basePath) {
+		
+		return new StringBuilder()
+			.toString();
+	}
+	
+	/**
+	 * Kafka 클라이언트 Json 메시지 생성 및 반환
 	 * 
 	 * @param startTime 시작 시간
 	 * @param endTime 다음 실행 시간
-	 * @return
+	 * @return 생성된 Json 메시지
 	 */
 	private static String makeMessage(long startTime, long endTime) throws Exception {
 		
