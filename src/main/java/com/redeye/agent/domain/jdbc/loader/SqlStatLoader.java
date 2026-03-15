@@ -32,6 +32,9 @@ public class SqlStatLoader implements APILoader {
 	@Override
 	public void load(String basePath, long startTime, long endTime) {
 		
+		// 전송할 url 패스 생성
+		String path = makePath(basePath);
+		
 		JDBCAcquisitor.sqlStatDaemon.flush(
 			(id, stat) -> {
 				
@@ -40,12 +43,9 @@ public class SqlStatLoader implements APILoader {
 				if(idM.matches() == false) {
 					return;
 				}
-				
-				// 전송할 url 패스 생성
-				final String path = makePath(basePath);
 
 				// 전송할 JSON 메시지 생성
-				final String message = makeMessage(startTime, endTime, idM, stat);
+				String message = makeMessage(startTime, endTime, idM, stat);
 				
 				// JSON 메시지 전송
 				try {
@@ -106,7 +106,7 @@ public class SqlStatLoader implements APILoader {
 			.append(",\"endTime\":").append(endTime);
 		
 		// sql 기본 정보
-		json.append("\"sqlInfo\":{");
+		json.append(",\"sqlInfo\":{");
 		
 		json.append("\"className\":\"").append(idM.group("class")).append("\"");
 		json.append(",\"methodName\":\"").append(idM.group("method")).append("\"");

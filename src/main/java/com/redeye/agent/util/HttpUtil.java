@@ -50,7 +50,7 @@ public class HttpUtil {
 		}
 		
 		// url 연결 생성
-		URL url = new URL(path.toString());
+		URL url = new URL(path);
 		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         
 		// 헤더 설정
@@ -68,8 +68,6 @@ public class HttpUtil {
 		// 응답 코드 확인 및 데이터 읽기 (Read)
 		int code = conn.getResponseCode();
 		
-		System.out.println("### DEBUG RESPONSE CODE: " + code);
-
 		try(
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))
 		) {
