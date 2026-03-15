@@ -160,11 +160,9 @@ public class JSONUtil {
 	 * 모수 통계량(Parameter) 에 대해 JSON 문자열로 반환
 	 * 
 	 * @param stat 모수 통계량
-	 * @param startTime 통계량 수집 시작 시간
-	 * @param endTime 통계량 수집 종료 시간
 	 * @return JSON 문자열
 	 */
-	public static String toJSON(Parameter stat, long startTime, long endTime) {
+	public static String toJSON(Parameter stat) {
 		
 		// 통계량이 없을 경우 디폴트 값으로 생성
 		if(stat == null) {
@@ -174,9 +172,7 @@ public class JSONUtil {
 		// JSON 문자열 생성
 		StringBuilder json = new StringBuilder("{");
 		
-		json.append("\"startTime\":").append(startTime);
-		json.append(",\"endTime\":").append(endTime);
-		json.append(",\"count\":").append(stat.getCount());
+		json.append("\"count\":").append(stat.getCount());
 		json.append(",\"sumX\":").append(stat.getSum());
 		json.append(",\"sumX2\":").append(stat.getSquaredSum());
 		json.append(",\"sumX3\":").append(stat.getCubedSum());

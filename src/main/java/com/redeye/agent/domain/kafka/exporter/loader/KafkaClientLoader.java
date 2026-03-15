@@ -38,21 +38,34 @@ public class KafkaClientLoader implements APILoader {
 	 */
 	private static String makeMessage(long startTime, long endTime) throws Exception {
 		
+		// json 메시지 변수
 		StringBuilder json = new StringBuilder("");
 		
-		json.append("{");
+		// 시간 정보 메시지 추가
+		json
+			.append("{")
+			.append("\"startTime\":").append(startTime)
+			.append(",\"endTime\":").append(endTime);
 		
 		// 프로듀서 정보 메시지 추가
+		json.append(", \"producer\": {");
+		
 		Set<String> producerIdSet = KafkaAcquisitor.getProducerClientIdSet();
 		for(String producerId: producerIdSet) {
-			json.append(makeProducerMessage(producerId, startTime, endTime));
+			json.append(makeProducerMessage(producerId));
 		}
 		
+		json.append("}");
+		
 		// 컨슈머 정보 메시지 추가
+		json.append(", \"consumer\": {");
+		
 		Set<String> consumerIdSet = KafkaAcquisitor.getConsumerClientIdSet();
 		for(String consumerId: consumerIdSet) {
-			json.append(makeConsumerMessage(consumerId, startTime, endTime));
+			json.append(makeConsumerMessage(consumerId));
 		}
+		
+		json.append("}");
 		
 		json.append("}");
 		
@@ -63,67 +76,77 @@ public class KafkaClientLoader implements APILoader {
 	 * 프로듀서 메시지 생성 및 반환
 	 * 
 	 * @param producerId 프로듀서 아이디
-	 * @param startTime 시작 시간
-	 * @param endTime 다음 실행 시간
 	 * @return 생성된 프로듀서 메시지
 	 */
-	private static String makeProducerMessage(String producerId, long startTime, long endTime) throws Exception {
+	private static String makeProducerMessage(String producerId) throws Exception {
 		
+		// json 메시지 변수
 		StringBuilder json = new StringBuilder();
 		
-		// 클라이언트 아이디와 타입 추가
-		json.append("");
+		// 클라이언트 아이디 추가
+		json
+			.append("\"")
+			.append(producerId)
+			.append("\": {");
 		
 		// 설정값 추가
-		json.append(
-			JSONUtil.toJSON(KafkaAcquisitor.getConfigMap(producerId))
-		);
+		json
+			.append("\"config\": ")
+			.append(JSONUtil.toJSON(KafkaAcquisitor.getConfigMap(producerId)));
 		
 		// 성능 정보 추가
-		json.append(
-			JSONUtil.toJSON(KafkaAcquisitor.getProducerMetrics(producerId))
-		);
+		json
+			.append(", \"metrics\": ")
+			.append(JSONUtil.toJSON(KafkaAcquisitor.getProducerMetrics(producerId)));
 		
 		// commitSync 간격 통계 정보 추가
 		Parameter commitSyncStat = KafkaAcquisitor.commitSyncTimeStatDaemon.getStat().remove(producerId);
-		json.append(JSONUtil.toJSON(commitSyncStat, startTime, endTime));
+		json
+			.append(", \"commitSyncStat\": ")
+			.append(JSONUtil.toJSON(commitSyncStat));
 		
 		// commitAsync 간격 통계 정보 추가
 		Parameter commitAsyncStat = KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(producerId);
-		json.append(JSONUtil.toJSON(commitAsyncStat, startTime, endTime));
+		json
+			.append(", \"commitAsyncStat\": ")
+			.append(JSONUtil.toJSON(commitAsyncStat));
 		
-		return json.toString();
+		return json.append("}").toString();
 	}
 	
 	/**
 	 * 컨슈머 메시지 생성 및 반환
 	 * 
 	 * @param consumerId 컨슈머 아이디
-	 * @param startTime 시작 시간
-	 * @param endTime 다음 실행 시간
 	 * @return 생성된 컨슈머 메시지
 	 */
-	private static String makeConsumerMessage(String consumerId, long startTime, long endTime) throws Exception {
+	private static String makeConsumerMessage(String consumerId) throws Exception {
 		
+		// json 메시지 변수
 		StringBuilder json = new StringBuilder();
 		
-		// 클라이언트 아이디와 타입 추가
-		json.append("");
+		// 클라이언트 아이디 추가
+		json
+			.append("\"")
+			.append(consumerId)
+			.append("\": {");
 		
 		// 설정값 추가
-		json.append(
-			JSONUtil.toJSON(KafkaAcquisitor.getConfigMap(consumerId))
-		);
+		json
+			.append("\"config\": ")
+			.append(JSONUtil.toJSON(KafkaAcquisitor.getConfigMap(consumerId)));
 		
 		// 성능 정보 추가
-		json.append(
-			JSONUtil.toJSON(KafkaAcquisitor.getConsumerMetrics(consumerId))
-		);
+		json
+			.append(", \"metrics\": ")
+			.append(JSONUtil.toJSON(KafkaAcquisitor.getConsumerMetrics(consumerId)));
 		
 		// 폴링 간격 통계 정보 추가
 		Parameter pollingStat = KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(consumerId);
-		json.append(JSONUtil.toJSON(pollingStat, startTime, endTime));
+		json
+			.append(", \"pollingStat\": ")
+			.append(JSONUtil.toJSON(pollingStat));
 		
-		return json.toString();
+		return json.append("}").toString();
 	}
 }

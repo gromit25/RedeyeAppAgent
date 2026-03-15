@@ -96,9 +96,14 @@ public class SqlStatLoader implements APILoader {
 	 */
 	private static String makeMessage(long startTime, long endTime, Matcher idM, Parameter stat) {
 		
+		// json 메시지 변수
 		StringBuilder json = new StringBuilder("");
 		
-		json.append("{");
+		// 시간 정보 메시지 추가
+		json
+			.append("{")
+			.append("\"startTime\":").append(startTime)
+			.append(",\"endTime\":").append(endTime);
 		
 		// sql 기본 정보
 		json.append("\"sqlInfo\":{");
@@ -119,7 +124,7 @@ public class SqlStatLoader implements APILoader {
 		
 		// sql 통계 정보
 		json.append(",\"sqlStat\":");
-		json.append(JSONUtil.toJSON(stat, startTime, endTime));
+		json.append(JSONUtil.toJSON(stat));
 		
 		json.append("}");
 		
