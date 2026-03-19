@@ -4,8 +4,6 @@ import java.lang.instrument.Instrumentation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
