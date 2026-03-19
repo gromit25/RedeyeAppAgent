@@ -1,5 +1,7 @@
 package com.redeye.agent.util;
 
+import com.redeye.agent.Config;
+
 /**
  * 
  * 
@@ -13,6 +15,9 @@ public class LogUtil {
 	 * @param message
 	 */
 	public static void log(String message) {
-		System.out.println(message);
+		
+		if(Config.LOG_USE_YN.getValue().equals("Y") == true) {
+			System.out.println(message);
+		}
 	}
 }

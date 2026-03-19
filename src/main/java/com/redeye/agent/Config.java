@@ -73,6 +73,13 @@ public enum Config {
 		false
 	),
 	
+	LOG_USE_YN(
+		"RE_LOG_USE",
+		"Y",
+		"로그 출력 여부(Y/N)",
+		false
+	),
+	
 	//---------------------------
 	
 	/** 익스포터 서비스 사용 여부 */
