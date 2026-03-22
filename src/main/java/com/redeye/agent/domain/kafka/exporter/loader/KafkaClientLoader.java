@@ -26,10 +26,14 @@ public class KafkaClientLoader implements APILoader {
 		
 		try {
 			
+			// 메시지 생성
+			String message = makeMessage(startTime, endTime);
+			System.out.println("### DEBUG MESSAGE: " + message);
+			
+			// 메시지 전송 url path 생성
 			String path = makePath(basePath);
 			
-			String message = makeMessage(startTime, endTime);
-					
+			// 메시지 전송
 			HttpUtil.postJSON(
 				path,
 				message,
@@ -55,7 +59,8 @@ public class KafkaClientLoader implements APILoader {
 	 */
 	private static String makePath(String basePath) {
 		
-		return new StringBuilder()
+		return new StringBuilder(basePath)
+			.append(SUBPATH)
 			.toString();
 	}
 	
