@@ -44,7 +44,7 @@ public class ConnectionAdvice {
 				return;
 			}
 			
-			sql.set(args[0].toString());
+			sql.set(StringUtil.unescape(args[0].toString()));
 		}
 	}
 	
