@@ -15,13 +15,13 @@ public class StatementAdvice extends ElapsedTimeAdvice {
 	 * 
 	 */
 	public static class executeQuery {
-		
+
 		/**
-		 * 
+		 * 쿼리 실행
 		 */
-		@Advice.OnMethodExit
-		public static void onExit() {
-			System.out.println("*** DEBUG 100 in StatementAdvice.executeQueryAdvice: ");
+		@Advice.OnMethodEnter
+		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
+			// TODO
 		}
 	}
 }
