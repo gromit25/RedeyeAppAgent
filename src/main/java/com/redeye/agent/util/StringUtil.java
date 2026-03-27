@@ -114,6 +114,49 @@ public class StringUtil {
 		
 		return escapedStr.toString();
 	}
+
+	/**
+	 * 주어진 문자열에 대한 특수문자를 이스케이프 문자열 변환<br>
+	 * ex) "hello	world!" -> "hello\tworld!"
+	 * 
+	 * @param str 주어진 문자열
+	 * @return 이스케이프 문자열로 변환된 문자열
+	 */
+	public static String unescape(String str) throws Exception {
+		
+		// 입력값 검증
+		if(str == null) {
+			return null;
+		}
+		
+		// 이스케이프 처리된 문자열 변수
+		StringBuilder unescapedStr = new StringBuilder("");
+
+		// 각 문자에 대해 언이스케이프 수행
+		for(int index = 0; index < str.length(); index++) {
+			
+			char ch = str.charAt(index);
+			
+			if(ch == '\0') {
+				unescapedStr.append("\\0");
+			} else if(ch == '\b') {
+				unescapedStr.append("\\b");
+			} else if(ch == '\f') {
+				unescapedStr.append("\\f");
+			} else if(ch == '\n') {
+				unescapedStr.append("\\n");
+			} else if(ch == '\r') {
+				unescapedStr.append("\\r");
+			} else if(ch == '\t') {
+				unescapedStr.append("\\t");
+			} else {
+				// 없을 경우 해당 문자를 그냥 추가함
+				unescapedStr.append(ch);
+			}
+		} // End of for
+		
+		return unescapedStr.toString();
+	}
 	
 	/**
 	 * 주어진 문자(ch)가 16진수 값(0-9, A-F, a-f) 인지 확인
