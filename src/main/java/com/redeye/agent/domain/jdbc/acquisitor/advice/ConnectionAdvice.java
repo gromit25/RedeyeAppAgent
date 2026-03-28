@@ -9,21 +9,7 @@ import net.bytebuddy.asm.Advice;
  * 
  * @author jmsohn
  */
-public class ConnectionAdvice {
-	
-	
-	/** PreparedStatement 생성시 sql 문 저장용 변수 */
-	public static ThreadLocal<String> sql = ThreadLocal.withInitial(() -> "");
-	
-	
-	/**
-	 * PreparedStatement 생성시 sql 문 반환
-	 * 
-	 * @return
-	 */
-	public static String getSql() {
-		return sql.get();
-	}
+public class ConnectionAdvice {	
 	
 	/**
 	 * Connection.prepareStatement 어드바이스 클래스
@@ -44,7 +30,7 @@ public class ConnectionAdvice {
 				return;
 			}
 			
-			sql.set(StringUtil.unescape(args[0].toString()));
+			ContextHolder.setSql(args[0].toString());
 		}
 	}
 	

@@ -2,6 +2,7 @@ package com.redeye.agent.domain.jdbc;
 
 import com.redeye.agent.domain.common.AdviceUtil;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.ConnectionAdvice;
+import com.redeye.agent.domain.jdbc.acquisitor.advice.ContextHolder;
 
 /**
  * JDBC 관련 유틸리티 클래스
@@ -26,6 +27,6 @@ public class JDBCUtil {
 	 * @return sql 아이디
 	 */
 	public static String getSqlId() {
-		return getSqlId(ConnectionAdvice.getSql());
+		return getSqlId(ContextHolder.getSql());
 	}
 }

@@ -16,48 +16,6 @@ import net.bytebuddy.asm.Advice;
  */
 public class PreparedStatementAdvice extends ElapsedTimeAdvice {
 	
-
-	/** 반복 호출 상태 */
-	public static ThreadLocal<InvokeStatus> invokeStatus = ThreadLocal.withInitial(() -> InvokeStatus.INVOKE_EXIT);
-	
-	/** 쿼리 시작 시간 */
-	public static ThreadLocal<Long> startTime = ThreadLocal.withInitial(() -> System.currentTimeMillis());
-	
-	
-	/**
-	 * 반복 호출 상태 설정
-	 * 
-	 * @param newStatus 설정할 상태
-	 */
-	public static void setInvokeStatus(InvokeStatus newStatus) {
-		invokeStatus.set(newStatus);
-	}
-	
-	/**
-	 * 반복 호출 상태 반환
-	 * 
-	 * @return 반복 호출 상태
-	 */
-	public static InvokeStatus getInvokeStatus() {
-		return invokeStatus.get();
-	}
-	
-	/**
-	 * 쿼리 시작 시간을 현재 시간으로 설정
-	 */
-	public static void resetStartTime() {
-		startTime.set(System.currentTimeMillis());
-	}
-	
-	/**
-	 * 쿼리 시작 시간 반환
-	 * 
-	 * @return 쿼리 시작 시간
-	 */
-	public static long getStartTime() {
-		return startTime.get();
-	}
-	
 	/**
 	 * 쿼리의 바인딩 변수 설정시 어드바이스 클래스
 	 */
@@ -86,10 +44,8 @@ public class PreparedStatementAdvice extends ElapsedTimeAdvice {
 		@Advice.OnMethodEnter
 		public static void onEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
 			
-			setInvokeStatus(InvokeStatus.INVOKE_ENTER);
-			resetStartTime();
-			
-			System.out.println("*** DEBUG 100 in PreparedStatementAdvice.execute on Enter: " + method);
+			ContextHolder.setInvokeStatus(InvokeStatus.INVOKE_ENTER);
+			ContextHolder.setStartTime();
 		}
 		
 		/**
@@ -101,14 +57,14 @@ public class PreparedStatementAdvice extends ElapsedTimeAdvice {
 			// 호출 상태 확인
 			// 반복 호출에 의해 여러번 호출된 것으로 계산되는 것을 방지하기 위함
 			// INVOKE_ENTER -> INVOKE_EXIT 상태 변경시에만 한번 호출된 것으로 계산
-			if(getInvokeStatus() != InvokeStatus.INVOKE_ENTER) {
+			if(ContextHolder.getInvokeStatus() != InvokeStatus.INVOKE_ENTER) {
 				return;
 			}
 			
-			setInvokeStatus(InvokeStatus.INVOKE_EXIT);
+			ContextHolder.setInvokeStatus(InvokeStatus.INVOKE_EXIT);
 			
 			// 쿼리 수행 시간 계산
-			long elapsedTime = System.currentTimeMillis() - getStartTime();
+			long elapsedTime = System.currentTimeMillis() - ContextHolder.getStartTime();
 			
 			// 쿼리 수행 시간을 통계 처리자에게 전송
 			put(JDBCUtil.getSqlId(), elapsedTime);

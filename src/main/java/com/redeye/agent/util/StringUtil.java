@@ -122,7 +122,7 @@ public class StringUtil {
 	 * @param str 주어진 문자열
 	 * @return 이스케이프 문자열로 변환된 문자열
 	 */
-	public static String unescape(String str) throws Exception {
+	public static String unescape(String str) {
 		
 		// 입력값 검증
 		if(str == null) {
