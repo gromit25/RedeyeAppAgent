@@ -45,25 +45,25 @@ public class ContextHolder {
 	}
 	
 	/**
-	 * 
+	 * 현재 시간으로 쿼리 시작 시간으로 설정
 	 */
 	public static void setStartTime() {
 		setStartTime(System.currentTimeMillis());
 	}
 	
 	/**
+	 * 주어진 시간으로 쿼리 시작 시간 설정
 	 * 
-	 * 
-	 * @param startTime
+	 * @param startTime 설정할 쿼리 시작 시간
 	 */
 	public static void setStartTime(long startTime) {
 		ContextHolder.startTime.set(startTime);
 	}
 	
 	/**
+	 * 쿼리 시작 시간 반환
 	 * 
-	 * 
-	 * @return
+	 * @return 쿼리 시작 시간
 	 */
 	public static long getStartTime() {
 		return startTime.get();
@@ -72,7 +72,7 @@ public class ContextHolder {
 	/**
 	 * 반복 호출 상태 설정
 	 * 
-	 * @param invokeStatus
+	 * @param invokeStatus 반복 호출 상태
 	 */
 	public static void setInvokeStatus(InvokeStatus invokeStatus) {
 		
@@ -86,7 +86,7 @@ public class ContextHolder {
 	/**
 	 * 반복 호출 상태 반환
 	 * 
-	 * @return
+	 * @return 반복 호출 상태
 	 */
 	public static InvokeStatus getInvokeStatus() {
 		return invokeStatus.get();
