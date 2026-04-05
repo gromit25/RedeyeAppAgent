@@ -50,17 +50,20 @@ public class SqlStatLoader implements APILoader {
 				// JSON 메시지 전송
 				try {
 					
-					HttpUtil.postJSON(
-						path,
-						message,
-						(respCode, respMessage) -> {
-							
-							// 실패시 메시지 출력
-							if(respCode != 200) {
-								LogUtil.log("fail to send sql stat(" + respCode + "): " + path);
-							}
-						}
-					);
+					System.out.println("#### DEBUG SQL ####");
+					System.out.println(message);
+					
+//					HttpUtil.postJSON(
+//						path,
+//						message,
+//						(respCode, respMessage) -> {
+//							
+//							// 실패시 메시지 출력
+//							if(respCode != 200) {
+//								LogUtil.log("fail to send sql stat(" + respCode + "): " + path);
+//							}
+//						}
+//					);
 					
 				} catch(Exception ex) {
 					ex.printStackTrace();
