@@ -94,7 +94,7 @@ public class EnvLoader implements APILoader {
 		
 		// 환경 변수 정보 설정
 		json
-			.append(",\"envList\":{")
+			.append(",\"envMap\":{")
 			.append(JSONUtil.toJSON(this.envList))
 			.append("}");
 		
