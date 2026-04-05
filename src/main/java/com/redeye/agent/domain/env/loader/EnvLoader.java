@@ -98,6 +98,8 @@ public class EnvLoader implements APILoader {
 			.append(JSONUtil.toJSON(this.envList))
 			.append("}");
 		
+		json.append("}");
+		
 		return json.toString();
 	}
 }
