@@ -20,16 +20,16 @@ public class EnvLoader implements APILoader {
 	private static String SUBPATH = "/api/app/env";
 	
 	/** 환경 변수 맵 */
-	private Map<String, String> envList;
+	private Map<String, String> envMap;
 	
 	
 	/**
 	 * 생성자
 	 * 
-	 * @param envList 환경 변수 맵
+	 * @param envMap 환경 변수 맵
 	 */
-	public EnvLoader(Map<String, String> envList) {
-		this.envList = envList;
+	public EnvLoader(Map<String, String> envMap) {
+		this.envMap = envMap;
 	}
 	
 	@Override
@@ -95,7 +95,7 @@ public class EnvLoader implements APILoader {
 		// 환경 변수 정보 설정
 		json
 			.append(",\"envMap\":{")
-			.append(JSONUtil.toJSON(this.envList))
+			.append(JSONUtil.toJSON(this.envMap))
 			.append("}");
 		
 		json.append("}");
