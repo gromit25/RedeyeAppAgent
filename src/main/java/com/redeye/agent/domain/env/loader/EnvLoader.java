@@ -9,7 +9,7 @@ import com.redeye.agent.util.JSONUtil;
 import com.redeye.agent.util.LogUtil;
 
 /**
- * 
+ * 환경 변수 로더 클래스
  * 
  * @author jmsohn
  */
@@ -21,6 +21,9 @@ public class EnvLoader implements APILoader {
 	
 	/** 환경 변수 맵 */
 	private Map<String, String> envMap;
+	
+	/** 전송 성공 여부 */
+	private boolean isSend = false;
 	
 	
 	/**
@@ -35,8 +38,15 @@ public class EnvLoader implements APILoader {
 	@Override
 	public void load(String basePath, long startTime, long endTime) {
 		
+		// 이미 전송되었으면 전송하지 않음
+		if(this.isSend == true) {
+			return;
+		}
+		
+		// 전송할 url 패스 생성
 		String path = makePath(basePath);
 		
+		// 전송 메시지 생성
 		String message = this.makeMessage(startTime, endTime);
 		
 		try {
@@ -50,6 +60,9 @@ public class EnvLoader implements APILoader {
 					if(respCode != 200) {
 						LogUtil.log("fail to send env(" + respCode + "): " + path);
 					}
+					
+					// 전송 성공시 성공 설정
+					isSend = true;
 				}
 			);
 			
