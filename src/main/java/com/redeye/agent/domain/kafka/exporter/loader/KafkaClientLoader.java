@@ -2,6 +2,7 @@ package com.redeye.agent.domain.kafka.exporter.loader;
 
 import java.util.Set;
 
+import com.redeye.agent.Config;
 import com.redeye.agent.domain.kafka.acquisitor.KafkaAcquisitor;
 import com.redeye.agent.loader.APILoader;
 import com.redeye.agent.util.HttpUtil;
@@ -61,6 +62,8 @@ public class KafkaClientLoader implements APILoader {
 		
 		return new StringBuilder(basePath)
 			.append(SUBPATH)
+			.append("/").append(Config.DOMAIN_CODE.getValue())
+			.append("/").append(Config.APP_CODE.getValue())
 			.toString();
 	}
 	
