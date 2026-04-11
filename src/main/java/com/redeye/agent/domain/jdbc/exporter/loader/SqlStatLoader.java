@@ -83,8 +83,6 @@ public class SqlStatLoader implements APILoader {
 		return new StringBuilder()
 			.append(basePath)
 			.append(SUBPATH)
-			.append("/").append(Config.DOMAIN_CODE.getValue())
-			.append("/").append(Config.APP_CODE.getValue())
 			.toString();
 	}
 	

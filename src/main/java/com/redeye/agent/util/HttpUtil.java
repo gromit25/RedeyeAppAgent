@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.redeye.agent.Config;
+
 /**
  * Http 관련 유틸리티 클래스
  * 
@@ -53,10 +55,11 @@ public class HttpUtil {
 		URL url = new URL(path);
 		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         
-		// 헤더 설정
+		// 메소드 및 헤더 설정
 		conn.setRequestMethod("POST");
 		conn.setRequestProperty("Content-Type", "application/json; utf-8");
 		conn.setRequestProperty("Accept", "application/json");
+		conn.setRequestProperty("X-Token", getToken());
 		conn.setDoOutput(true);
 
 		// JSON 데이터 전송 (Write)
@@ -85,5 +88,18 @@ public class HttpUtil {
 				respConsumer.consume(code, response.toString());
 			}
 		}
+	}
+	
+	/**
+	 * 토큰 문자열 반환
+	 * 
+	 * @return 토큰 문자열
+	 */
+	private static String getToken() {
+		return new StringBuilder()
+			.append(Config.ORGAN_CODE.getValue()).append("/")
+			.append(Config.DOMAIN_CODE.getValue()).append("/")
+			.append(Config.APP_CODE.getValue())
+			.toString();
 	}
 }
