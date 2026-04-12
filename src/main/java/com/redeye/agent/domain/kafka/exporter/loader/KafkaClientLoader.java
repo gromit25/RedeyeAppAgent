@@ -27,12 +27,12 @@ public class KafkaClientLoader implements APILoader {
 		
 		try {
 			
+			// 메시지 전송 url path 생성
+			String path = makePath(basePath);
+			
 			// 메시지 생성
 			String message = makeMessage(startTime, endTime);
 			System.out.println("### DEBUG MESSAGE: " + message);
-			
-			// 메시지 전송 url path 생성
-			String path = makePath(basePath);
 			
 			// 메시지 전송
 			HttpUtil.postJSON(
@@ -43,6 +43,7 @@ public class KafkaClientLoader implements APILoader {
 					// 실패시 메시지 출력
 					if(respCode != 200) {
 						LogUtil.log("fail to send sql stat(" + respCode + "): " + path);
+						return;
 					}
 				}
 			);
@@ -62,8 +63,6 @@ public class KafkaClientLoader implements APILoader {
 		
 		return new StringBuilder(basePath)
 			.append(SUBPATH)
-			.append("/").append(Config.DOMAIN_CODE.getValue())
-			.append("/").append(Config.APP_CODE.getValue())
 			.toString();
 	}
 	
@@ -137,17 +136,25 @@ public class KafkaClientLoader implements APILoader {
 			.append(",\"metrics\": ")
 			.append(JSONUtil.toJSON(KafkaAcquisitor.getProducerMetrics(producerId)));
 		
+		// 통계 정보 추가 시작
+		json
+			.append(",\"stat\":{");
+		
 		// commitSync 간격 통계 정보 추가
 		Parameter commitSyncStat = KafkaAcquisitor.commitSyncTimeStatDaemon.getStat().remove(producerId);
 		json
-			.append(",\"commitSyncStat\": ")
+			.append("\"commitSync\": ")
 			.append(JSONUtil.toJSON(commitSyncStat));
 		
 		// commitAsync 간격 통계 정보 추가
 		Parameter commitAsyncStat = KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(producerId);
 		json
-			.append(",\"commitAsyncStat\": ")
+			.append(",\"commitAsync\": ")
 			.append(JSONUtil.toJSON(commitAsyncStat));
+	
+		// 통계 정보 종료
+		json
+			.append("}");
 		
 		return json.append("}").toString();
 	}
@@ -182,8 +189,10 @@ public class KafkaClientLoader implements APILoader {
 		// 폴링 간격 통계 정보 추가
 		Parameter pollingStat = KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(consumerId);
 		json
-			.append(",\"pollingStat\": ")
-			.append(JSONUtil.toJSON(pollingStat));
+			.append(",\"stat\":{")
+			.append("\"polling\":")
+			.append(JSONUtil.toJSON(pollingStat))
+			.append("}");
 		
 		return json.append("}").toString();
 	}
