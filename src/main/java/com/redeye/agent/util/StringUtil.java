@@ -149,6 +149,8 @@ public class StringUtil {
 				unescapedStr.append("\\r");
 			} else if(ch == '\t') {
 				unescapedStr.append("\\t");
+			} else if(ch == '\\') {
+				unescapedStr.append("\\\\");
 			} else {
 				// 없을 경우 해당 문자를 그냥 추가함
 				unescapedStr.append(ch);

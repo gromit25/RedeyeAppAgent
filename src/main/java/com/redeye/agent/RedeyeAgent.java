@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.redeye.agent.domain.env.EnvContext;
 import com.redeye.agent.domain.jdbc.JDBCContext;
 import com.redeye.agent.domain.kafka.KafkaContext;
 import com.redeye.agent.loader.APILoader;
@@ -38,6 +39,9 @@ public class RedeyeAgent {
 		
 		// 컨텍스트 목록 초기화
 		contextList = new CopyOnWriteArrayList<>();
+		
+		// 환경 변수 컨텍스트 추가
+		contextList.add(new EnvContext());
 		
 		// JDBC 컨텍스트 추가
 		contextList.add(new JDBCContext());

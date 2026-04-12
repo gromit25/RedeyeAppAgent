@@ -151,7 +151,7 @@ public class JSONUtil {
 				}
 				
 			} else {
-				return '"' + obj.toString() + '"';
+				return '"' + StringUtil.unescape(obj.toString()) + '"';
 			}
 		}
 	}

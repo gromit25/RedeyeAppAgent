@@ -23,7 +23,7 @@ public class EnvLoader implements APILoader {
 	private Map<String, String> envMap;
 	
 	/** 전송 성공 여부 */
-	private boolean isSend = false;
+	private volatile boolean isSend = false;
 	
 	
 	/**
@@ -48,7 +48,7 @@ public class EnvLoader implements APILoader {
 		
 		// 전송 메시지 생성
 		String message = this.makeMessage(startTime, endTime);
-		
+				
 		try {
 			
 			HttpUtil.postJSON(
@@ -59,6 +59,7 @@ public class EnvLoader implements APILoader {
 					// 실패시 메시지 출력
 					if(respCode != 200) {
 						LogUtil.log("fail to send env(" + respCode + "): " + path);
+						return;
 					}
 					
 					// 전송 성공시 성공 설정
@@ -105,9 +106,8 @@ public class EnvLoader implements APILoader {
 		
 		// 환경 변수 정보 설정
 		json
-			.append(",\"envMap\":{")
-			.append(JSONUtil.toJSON(this.envMap))
-			.append("}");
+			.append(",\"envMap\":")
+			.append(JSONUtil.toJSON(this.envMap));
 		
 		json.append("}");
 		

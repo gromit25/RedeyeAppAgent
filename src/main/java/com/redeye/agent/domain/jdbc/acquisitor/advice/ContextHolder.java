@@ -32,7 +32,7 @@ public class ContextHolder {
 			throw new IllegalArgumentException("'sql' is null.");
 		}
 		
-		ContextHolder.sql.set(StringUtil.unescape(sql));
+		ContextHolder.sql.set(sql);
 	}
 	
 	/**
