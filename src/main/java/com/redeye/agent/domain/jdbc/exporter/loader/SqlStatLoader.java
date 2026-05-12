@@ -112,14 +112,7 @@ public class SqlStatLoader implements APILoader {
 		json.append("\"className\":\"").append(idM.group("class")).append("\"");
 		json.append(",\"methodName\":\"").append(idM.group("method")).append("\"");
 		json.append(",\"lineNum\":").append(idM.group("lineNum"));
-		json.append(",\"stmt\":\"")
-			.append(
-				idM.group("stmt")
-					.replaceAll("\n", "\\\\n")
-					.replaceAll("\r", "\\\\r")
-					.replaceAll("\t", "\\\\t")
-			)
-			.append("\"");
+		json.append(",\"stmt\":\"").append(idM.group("stmt")).append("\"");
 
 		json.append("}");
 		
