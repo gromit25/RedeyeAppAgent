@@ -300,26 +300,32 @@ public class Parameter {
 	}
 	
 	/**
-	 * 현재 객체를 json 문자열 형태로 반환
+	 * 모수 통계량(Parameter) 에 대해 JSON 문자열로 반환
+	 * 
+	 * @return JSON 문자열
 	 */
-	@Override
-	public String toString() {
+	public String toJSON() {
 		
-		StringBuilder builder = new StringBuilder("");
+		// 통계량이 없을 경우 디폴트 값으로 생성
+		if(stat == null) {
+			stat = new Parameter();
+		}
 		
-		builder
-			.append("{").append("\r\n")
-			.append("\"count\":").append(this.count).append("\r\n")
-			.append("\"sum\":").append(this.sum).append("\r\n")
-			.append("\"mean\":").append(this.getMean()).append("\r\n")
-			.append("\"variance\":").append(this.getVariance()).append("\r\n")
-			.append("\"std\":").append(this.getStd()).append("\r\n")
-			.append("\"skewness\":").append(this.getSkewness()).append("\r\n")
-			.append("\"kurtosis\":").append(this.getKurtosis()).append("\r\n")
-			.append("\"min\":").append(this.getMin()).append("\r\n")
-			.append("\"max\":").append(this.getMax()).append("\r\n")
-			.append("}");
+		// JSON 문자열 생성
+		StringBuilder json = new StringBuilder("{");
 		
-		return builder.toString();
+		json.append("\"count\":").append(stat.getCount());
+		json.append(",\"sumX\":").append(stat.getSum());
+		json.append(",\"sumX2\":").append(stat.getSquaredSum());
+		json.append(",\"sumX3\":").append(stat.getCubedSum());
+		json.append(",\"sumX4\":").append(stat.getFourthPoweredSum());
+		
+		String min = (Double.isNaN(stat.getMin()) == true)?"null":Double.toString(stat.getMin());
+		json.append(",\"minX\":").append(min);
+		
+		String max = (Double.isNaN(stat.getMax()) == true)?"null":Double.toString(stat.getMax());
+		json.append(",\"maxX\":").append(max);
+		
+		return json.append("}").toString();
 	}
 }
