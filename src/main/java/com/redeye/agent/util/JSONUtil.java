@@ -198,36 +198,4 @@ public class JSONUtil {
 		// 변환된 문자열 반환
 		return buffer.toString();
 	}
-
-	
-	/**
-	 * 모수 통계량(Parameter) 에 대해 JSON 문자열로 반환
-	 * 
-	 * @param stat 모수 통계량
-	 * @return JSON 문자열
-	 */
-	public static String toJSON(Parameter stat) {
-		
-		// 통계량이 없을 경우 디폴트 값으로 생성
-		if(stat == null) {
-			stat = new Parameter();
-		}
-		
-		// JSON 문자열 생성
-		StringBuilder json = new StringBuilder("{");
-		
-		json.append("\"count\":").append(stat.getCount());
-		json.append(",\"sumX\":").append(stat.getSum());
-		json.append(",\"sumX2\":").append(stat.getSquaredSum());
-		json.append(",\"sumX3\":").append(stat.getCubedSum());
-		json.append(",\"sumX4\":").append(stat.getFourthPoweredSum());
-		
-		String min = (Double.isNaN(stat.getMin()) == true)?"null":Double.toString(stat.getMin());
-		json.append(",\"minX\":").append(min);
-		
-		String max = (Double.isNaN(stat.getMax()) == true)?"null":Double.toString(stat.getMax());
-		json.append(",\"maxX\":").append(max);
-		
-		return json.append("}").toString();
-	}
 }
