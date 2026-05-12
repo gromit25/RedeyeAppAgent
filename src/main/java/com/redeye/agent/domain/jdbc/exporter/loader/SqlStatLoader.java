@@ -109,16 +109,18 @@ public class SqlStatLoader implements APILoader {
 		// sql 기본 정보
 		json.append(",\"sqlInfo\":{");
 		
-		json.append("\"className\":\"").append(idM.group("class")).append("\"");
-		json.append(",\"methodName\":\"").append(idM.group("method")).append("\"");
-		json.append(",\"lineNum\":").append(idM.group("lineNum"));
-		json.append(",\"stmt\":\"").append(idM.group("stmt")).append("\"");
+		json
+			.append("\"className\":\"").append(idM.group("class")).append("\"");
+			.append(",\"methodName\":\"").append(idM.group("method")).append("\"");
+			.append(",\"lineNum\":").append(idM.group("lineNum"));
+			.append(",\"stmt\":\"").append(idM.group("stmt")).append("\"");
 
 		json.append("}");
 		
 		// sql 통계 정보
-		json.append(",\"sqlStat\":");
-		json.append(JSONUtil.toJSON(stat));
+		json
+			.append(",\"sqlStat\":");
+			.append(JSONUtil.toJSON(stat));
 		
 		json.append("}");
 		
