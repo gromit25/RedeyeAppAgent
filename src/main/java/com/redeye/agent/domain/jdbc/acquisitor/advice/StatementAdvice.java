@@ -17,7 +17,7 @@ import net.bytebuddy.asm.Advice;
 public class StatementAdvice extends ElapsedTimeAdvice {
 
 	/**
-	 * 
+	 * 쿼리 실행시 어드바이스 클래스
 	 */
 	public static class executeQuery {
 
