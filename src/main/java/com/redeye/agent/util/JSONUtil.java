@@ -190,6 +190,8 @@ public class JSONUtil {
 				case '"':
 					buffer.append("\\\\\"");
 					break;
+				default:
+					buffer.append(ch);
 			}
 		}
 
