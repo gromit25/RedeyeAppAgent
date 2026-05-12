@@ -151,10 +151,52 @@ public class JSONUtil {
 				}
 				
 			} else {
-				return '"' + StringUtil.unescape(obj.toString()) + '"';
+				return '"' + replaceSpecialChar(obj.toString()) + '"';
 			}
 		}
 	}
+
+	/**
+	 * 문자열의 특수문자 변환
+	 * 
+	 * @param str 문자열
+	 * @return 변환된 문자열
+	 */
+	private static String replaceSpecialChar(String str) {
+
+		// 문자열이 비어 있는 경우 반환
+		if(StringUtil.isEmpty(str) == true) {
+			return str;
+		}
+
+		// 변환된 문자열 버퍼 변수
+		StringBuilder buffer = new StringBuilder();
+
+		// 문자열의 각 문자를 확인하여 변환 수행
+		for(int index = 0; index < str.length(); index++) {
+
+			char ch = str.charAt(index);
+
+			switch(ch) {
+				case '\n':
+					buffer.append("\\\\n");
+					break;
+				case '\r':
+					buffer.append("\\\\r");
+					break;
+				case '\t':
+					buffer.append("\\\\t");
+					break;
+				case '"':
+					buffer.append("\\\\\"");
+					break;
+			}
+		}
+
+		// 변환된 문자열 반환
+		return buffer.toString();
+	}
+
 	
 	/**
 	 * 모수 통계량(Parameter) 에 대해 JSON 문자열로 반환
