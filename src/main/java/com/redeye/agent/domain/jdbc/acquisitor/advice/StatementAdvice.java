@@ -9,7 +9,8 @@ import com.redeye.agent.domain.jdbc.JDBCUtil;
 import net.bytebuddy.asm.Advice;
 
 /**
- * 
+ * Statement 어드바이스 클래스<br>
+ * 모든 속성 및 메소드는 public 이어야 함 - 스프링부트 클래스 로더 때문
  * 
  * @author jmsohn
  */
