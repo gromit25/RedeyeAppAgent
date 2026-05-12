@@ -119,7 +119,7 @@ public class SqlStatLoader implements APILoader {
 		// sql 통계 정보
 		json
 			.append(",\"sqlStat\":");
-			.append(JSONUtil.toJSON(stat));
+			.append(stat.toJSON());
 		
 		json.append("}");
 		
