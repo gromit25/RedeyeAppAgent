@@ -13,7 +13,6 @@ import lombok.Data;
  */
 public class AdviceUtil {
 
-	
 	/**
 	 * Line of code
 	 */
@@ -40,7 +39,6 @@ public class AdviceUtil {
 				.toString();
 		}
 	}
-	
 	
 	/**
 	 * 현재 스레드의 Loc 정보를 반환
