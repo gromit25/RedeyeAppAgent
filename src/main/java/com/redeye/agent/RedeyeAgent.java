@@ -70,7 +70,7 @@ public class RedeyeAgent {
 			startExporterService();
 			
 			// 로더 서비스 기동
-			Loader.start(contextList);
+			LoaderService.start(contextList);
 			
 			// 클래스 변환기(transformer) 추가
 			addTransformer(inst);
