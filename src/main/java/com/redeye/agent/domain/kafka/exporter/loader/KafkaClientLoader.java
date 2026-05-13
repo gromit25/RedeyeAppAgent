@@ -11,7 +11,7 @@ import com.redeye.agent.util.LogUtil;
 import com.redeye.agent.util.stat.Parameter;
 
 /**
- * kafka 클라이언트 데이터 로더 클래스
+ * kafka 클라이언트(프로듀서/컨슈머) 성능 정보 로더 클래스
  * 
  * @author jmsohn
  */
