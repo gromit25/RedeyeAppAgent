@@ -5,7 +5,7 @@ package com.redeye.agent.loader;
  *
  * @author jmsohn
  */
-public class Loader {
+public class LoaderService {
 
   /**
    *
