@@ -10,7 +10,7 @@ import com.redeye.agent.domain.env.exporter.loader.EnvLoader;
 import com.redeye.agent.loader.APILoader;
 
 /**
- * 
+ * 환경 변수 컨텍스트 클래스
  * 
  * @author jmsohn
  */
