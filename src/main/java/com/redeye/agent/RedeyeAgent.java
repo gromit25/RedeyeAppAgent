@@ -70,7 +70,7 @@ public class RedeyeAgent {
 			startExporterService();
 			
 			// 로더 서비스 기동
-			startLoaderService();
+			Loader.start(contextList);
 			
 			// 클래스 변환기(transformer) 추가
 			addTransformer(inst);
@@ -174,43 +174,5 @@ public class RedeyeAgent {
 		service.start();
 		
 		LogUtil.log("http exporter(" + service.getHostStr() + ") is started.");
-	}
-	
-	/**
-	 * API 호출 로더 기동
-	 */
-	private static void startLoaderService() throws Exception {
-		
-		// ------------------------
-		// 로더 기동 여부 확인
-		String useLoader = Config.LOADER_YN.value;
-		if("Y".equalsIgnoreCase(useLoader) == false) {
-			LogUtil.log("metrics api loader is disabled.");
-			return;
-		}
-		
-		// ------------------------
-		// 로더 기동을 위한 옵션 획득
-		
-		// 호출할 API의 기준 패스 획득
-		String basePath = Config.LOADER_API_SERVER.value;
-		
-		// API 호출 스케쥴 획득
-		String schedule = Config.LOADER_SCHEDULE.value;
-		
-		// ------------------------
-		// API 호출 로더 목록 설정
-		List<APILoader> loaderList = new ArrayList<>();
-		
-		for(Context context: contextList) {
-			loaderList.addAll(context.getAPILoaderList());
-		}
-		
-		// ------------------------
-		// API 호출 로더 생성 및 기동
-		loader = new APILoaderCronJob(basePath, schedule, loaderList);
-		loader.start();
-		
-		LogUtil.log("metrics api loader is started.");
 	}
 }
