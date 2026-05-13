@@ -17,7 +17,7 @@ public class EnvLoader implements APILoader {
 	
 	
 	/** 환경 변수 서브패스 */
-	private static String SUBPATH = "/api/app/env";
+	private static String SUBPATH = "/api/app/%d/env";
 	
 	/** 환경 변수 맵 */
 	private Map<String, String> envMap;
