@@ -1,13 +1,23 @@
 package com.redeye.agent.exporter;
 
+/**
+ *
+ *
+ * @author jmsohn
+ */
 public class ExporterService {
-  
-  public static void start(List<Context> contextList) {
 
-    //
-    if(contextList == null || contextList.size() == 0) {
-      return;
-    }
+	/**
+	 *
+	 *
+	 * @param contextList
+	 */
+	public static void start(List<Context> contextList) {
+
+		//
+		if(contextList == null || contextList.size() == 0) {
+			return;
+		}
     
 		// ------------------------
 		// 로더 기동 여부 확인
