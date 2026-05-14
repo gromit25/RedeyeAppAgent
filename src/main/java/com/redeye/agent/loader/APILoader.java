@@ -10,9 +10,11 @@ public interface APILoader {
 	/**
 	 * API 호출을 통한 성능 정보 저장
 	 * 
+	 * @param hostId 호스트 아이디
+	 * @param appId 어플리케이션 아이디
 	 * @param basePath 기준 패스
 	 * @param startTime 시작 시간
 	 * @param endTime 다음 실행 시간
 	 */
-	void load(String basePath, long startTime, long endTime);
+	void load(long hostId, long appId, String basePath, long startTime, long endTime);
 }
