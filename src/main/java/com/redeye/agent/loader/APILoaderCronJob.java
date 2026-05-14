@@ -117,10 +117,12 @@ public class APILoaderCronJob {
 				
 				// 호스트 아이디 설정
 				if(this.hostId == -1) {
+					this.hostId = getHostId();
 				}
 
 				// 어플리케이션 아이디 설정
 				if(this.appId == -1) {
+					this.appId = getAppId();
 				}
 				
 			} catch(Exception ex) {
@@ -139,6 +141,24 @@ public class APILoaderCronJob {
 					}
 				});
 			}
+		}
+
+		/**
+		 * 호스트 아이디 반환
+		 *
+		 * @return 호스트 아이디
+		 */
+		private static long getHostId() {
+			return -1L;
+		}
+
+		/**
+		 * 어플리케이션 아이디 반환
+		 *
+		 * @return 어플리케이션 아이디
+		 */
+		private static long getAppId() {
+			return -1L;
 		}
 		
 		/**
