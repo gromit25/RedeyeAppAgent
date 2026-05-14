@@ -1,11 +1,8 @@
 package com.redeye.agent.util;
 
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.redeye.agent.util.stat.Parameter;
 
 /**
  * JSON 유틸리티 클래스
