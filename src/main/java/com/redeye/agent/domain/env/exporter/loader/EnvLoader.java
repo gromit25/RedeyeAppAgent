@@ -36,7 +36,7 @@ public class EnvLoader implements APILoader {
 	}
 	
 	@Override
-	public void load(String basePath, long startTime, long endTime) {
+	public void load(long hostId, long appId, String basePath, long startTime, long endTime) {
 		
 		// 이미 전송되었으면 전송하지 않음
 		if(this.isSend == true) {
@@ -44,7 +44,7 @@ public class EnvLoader implements APILoader {
 		}
 		
 		// 전송할 url 패스 생성
-		String path = makePath(basePath);
+		String path = makePath(appId, basePath);
 		
 		// 전송 메시지 생성
 		String message = this.makeMessage(startTime, endTime);
@@ -75,10 +75,11 @@ public class EnvLoader implements APILoader {
 	/**
 	 * 호출 패스 생성
 	 * 
+	 * @param appId 어플리케이션 아이디
 	 * @param basePath 기본 패스
 	 * @return 생성된 패스
 	 */
-	private static String makePath(String basePath) {
+	private static String makePath(long appId, String basePath) {
 		
 		return new StringBuilder()
 			.append(basePath)
