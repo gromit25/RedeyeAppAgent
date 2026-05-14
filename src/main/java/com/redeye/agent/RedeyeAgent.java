@@ -61,7 +61,7 @@ public class RedeyeAgent {
 	/**
 	 * 컨택스트 목록의 클래스 변환기(transformer)들을 추가 
 	 * 
-	 * @param inst java 인스트루먼트 클래스
+	 * @param inst 인스트루먼트 객체
 	 * @param contextList 컨텍스트 목록
 	 */
 	private static void addTransformer(Instrumentation inst, List<Context> contextList) {
