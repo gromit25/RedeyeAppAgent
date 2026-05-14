@@ -16,8 +16,24 @@ public class LogUtil {
 	 */
 	public static void log(String message) {
 		
-		if(Config.LOG_USE_YN.getValue().equals("Y") == true) {
-			System.out.println(message);
+		if(Config.LOG_USE_YN.getValue().equals("Y") == false) {
+			return;
 		}
+
+		System.out.println(message);
+	}
+
+	/**
+	 * ㅇ예외 로깅 수행
+	 * 
+	 * @param ex 에외 객체
+	 */
+	public static void log(Exception ex) {
+		
+		if(Config.LOG_USE_YN.getValue().equals("Y") == false) {
+			return;
+		}
+
+		ex.printStackTrace();
 	}
 }
