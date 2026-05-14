@@ -24,7 +24,7 @@ public class LogUtil {
 	}
 
 	/**
-	 * ㅇ예외 로깅 수행
+	 * 예외 로깅 수행
 	 * 
 	 * @param ex 에외 객체
 	 */
