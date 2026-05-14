@@ -98,8 +98,7 @@ public class HttpUtil {
 	private static String getToken() {
 		return new StringBuilder()
 			.append(Config.ORGAN_CODE.getValue()).append("/")
-			.append(Config.DOMAIN_CODE.getValue()).append("/")
-			.append(Config.APP_CODE.getValue())
+			.append(Config.DOMAIN_CODE.getValue())
 			.toString();
 	}
 }
