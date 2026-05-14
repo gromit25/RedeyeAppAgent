@@ -7,16 +7,16 @@ package com.redeye.agent.loader;
  */
 public class LoaderService {
 
-  /**
-   *
-   */
-  public static void start(List<Context> contextList) {
+	/**
+	 *
+	 */
+	public static void start(List<Context> contextList) {
 
-    // 컨텍스트가 없는 경우 반환
-    if(contextList == null || contextList.size() == 0) {
-      return;
-    }
-    
+		// 컨텍스트가 없는 경우 반환
+		if(contextList == null || contextList.size() == 0) {
+			return;
+		}
+
 		// ------------------------
 		// 로더 기동 여부 확인
 		String useLoader = Config.LOADER_YN.value;
