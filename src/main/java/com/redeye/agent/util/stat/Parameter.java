@@ -1,6 +1,10 @@
 package com.redeye.agent.util.stat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.redeye.agent.util.JSONUtil;
 
 import lombok.Getter;
 
@@ -306,26 +310,17 @@ public class Parameter {
 	 */
 	public String toJSON() {
 		
-		// 통계량이 없을 경우 디폴트 값으로 생성
-		if(stat == null) {
-			stat = new Parameter();
-		}
+		Map<String, Object> statMap = new HashMap<>();
 		
-		// JSON 문자열 생성
-		StringBuilder json = new StringBuilder("{");
+		statMap.put("\"count\":", this.getCount());
+		statMap.put(",\"sumX\":", this.getSum());
+		statMap.put(",\"sumX2\":", this.getSquaredSum());
+		statMap.put(",\"sumX3\":", this.getCubedSum());
+		statMap.put(",\"sumX4\":", this.getFourthPoweredSum());
 		
-		json.append("\"count\":").append(stat.getCount());
-		json.append(",\"sumX\":").append(stat.getSum());
-		json.append(",\"sumX2\":").append(stat.getSquaredSum());
-		json.append(",\"sumX3\":").append(stat.getCubedSum());
-		json.append(",\"sumX4\":").append(stat.getFourthPoweredSum());
+		statMap.put(",\"minX\":", this.getMin());
+		statMap.put(",\"minX\":", this.getMax());
 		
-		String min = (Double.isNaN(stat.getMin()) == true)?"null":Double.toString(stat.getMin());
-		json.append(",\"minX\":").append(min);
-		
-		String max = (Double.isNaN(stat.getMax()) == true)?"null":Double.toString(stat.getMax());
-		json.append(",\"maxX\":").append(max);
-		
-		return json.append("}").toString();
+		return JSONUtil.toJSON(statMap);
 	}
 }
