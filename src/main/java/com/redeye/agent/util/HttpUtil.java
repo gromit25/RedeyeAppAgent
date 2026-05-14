@@ -30,11 +30,55 @@ public class HttpUtil {
 		 */
 		public void consume(int respCode, String respMessage);
 	}
-	
 
 	/**
-	 * JSON 메시지 전송<br>
-	 * POST 방식
+	 * GET 요청 전송
+	 * 
+	 * @param path 패스
+	 * @param respConsumer 응답 처리 컨슈머
+	 */
+	public static void getJSON(String path, RespConsumer respConsumer) throws Exception {
+		
+		// 입력 값 검증
+		if(StringUtil.isBlank(path) == true) {
+			throw new IllegalArgumentException("'path' is null or blank.");
+		}
+		
+		// url 연결 생성
+		URL url = new URL(path);
+		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        
+		// 메소드 및 헤더 설정
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("Content-Type", "application/json; utf-8");
+		conn.setRequestProperty("Accept", "application/json");
+		conn.setRequestProperty("X-Token", getToken());
+		conn.setDoOutput(true);
+
+		// 응답 코드 확인 및 데이터 읽기 (Read)
+		int code = conn.getResponseCode();
+		
+		try(
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))
+		) {
+			
+			StringBuilder response = new StringBuilder();
+			
+			String responseLine = null;
+			while((responseLine = br.readLine()) != null) {
+				response.append(responseLine.trim());
+			}
+			
+			// 응답 처리 컨슈머에게 처리 전달
+			// 컨슈머가 null 일 경우 처리하지 않음
+			if(respConsumer != null) {
+				respConsumer.consume(code, response.toString());
+			}
+		}
+	}
+
+	/**
+	 * POST 요청 전송
 	 * 
 	 * @param path 패스
 	 * @param message 메시지
