@@ -67,7 +67,13 @@ public class APILoaderCronJob {
 	 * @author jmsohn
 	 */
 	class LoaderJob implements Job {
-		
+
+
+		/** 호스트 아이디 */
+		private long hostId = -1;
+
+		/** 어플리케이션 아이디 */
+		private long appId = -1;
 
 		/** API 호출 작업 실행시 사용할 스레드 풀 */
 		private ExecutorService pool;
@@ -99,6 +105,21 @@ public class APILoaderCronJob {
 		
 		@Override
 		public void run(long startTime, long nextTime) {
+
+			try {
+				
+				// 호스트 아이디 설정
+				if(this.hostId == -1) {
+				}
+
+				// 어플리케이션 아이디 설정
+				if(this.appId == -1) {
+				}
+				
+			} catch(Exception ex) {
+				LogUtil.log(ex);
+				return;
+			}
 			
 			// 목록의 각 로더들을 하나씩 멀티스레드로 수행함
 			for(APILoader loader: loaderList) {
