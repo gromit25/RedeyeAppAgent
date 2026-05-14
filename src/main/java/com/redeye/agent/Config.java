@@ -127,7 +127,7 @@ public enum Config {
 	/** API 호출 스케쥴 */
 	LOADER_SCHEDULE(
 		"RE_LOADER_SCHEDULE",
-		"*/10 * * * * *",
+		"*/10 * * * * *",	// 디폴트 : 10초에 한번씩
 		"API 호출 스케쥴",
 		false
 	);
