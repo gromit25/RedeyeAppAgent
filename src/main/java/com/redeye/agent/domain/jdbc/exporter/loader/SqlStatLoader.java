@@ -20,7 +20,7 @@ public class SqlStatLoader implements APILoader {
 	
 	
 	/** sql 통계 정보 서브패스 */
-	private static String SUBPATH = "/api/app/sql";
+	private static String SUBPATH = "/api/app/%d/sql";
 	
 	/** sql 아이디 패턴 문자열 */
 	private static String ID_PATTERN = "(?<class>[^:]+)\\:(?<method>[^:]+)\\:(?<lineNum>(\\-)?[0-9]+)\\:(?<stmt>.+)";
@@ -30,10 +30,10 @@ public class SqlStatLoader implements APILoader {
 
 
 	@Override
-	public void load(String basePath, long startTime, long endTime) {
+	public void load(long hostId, long appId, String basePath, long startTime, long endTime) {
 		
 		// 전송할 url 패스 생성
-		String path = makePath(basePath);
+		String path = makePath(appId, basePath);
 		
 		JDBCAcquisitor.sqlStatDaemon.flush(
 			(id, stat) -> {
@@ -75,10 +75,11 @@ public class SqlStatLoader implements APILoader {
 	/**
 	 * 호출 패스 생성
 	 * 
+	 * @param appId 어플리케이션 아이디
 	 * @param basePath 기본 패스
 	 * @return 생성된 패스
 	 */
-	private static String makePath(String basePath) {
+	private static String makePath(long appId, String basePath) {
 		
 		return new StringBuilder()
 			.append(basePath)
