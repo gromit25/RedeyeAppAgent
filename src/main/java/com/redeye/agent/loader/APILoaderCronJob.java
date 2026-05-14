@@ -135,7 +135,7 @@ public class APILoaderCronJob {
 					
 					@Override
 					public void run() {
-						loader.load(basePath, startTime, nextTime);
+						loader.load(hostId, appId, basePath, startTime, nextTime);
 					}
 				});
 			}
