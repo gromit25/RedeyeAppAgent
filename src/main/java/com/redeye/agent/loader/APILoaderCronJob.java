@@ -69,6 +69,13 @@ public class APILoaderCronJob {
 	class LoaderJob implements Job {
 
 
+		/** 호스트 아이디 URL */
+		private static final String HOST_ID_URL = "/api/host/id";
+
+		/** 어플리케이션 아이디 URL */
+		private static final String APP_ID_URL = "/api/app/id";
+
+
 		/** 호스트 아이디 */
 		private long hostId = -1;
 
