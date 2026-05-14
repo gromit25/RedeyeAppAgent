@@ -1,14 +1,17 @@
 package com.redeye.agent.loader;
 
 /**
- *
+ * API Loader Service 클래스<br>
+ * 외부 API 서비스(SentryAPI)로 성능 정보를 로드하는 서비스
  *
  * @author jmsohn
  */
 public class LoaderService {
 
 	/**
-	 *
+	 * API Loader Service 기동
+	 * 
+	 * @param contextList 컨텍스트 목록
 	 */
 	public static void start(List<Context> contextList) {
 
