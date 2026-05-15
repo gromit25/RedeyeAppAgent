@@ -95,23 +95,14 @@ public class EnvLoader implements APILoader {
 	 * @return Sql 통계 Json 메시지
 	 */
 	private String makeMessage(long startTime, long endTime) {
+
+		Map<String, Object> msgMap = new HashMap<>();
+
+		msgMap.put("startTime", startTime);
+		msgMap.put("endTime", endTime);
 		
-		// json 메시지 변수
-		StringBuilder json = new StringBuilder("");
+		msgMap.put("envMap", this.envMap);
 		
-		// 시간 정보 메시지 추가
-		json
-			.append("{")
-			.append("\"startTime\":").append(startTime)
-			.append(",\"endTime\":").append(endTime);
-		
-		// 환경 변수 정보 설정
-		json
-			.append(",\"envMap\":")
-			.append(JSONUtil.toJSON(this.envMap));
-		
-		json.append("}");
-		
-		return json.toString();
+		return JSONUtil.toJSON(msgMap);
 	}
 }
