@@ -97,33 +97,29 @@ public class SqlStatLoader implements APILoader {
 	 * @return Sql 통계 Json 메시지
 	 */
 	private static String makeMessage(long startTime, long endTime, Matcher idM, Parameter stat) {
-		
-		// json 메시지 변수
-		StringBuilder json = new StringBuilder("");
-		
-		// 시간 정보 메시지 추가
-		json
-			.append("{")
-			.append("\"startTime\":").append(startTime)
-			.append(",\"endTime\":").append(endTime);
-		
-		// sql 기본 정보
-		json.append(",\"sqlInfo\":{");
-		
-			.append("\"className\":\"").append(idM.group("class")).append("\"");
-			.append(",\"methodName\":\"").append(idM.group("method")).append("\"");
-			.append(",\"lineNum\":").append(idM.group("lineNum"));
-			.append(",\"stmt\":\"").append(idM.group("stmt")).append("\"");
 
-		json.append("}");
+		Map<String, Object> msgMap = new HashMap<>();
+
+		// 종류
+		msgMap.put("type", "sql");
+
+		// 시간 정보 메시지 추가
+		msgMap.put("startTime", startTime);
+		msgMap.put("endTime", endTime);
+
+		// sql 기본 정보
+		msgMap.put("info",
+			Map.ofEntries(
+				Map.entry("className", idM.group("class")),
+				Map.entry("methodName", idM.group("method")),
+				Map.entry("lineNum", Integer.parseInt(idM.group("lineNum"))),
+				Map.entry("stmt", idM.group("stmt")))
+			)
+		);
+
+		// sql 성능 통계 정보
+		msgMap.put("stat", sqlStat);
 		
-		// sql 통계 정보
-		json
-			.append(",\"sqlStat\":");
-			.append(stat.toJSON());
-		
-		json.append("}");
-		
-		return json.toString();
+		return JSONUtil.toJSON(msgMap);
 	}
 }
