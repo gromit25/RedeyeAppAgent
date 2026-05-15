@@ -195,4 +195,23 @@ public class JSONUtil {
 		// 변환된 문자열 반환
 		return buffer.toString();
 	}
+
+	private enum JSONParserStatus {
+		START,
+		NAME,
+		SEPARATOR,
+		VALUE
+	}
+
+	public Map<String, Object> parse(String jsonMsg) {
+
+		Map<String, Object> jsonMap = new HashMap<>();
+		
+		if(StringUtil.isBlank(jsonMsg) == true) {
+			return jsonMap;
+		}
+
+		for(int index = 0; index < jsonMsg.size(); index++) {
+		}
+	}
 }
