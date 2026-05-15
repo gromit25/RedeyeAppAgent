@@ -196,22 +196,255 @@ public class JSONUtil {
 		return buffer.toString();
 	}
 
-	private enum JSONParserStatus {
-		START,
-		NAME,
-		SEPARATOR,
-		VALUE
+	public static Object parse(String jsonMsg) throws Exception {
+		
+		if(jsonMsg == null) {
+			return null;
+		}
+		
+		//
+		try(PushbackReader reader = new PushbackReader(new StringReader(jsonMsg))) {
+			
+			int read = -1;
+			while((read = reader.read()) != -1) {
+				
+				char ch = (char)read;
+				
+				if(ch == '{') {
+					
+					reader.unread(ch);
+					return parseMap(reader);
+					
+				} else if(ch == '[') {
+					
+					reader.unread(ch);
+					return parseList(reader);
+					
+				} else if(isSpace(ch) == false) {
+					throw new RuntimeException("");
+				}
+			}
+			
+			// 아무 내용이 없는 경우
+			return null;
+		}
 	}
 
-	public Map<String, Object> parse(String jsonMsg) {
+	private enum MapParserStatus {
+		START,
+		ITEM_START,
+		NAME,
+		SEPARATOR,
+		VALUE_END
+	}
 
+	private static Map<String, Object> parseMap(PushbackReader reader) throws Exception {
+		
+		//
 		Map<String, Object> jsonMap = new HashMap<>();
 		
-		if(StringUtil.isBlank(jsonMsg) == true) {
-			return jsonMap;
-		}
+		//
+		StringBuilder name = new StringBuilder();
+		
+		MapParserStatus status = MapParserStatus.START;
 
-		for(int index = 0; index < jsonMsg.size(); index++) {
+		int read = -1;
+		while((read = reader.read()) != -1) {
+			
+			char ch = (char)read;
+			
+			switch(status) {
+			
+			case START:
+				
+				if(ch == '{') {
+					status = MapParserStatus.ITEM_START;
+				} else if(isSpace(ch) == false) {
+					throw new RuntimeException("");
+				}
+				
+				break;
+				
+			case ITEM_START:
+				
+				if(ch == '"') {
+					status = MapParserStatus.NAME;
+				} else if(isSpace(ch) == false) {
+					throw new RuntimeException("");
+				}
+				
+				break;
+				
+			case NAME:
+				
+				if(ch == '"') {
+					status = MapParserStatus.SEPARATOR;
+				} else {
+					name.append(ch);
+				}
+				
+				break;
+				
+			case SEPARATOR:
+				
+				if(ch == ':') {
+					
+					// map에 아이템 추가
+					jsonMap.put(name.toString(), parseValue(reader));
+					
+					// name 클리어
+					name.delete(0, name.length());
+					
+					status = MapParserStatus.VALUE_END;
+					
+				} else if(isSpace(ch) == false) {
+					throw new RuntimeException("");
+				}
+				
+				break;
+				
+			case VALUE_END:
+				
+				if(ch == '}') {
+					return jsonMap;
+				} else if(ch == ',') {
+					status = MapParserStatus.ITEM_START;
+				} else if(isSpace(ch) == false) {
+					throw new RuntimeException("");
+				}
+				
+				break;
+			}
 		}
+		
+		// 정상 종료 되지 않은 경우
+		throw new RuntimeException("");
+	}
+	
+	private enum ListParserStatus {
+		START,
+		ITEM_END
+	}
+	
+	private static List<Object> parseList(PushbackReader reader) throws Exception {
+		
+		//
+		List<Object> jsonList = new ArrayList<>();
+		
+		ListParserStatus status = ListParserStatus.START;
+		
+		int read = -1;
+		while((read = reader.read()) != -1) {
+			
+			char ch = (char)read;
+			
+			switch(status) {
+			case START:
+				
+				if(ch == '[') {
+					
+					jsonList.add(parseValue(reader));
+					status = ListParserStatus.ITEM_END;
+					
+				} else if(isSpace(ch) == false) {
+					throw new RuntimeException("");
+				}
+				
+				break;
+				
+			case ITEM_END:
+				
+				if(ch == ']') {
+					return jsonList;
+				} else if(ch == ',') {
+					jsonList.add(parseValue(reader));
+				} else if(isSpace(ch) == false) {
+					throw new RuntimeException("");
+				}
+				
+				break;
+			}
+		}
+		
+		// 정상 종료 되지 않은 경우
+		throw new RuntimeException("");
+	}
+	
+	private enum ValueParserStatus {
+		START,
+		DECIMAL,
+		FRACTIONAL,
+		STRING
+	}
+	
+	private static Object parseValue(PushbackReader reader) throws Exception {
+		
+		StringBuilder value = new StringBuilder();
+		
+		ValueParserStatus status = ValueParserStatus.START;
+
+		int read = -1;
+		while((read = reader.read()) != -1) {
+			
+			char ch = (char)read;
+			
+			switch(status) {
+			
+			case START:
+				
+				if(ch == '"') {
+					status = ValueParserStatus.STRING;
+				} else if(ch >= '0' && ch <= '9') {
+					value.append(ch);
+					status = ValueParserStatus.DECIMAL;
+				} else if(isSpace(ch) == false) {
+					throw new RuntimeException("");
+				}
+				
+				break;
+				
+			case DECIMAL:
+				
+				if(ch >= '0' && ch <= '9') {
+					value.append(ch);
+				} else if(ch == '.') {
+					value.append(ch);
+					status = ValueParserStatus.FRACTIONAL;
+				} else {
+					reader.unread(ch);
+					return Long.parseLong(value.toString());
+				}
+				
+				break;
+				
+			case FRACTIONAL:
+				
+				if(ch >= '0' && ch <= '9') {
+					value.append(ch);
+				} else {
+					reader.unread(ch);
+					return Double.parseDouble(value.toString());
+				}
+				
+				break;
+				
+			case STRING:
+				
+				if(ch == '"') {
+					return value.toString();
+				} else {
+					value.append(ch);
+				}
+				
+				break;
+			}
+		}
+		
+		// 정상 종료 되지 않은 경우
+		throw new RuntimeException("");
+	}
+	
+	private static boolean isSpace(char ch) {
+		return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
 	}
 }
