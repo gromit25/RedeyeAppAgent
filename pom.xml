@@ -8,7 +8,12 @@
 	<properties>
 		<deploy.target.dir>C:/apps/KafExporter</deploy.target.dir>
 	</properties>
-	
+
+	<!--
+		외부 라이브러리 최소한으로 유지해야 함
+		APM 프로그램은 모니터링 대상 프로그램과
+		동일한 라이브러리를 사용하게되면 충돌이 발생할 우려가 있음
+	-->
 	<dependencies>
 		
 		<dependency>
