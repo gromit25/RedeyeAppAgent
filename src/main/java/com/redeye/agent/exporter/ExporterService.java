@@ -15,15 +15,14 @@ public class ExporterService {
 	 */
 	public static void start(List<Context> contextList) {
 
-		// 컨텍스트가 없는 경우 반환
-		if(contextList == null || contextList.size() == 0) {
-			return;
-		}
-    
 		// ------------------------
 		// 로더 기동 여부 확인
 		String useLoader = Config.LOADER_YN.value;
-		if("Y".equalsIgnoreCase(useLoader) == false) {
+		if(
+			"Y".equalsIgnoreCase(useLoader) == false
+			|| contextList == null
+			|| contextList.size() == 0
+		) {
 			LogUtil.log("metrics api loader is disabled.");
 			return;
 		}
