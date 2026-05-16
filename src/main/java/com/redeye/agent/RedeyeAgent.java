@@ -1,20 +1,10 @@
 package com.redeye.agent;
 
 import java.lang.instrument.Instrumentation;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.redeye.agent.domain.env.EnvContext;
-import com.redeye.agent.domain.jdbc.JDBCContext;
-import com.redeye.agent.domain.kafka.KafkaContext;
-import com.redeye.agent.loader.APILoader;
-import com.redeye.agent.loader.APILoaderCronJob;
-import com.redeye.agent.util.LogUtil;
-import com.redeye.agent.util.StringUtil;
-import com.redeye.agent.util.WebUtil;
-import com.redeye.agent.util.http.service.HttpService;
-import com.redeye.agent.util.http.service.annotation.Controller;
+import com.redeye.agent.exporter.ExporterService;
+import com.redeye.agent.loader.LoaderService;
 
 /**
  * 에이전트 클래스
@@ -22,14 +12,6 @@ import com.redeye.agent.util.http.service.annotation.Controller;
  * @author jmsohn
  */
 public class RedeyeAgent {
-
-	
-	/** http exporter 서비스*/
-	private static HttpService service;
-	
-	/** API를 통한 성능 정보 저장 크론잡 객체 */
-	private static APILoaderCronJob loader;
-	
 	
 	/**
 	 * 메인 메소드

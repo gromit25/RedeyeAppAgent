@@ -1,5 +1,12 @@
 package com.redeye.agent;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import com.redeye.agent.domain.env.EnvContext;
+import com.redeye.agent.domain.jdbc.JDBCContext;
+import com.redeye.agent.domain.kafka.KafkaContext;
+
 /**
  * 컨텍스트 관리자 클래스
  *
