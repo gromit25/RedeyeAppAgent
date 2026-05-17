@@ -3,9 +3,14 @@ package com.redeye.agent.loader;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
+import com.redeye.agent.Config;
 import com.redeye.agent.util.CronJob;
 import com.redeye.agent.util.CronJob.Job;
+import com.redeye.agent.util.HttpUtil;
+import com.redeye.agent.util.JSONUtil;
+import com.redeye.agent.util.LogUtil;
 import com.redeye.agent.util.StringUtil;
 
 /**
@@ -70,10 +75,10 @@ public class APILoaderCronJob {
 
 
 		/** 호스트 아이디 URL */
-		private static final String HOST_ID_URL = "/api/host/id";
+		private static final String HOST_ID_URL = "/api/host/id?organCode=%s&domainCode=%s&hostName=%s";
 
 		/** 어플리케이션 아이디 URL */
-		private static final String APP_ID_URL = "/api/app/id";
+		private static final String APP_ID_URL = "/api/app/id?organCode=%s&domainCode=%s&appCode=%s";
 
 
 		/** 호스트 아이디 */
@@ -81,12 +86,12 @@ public class APILoaderCronJob {
 
 		/** 어플리케이션 아이디 */
 		private long appId = -1;
-
-		/** API 호출 작업 실행시 사용할 스레드 풀 */
-		private ExecutorService pool;
 		
 		/** API 저장 로더 목록 */
 		private final List<APILoader> loaderList;
+
+		/** API 호출 작업 실행시 사용할 스레드 풀 */
+		private ExecutorService pool;
 		
 		
 		/**
@@ -107,6 +112,8 @@ public class APILoaderCronJob {
 			
 			// API 저장 로더 목록 설정
 			this.loaderList = loaderList;
+			
+			// 스레드 풀 생성 및 설정
 			this.pool = Executors.newFixedThreadPool(this.loaderList.size());
 		}
 		
@@ -126,6 +133,8 @@ public class APILoaderCronJob {
 				}
 				
 			} catch(Exception ex) {
+				
+				// 예외 발생시, 로더를 실행하지 않음
 				LogUtil.log(ex);
 				return;
 			}
@@ -148,8 +157,46 @@ public class APILoaderCronJob {
 		 *
 		 * @return 호스트 아이디
 		 */
-		private static long getHostId() {
-			return -1L;
+		private long getHostId() {
+			
+			try {
+				
+				AtomicLong hostId = new AtomicLong(-1L);
+				
+				HttpUtil.getJSON(
+						
+					String.format(
+						basePath + HOST_ID_URL,
+						Config.ORGAN_CODE.getValue(),
+						Config.DOMAIN_CODE.getValue(),
+						Config.HOST_NAME.getValue()
+					),
+					
+					(respCode, respMsg) -> {
+						
+						if(respCode == 200) {
+							try {
+								
+								hostId.set(
+									(long)JSONUtil.parseMap(respMsg).get("id")
+								);
+								
+							} catch(Exception ex) {
+								
+								LogUtil.log(ex);
+								hostId.set(-1L);
+							}
+						}
+					}
+				);
+				
+				return hostId.get();
+				
+			} catch(Exception ex) {
+				
+				LogUtil.log(ex);
+				return -1L;
+			}
 		}
 
 		/**
@@ -157,7 +204,7 @@ public class APILoaderCronJob {
 		 *
 		 * @return 어플리케이션 아이디
 		 */
-		private static long getAppId() {
+		private long getAppId() {
 			return -1L;
 		}
 		
