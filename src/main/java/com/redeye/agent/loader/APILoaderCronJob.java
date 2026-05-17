@@ -164,14 +164,16 @@ public class APILoaderCronJob {
 				AtomicLong hostId = new AtomicLong(-1L);
 				
 				HttpUtil.getJSON(
-						
+
+					// 접속 URL
 					String.format(
 						basePath + HOST_ID_URL,
 						Config.ORGAN_CODE.getValue(),
 						Config.DOMAIN_CODE.getValue(),
 						Config.HOST_NAME.getValue()
 					),
-					
+
+					// 응답 처리
 					(respCode, respMsg) -> {
 						
 						if(respCode == 200) {
@@ -205,7 +207,47 @@ public class APILoaderCronJob {
 		 * @return 어플리케이션 아이디
 		 */
 		private long getAppId() {
-			return -1L;
+			
+			try {
+				
+				AtomicLong hostId = new AtomicLong(-1L);
+				
+				HttpUtil.getJSON(
+
+					// 접속 URL
+					String.format(
+						basePath + APP_ID_URL,
+						Config.ORGAN_CODE.getValue(),
+						Config.DOMAIN_CODE.getValue(),
+						Config.APP_CODE.getValue()
+					),
+
+					// 응답 처리
+					(respCode, respMsg) -> {
+						
+						if(respCode == 200) {
+							try {
+								
+								hostId.set(
+									(long)JSONUtil.parseMap(respMsg).get("id")
+								);
+								
+							} catch(Exception ex) {
+								
+								LogUtil.log(ex);
+								hostId.set(-1L);
+							}
+						}
+					}
+				);
+				
+				return hostId.get();
+				
+			} catch(Exception ex) {
+				
+				LogUtil.log(ex);
+				return -1L;
+			}
 		}
 		
 		/**
