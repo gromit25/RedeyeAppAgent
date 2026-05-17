@@ -762,10 +762,10 @@ public class JSONUtil {
 	}
 	
 	/**
-	 * 공백 캐릭터 여부 반환
+	 * 공백 문자 여부 반환
 	 * 
-	 * @param ch 검사할 캐릭터
-	 * @return 공백 캐릭터 여부
+	 * @param ch 검사할 문자
+	 * @return 공백 문자 여부
 	 */
 	private static boolean isSpace(char ch) {
 		return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
