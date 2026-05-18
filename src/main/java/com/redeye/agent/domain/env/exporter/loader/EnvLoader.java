@@ -17,7 +17,7 @@ public class EnvLoader implements APILoader {
 	
 	
 	/** 환경 변수 서브패스 */
-	private static String SUBPATH = "/api/app/%d/env";
+	private static String SUBPATH = "/api/prc/%d/%d/env";
 	
 	/** 환경 변수 맵 */
 	private Map<String, String> envMap;
@@ -75,15 +75,16 @@ public class EnvLoader implements APILoader {
 	/**
 	 * 호출 패스 생성
 	 * 
+	 * @param hostId 호스트 아이디
 	 * @param appId 어플리케이션 아이디
 	 * @param basePath 기본 패스
 	 * @return 생성된 패스
 	 */
-	private static String makePath(long appId, String basePath) {
+	private static String makePath(long hostId, long appId, String basePath) {
 		
 		return new StringBuilder()
 			.append(basePath)
-			.append(SUBPATH)
+			.append(String.format(SUBPATH, hostId, appId))
 			.toString();
 	}
 	
