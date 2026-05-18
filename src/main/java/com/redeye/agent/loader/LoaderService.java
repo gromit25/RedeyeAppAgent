@@ -62,5 +62,5 @@ public class LoaderService {
 		loader.start();
 		
 		LogUtil.log("metrics api loader is started.");
-  }
+	}
 }
