@@ -100,5 +100,5 @@ public class ExporterService {
 		service.start();
 		
 		LogUtil.log("http exporter(" + service.getHostStr() + ") is started.");
-  }
+	}
 }
