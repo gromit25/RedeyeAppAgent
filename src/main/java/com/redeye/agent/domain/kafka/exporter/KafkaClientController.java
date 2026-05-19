@@ -1,4 +1,4 @@
-package com.redeye.agent.domain.kafka.exporter.service;
+package com.redeye.agent.domain.kafka.exporter;
 
 import java.util.HashMap;
 import java.util.List;
