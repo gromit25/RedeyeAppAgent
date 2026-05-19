@@ -19,6 +19,7 @@ public class AdviceUtil {
 	@Data
 	@AllArgsConstructor
 	public static class Loc {
+
 		
 		/** 클래스 명 */
 		private final String className;
@@ -28,6 +29,7 @@ public class AdviceUtil {
 		
 		/** 라인 넘버 */
 		private final int lineNumber;
+		
 		
 		@Override
 		public String toString() {
