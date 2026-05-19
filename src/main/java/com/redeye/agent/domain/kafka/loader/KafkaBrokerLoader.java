@@ -1,4 +1,4 @@
-package com.redeye.agent.domain.kafka.exporter.loader;
+package com.redeye.agent.domain.kafka.loader;
 
 import com.redeye.agent.loader.APILoader;
 
