@@ -1,14 +1,14 @@
 package com.redeye.agent.domain.kafka.loader;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-import com.redeye.agent.Config;
 import com.redeye.agent.domain.kafka.acquisitor.KafkaAcquisitor;
 import com.redeye.agent.loader.APILoader;
 import com.redeye.agent.util.HttpUtil;
 import com.redeye.agent.util.JSONUtil;
 import com.redeye.agent.util.LogUtil;
-import com.redeye.agent.util.stat.Parameter;
 
 /**
  * kafka 클라이언트(프로듀서/컨슈머) 성능 정보 로더 클래스
@@ -23,7 +23,7 @@ public class KafkaClientLoader implements APILoader {
 
 
 	@Override
-	public void load(String basePath, long startTime, long endTime) {
+	public void load(long hostId, long appId, String basePath, long startTime, long endTime) {
 		
 		try {
 			
@@ -75,88 +75,63 @@ public class KafkaClientLoader implements APILoader {
 	 */
 	private static String makeMessage(long startTime, long endTime) throws Exception {
 		
-		// json 메시지 변수
-		StringBuilder json = new StringBuilder("");
+		// json 맵 객체 변수
+		Map<String, Object> jsonMap = new HashMap<>();
 		
-		// 시간 정보 메시지 추가
-		json
-			.append("{")
-			.append("\"startTime\":").append(startTime)
-			.append(",\"endTime\":").append(endTime);
+		// 통계 수집 시간 정보 추가
+		jsonMap.put("startTime", startTime);
+		jsonMap.put("endTime", endTime);
 		
-		// 프로듀서 정보 메시지 추가
-		json.append(",\"producer\": {");
+		// 프로듀서 정보 맵 추가
+		Map<String, Object> producerMap = new HashMap<>();
 		
 		Set<String> producerIdSet = KafkaAcquisitor.getProducerClientIdSet();
 		for(String producerId: producerIdSet) {
-			json.append(makeProducerMessage(producerId));
+			producerMap.put(producerId, makeProducerMessage(producerId));
 		}
 		
-		json.append("}");
+		jsonMap.put("producer", producerMap);
 		
-		// 컨슈머 정보 메시지 추가
-		json.append(",\"consumer\": {");
+		// 컨슈머 정보 맵 추가
+		Map<String, Object> consumerMap = new HashMap<>();
 		
 		Set<String> consumerIdSet = KafkaAcquisitor.getConsumerClientIdSet();
 		for(String consumerId: consumerIdSet) {
-			json.append(makeConsumerMessage(consumerId));
+			consumerMap.put(consumerId, makeConsumerMessage(consumerId));
 		}
 		
-		json.append("}");
-		
-		json.append("}");
-		
-		return json.toString();
+		jsonMap.put("consumer", consumerMap);
+
+		// JSON 메시지 변환 및 반환
+		return JSONUtil.toJSON(jsonMap);
 	}
 	
 	/**
-	 * 프로듀서 메시지 생성 및 반환
+	 * 프로듀서 메시지 맵 객체 생성 및 반환
 	 * 
 	 * @param producerId 프로듀서 아이디
-	 * @return 생성된 프로듀서 메시지
+	 * @return 프로듀서 메시지 맵 객체
 	 */
-	private static String makeProducerMessage(String producerId) throws Exception {
+	private static Map<String, Object> makeProducerMessage(String producerId) throws Exception {
 		
-		// json 메시지 변수
-		StringBuilder json = new StringBuilder();
-		
-		// 클라이언트 아이디 추가
-		json
-			.append("\"")
-			.append(producerId)
-			.append("\": {");
-		
-		// 설정값 추가
-		json
-			.append("\"config\": ")
-			.append(JSONUtil.toJSON(KafkaAcquisitor.getConfigMap(producerId)));
-		
-		// 성능 정보 추가
-		json
-			.append(",\"metrics\": ")
-			.append(JSONUtil.toJSON(KafkaAcquisitor.getProducerMetrics(producerId)));
-		
-		// 통계 정보 추가 시작
-		json
-			.append(",\"stat\":{");
-		
-		// commitSync 간격 통계 정보 추가
-		Parameter commitSyncStat = KafkaAcquisitor.commitSyncTimeStatDaemon.getStat().remove(producerId);
-		json
-			.append("\"commitSync\": ")
-			.append(JSONUtil.toJSON(commitSyncStat));
-		
-		// commitAsync 간격 통계 정보 추가
-		Parameter commitAsyncStat = KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(producerId);
-		json
-			.append(",\"commitAsync\": ")
-			.append(JSONUtil.toJSON(commitAsyncStat));
-	
-		// 통계 정보 종료
-		json
-			.append("}");
-		
-		return json.append("}").toString();
+		return Map.of(
+					
+			// 설정값 추가
+			"config", KafkaAcquisitor.getConfigMap(producerId),
+			
+			// 성능 정보 추가
+			"metrics", KafkaAcquisitor.getProducerMetrics(producerId),
+			
+			// 통계 정보 추가
+			"stat",
+				Map.of(
+					
+					// commitSync, commitAsync 간격 통계 정보 추가
+					// 통계 정보 삭세 후 삭제된 값을 저장
+					"commitSync", KafkaAcquisitor.commitSyncTimeStatDaemon.getStat().remove(producerId).toMap(),
+					"commitAsync", KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(producerId).toMap()
+				)
+		);
 	}
 	
 	/**
@@ -165,35 +140,23 @@ public class KafkaClientLoader implements APILoader {
 	 * @param consumerId 컨슈머 아이디
 	 * @return 생성된 컨슈머 메시지
 	 */
-	private static String makeConsumerMessage(String consumerId) throws Exception {
+	private static Map<String, Object> makeConsumerMessage(String consumerId) throws Exception {
 		
-		// json 메시지 변수
-		StringBuilder json = new StringBuilder();
-		
-		// 클라이언트 아이디 추가
-		json
-			.append("\"")
-			.append(consumerId)
-			.append("\": {");
-		
-		// 설정값 추가
-		json
-			.append("\"config\": ")
-			.append(JSONUtil.toJSON(KafkaAcquisitor.getConfigMap(consumerId)));
-		
-		// 성능 정보 추가
-		json
-			.append(",\"metrics\": ")
-			.append(JSONUtil.toJSON(KafkaAcquisitor.getConsumerMetrics(consumerId)));
-		
-		// 폴링 간격 통계 정보 추가
-		Parameter pollingStat = KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(consumerId);
-		json
-			.append(",\"stat\":{")
-			.append("\"polling\":")
-			.append(JSONUtil.toJSON(pollingStat))
-			.append("}");
-		
-		return json.append("}").toString();
+		return Map.of(
+			
+			// 설정값 추가
+			"config", KafkaAcquisitor.getConfigMap(consumerId),
+			
+			// 성능 정보 추가
+			"metrics", KafkaAcquisitor.getConsumerMetrics(consumerId),
+			
+			// 통계 정보 추가
+			"stat",
+				Map.of(
+					// 폴링 간격 통계 정보 추가
+					// 통계 정보 삭세 후 삭제된 값을 저장
+					"polling", KafkaAcquisitor.commitAsyncTimeStatDaemon.getStat().remove(consumerId).toMap()
+				)
+		);
 	}
 }

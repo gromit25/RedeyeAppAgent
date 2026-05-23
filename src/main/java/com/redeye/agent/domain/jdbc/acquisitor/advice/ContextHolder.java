@@ -1,7 +1,6 @@
 package com.redeye.agent.domain.jdbc.acquisitor.advice;
 
 import com.redeye.agent.domain.common.InvokeStatus;
-import com.redeye.agent.util.StringUtil;
 
 /**
  * JDBC 실행 관련 컨텍스트 클래스

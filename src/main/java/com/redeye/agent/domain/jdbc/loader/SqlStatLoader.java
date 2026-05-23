@@ -1,14 +1,13 @@
 package com.redeye.agent.domain.jdbc.loader;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.redeye.agent.Config;
 import com.redeye.agent.domain.jdbc.acquisitor.JDBCAcquisitor;
 import com.redeye.agent.loader.APILoader;
-import com.redeye.agent.util.HttpUtil;
 import com.redeye.agent.util.JSONUtil;
-import com.redeye.agent.util.LogUtil;
 import com.redeye.agent.util.stat.Parameter;
 
 /**
@@ -113,12 +112,12 @@ public class SqlStatLoader implements APILoader {
 				Map.entry("className", idM.group("class")),
 				Map.entry("methodName", idM.group("method")),
 				Map.entry("lineNum", Integer.parseInt(idM.group("lineNum"))),
-				Map.entry("stmt", idM.group("stmt")))
+				Map.entry("stmt", idM.group("stmt"))
 			)
 		);
 
 		// sql 성능 통계 정보
-		msgMap.put("stat", sqlStat);
+		msgMap.put("stat", stat);
 		
 		return JSONUtil.toJSON(msgMap);
 	}

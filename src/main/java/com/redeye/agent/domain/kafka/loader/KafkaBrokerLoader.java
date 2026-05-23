@@ -15,8 +15,7 @@ public class KafkaBrokerLoader implements APILoader {
 	
 
 	@Override
-	public void load(String basePath, long startTime, long endTime) {
+	public void load(long hostId, long appId, String basePath, long startTime, long endTime) {
 		// TODO Auto-generated method stub
-
 	}
 }

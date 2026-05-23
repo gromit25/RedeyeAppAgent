@@ -1,8 +1,8 @@
 package com.redeye.agent.domain.env.loader;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import com.redeye.agent.Config;
 import com.redeye.agent.loader.APILoader;
 import com.redeye.agent.util.HttpUtil;
 import com.redeye.agent.util.JSONUtil;
@@ -44,7 +44,7 @@ public class EnvLoader implements APILoader {
 		}
 		
 		// 전송할 url 패스 생성
-		String path = makePath(appId, basePath);
+		String path = makePath(hostId, appId, basePath);
 		
 		// 전송 메시지 생성
 		String message = this.makeMessage(startTime, endTime);

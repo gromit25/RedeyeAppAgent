@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.redeye.agent.util.JSONUtil;
-
 import lombok.Getter;
 
 /**
@@ -304,23 +302,23 @@ public class Parameter {
 	}
 	
 	/**
-	 * 모수 통계량(Parameter) 에 대해 JSON 문자열로 반환
+	 * 모수 통계량(Parameter) 에 대해 맵 캑체로 반환
 	 * 
-	 * @return JSON 문자열
+	 * @return 맵 객체
 	 */
-	public String toJSON() {
+	public Map<String, Object> toMap() {
 		
 		Map<String, Object> statMap = new HashMap<>();
 		
-		statMap.put("\"count\":", this.getCount());
-		statMap.put(",\"sumX\":", this.getSum());
-		statMap.put(",\"sumX2\":", this.getSquaredSum());
-		statMap.put(",\"sumX3\":", this.getCubedSum());
-		statMap.put(",\"sumX4\":", this.getFourthPoweredSum());
+		statMap.put("count", this.getCount());
+		statMap.put("sumX", this.getSum());
+		statMap.put("sumX2", this.getSquaredSum());
+		statMap.put("sumX3", this.getCubedSum());
+		statMap.put("sumX4", this.getFourthPoweredSum());
 		
-		statMap.put(",\"minX\":", this.getMin());
-		statMap.put(",\"minX\":", this.getMax());
+		statMap.put("minX", this.getMin());
+		statMap.put("minX", this.getMax());
 		
-		return JSONUtil.toJSON(statMap);
+		return statMap;
 	}
 }

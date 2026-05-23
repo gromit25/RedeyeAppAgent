@@ -13,7 +13,7 @@ import com.redeye.agent.domain.jdbc.acquisitor.advice.ConnectionAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.DataSourceAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.DriverManagerAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.PreparedStatementAdvice;
-import com.redeye.agent.domain.jdbc.exporter.loader.SqlStatLoader;
+import com.redeye.agent.domain.jdbc.loader.SqlStatLoader;
 import com.redeye.agent.loader.APILoader;
 
 import net.bytebuddy.agent.builder.AgentBuilder;

@@ -1,7 +1,6 @@
 package com.redeye.agent.domain.jdbc;
 
 import com.redeye.agent.domain.common.AdviceUtil;
-import com.redeye.agent.domain.jdbc.acquisitor.advice.ConnectionAdvice;
 import com.redeye.agent.domain.jdbc.acquisitor.advice.ContextHolder;
 
 /**
