@@ -1,12 +1,9 @@
 package com.redeye.agent.exporter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.redeye.agent.Config;
 import com.redeye.agent.Context;
-import com.redeye.agent.loader.APILoader;
-import com.redeye.agent.loader.APILoaderCronJob;
 import com.redeye.agent.util.LogUtil;
 import com.redeye.agent.util.StringUtil;
 import com.redeye.agent.util.WebUtil;
