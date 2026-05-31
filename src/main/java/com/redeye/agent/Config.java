@@ -119,7 +119,7 @@ public enum Config {
 	/** 로더에서 호출할 API의 기준 패스 */
 	LOADER_API_SERVER(
 		"RE_LOADER_API_SERVER",
-		null,
+		"",
 		"로더에서 호출할 API의 기준 패스 - ex) http://localhost:8080",
 		false
 	),
