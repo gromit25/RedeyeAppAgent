@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.redeye.agent.Config;
 import com.redeye.agent.util.CronJob;
 import com.redeye.agent.util.CronJob.Job;
-import com.redeye.agent.util.HttpUtil;
+import com.redeye.agent.util.RESTUtil;
 import com.redeye.agent.util.JSONUtil;
 import com.redeye.agent.util.LogUtil;
 import com.redeye.agent.util.StringUtil;
@@ -163,7 +163,7 @@ public class APILoaderCronJob {
 				
 				AtomicLong hostId = new AtomicLong(-1L);
 				
-				HttpUtil.getJSON(
+				RESTUtil.getJSON(
 
 					// 접속 URL
 					String.format(
@@ -212,7 +212,7 @@ public class APILoaderCronJob {
 				
 				AtomicLong hostId = new AtomicLong(-1L);
 				
-				HttpUtil.getJSON(
+				RESTUtil.getJSON(
 
 					// 접속 URL
 					String.format(

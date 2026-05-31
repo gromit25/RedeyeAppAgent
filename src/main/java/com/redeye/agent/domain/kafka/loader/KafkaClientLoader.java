@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.redeye.agent.domain.kafka.acquisitor.KafkaAcquisitor;
 import com.redeye.agent.loader.APILoader;
-import com.redeye.agent.util.HttpUtil;
+import com.redeye.agent.util.RESTUtil;
 import com.redeye.agent.util.JSONUtil;
 import com.redeye.agent.util.LogUtil;
 
@@ -35,7 +35,7 @@ public class KafkaClientLoader implements APILoader {
 			System.out.println("### DEBUG MESSAGE: " + message);
 			
 			// 메시지 전송
-			HttpUtil.postJSON(
+			RESTUtil.postJSON(
 				path,
 				message,
 				(respCode, respMessage) -> {

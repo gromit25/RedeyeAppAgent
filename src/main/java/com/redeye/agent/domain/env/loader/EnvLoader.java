@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.redeye.agent.loader.APILoader;
-import com.redeye.agent.util.HttpUtil;
+import com.redeye.agent.util.RESTUtil;
 import com.redeye.agent.util.JSONUtil;
 import com.redeye.agent.util.LogUtil;
 
@@ -51,7 +51,7 @@ public class EnvLoader implements APILoader {
 				
 		try {
 			
-			HttpUtil.postJSON(
+			RESTUtil.postJSON(
 				path,
 				message,
 				(respCode, respMessage) -> {
