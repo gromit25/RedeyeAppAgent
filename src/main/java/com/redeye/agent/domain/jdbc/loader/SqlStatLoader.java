@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 import com.redeye.agent.domain.jdbc.acquisitor.JDBCAcquisitor;
 import com.redeye.agent.loader.APILoader;
 import com.redeye.agent.util.JSONUtil;
+import com.redeye.agent.util.LogUtil;
+import com.redeye.agent.util.RESTUtil;
 import com.redeye.agent.util.stat.Parameter;
 
 /**
@@ -49,20 +51,17 @@ public class SqlStatLoader implements APILoader {
 				// JSON 메시지 전송
 				try {
 					
-					System.out.println("#### DEBUG SQL ####");
-					System.out.println(message);
-					
-//					HttpUtil.postJSON(
-//						path,
-//						message,
-//						(respCode, respMessage) -> {
-//							
-//							// 실패시 메시지 출력
-//							if(respCode != 200) {
-//								LogUtil.log("fail to send sql stat(" + respCode + "): " + path);
-//							}
-//						}
-//					);
+					RESTUtil.post(
+						path,
+						message,
+						(respCode, respMessage) -> {
+							
+							// 실패시 메시지 출력
+							if(respCode != 200) {
+								LogUtil.log("fail to send sql stat(" + respCode + "): " + path);
+							}
+						}
+					);
 					
 				} catch(Exception ex) {
 					ex.printStackTrace();
