@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>KafExporter</groupId>
-	<artifactId>KafExporter</artifactId>
+	<groupId>com.redeye</groupId>
+	<artifactId>AppAgent</artifactId>
 	<version>0.1</version>
 	
 	<properties>
-		<deploy.target.dir>C:/apps/KafExporter</deploy.target.dir>
+		<deploy.target.dir>C:/apps/AppAgent</deploy.target.dir>
 	</properties>
 
 	<!--
@@ -88,7 +88,7 @@
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
 						<manifestEntries>
-							<Premain-Class>com.redeye.agent.RedeyeAgent</Premain-Class>
+							<Premain-Class>com.redeye.appagent.RedeyeAgent</Premain-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Can-Retransform-Classes>true</Can-Retransform-Classes>
 						</manifestEntries>
