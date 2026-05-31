@@ -51,7 +51,7 @@ public class EnvLoader implements APILoader {
 				
 		try {
 			
-			RESTUtil.postJSON(
+			RESTUtil.post(
 				path,
 				message,
 				(respCode, respMessage) -> {

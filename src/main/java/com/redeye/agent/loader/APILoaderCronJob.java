@@ -163,7 +163,7 @@ public class APILoaderCronJob {
 				
 				AtomicLong hostId = new AtomicLong(-1L);
 				
-				RESTUtil.getJSON(
+				RESTUtil.get(
 
 					// 접속 URL
 					String.format(
@@ -212,7 +212,7 @@ public class APILoaderCronJob {
 				
 				AtomicLong hostId = new AtomicLong(-1L);
 				
-				RESTUtil.getJSON(
+				RESTUtil.get(
 
 					// 접속 URL
 					String.format(

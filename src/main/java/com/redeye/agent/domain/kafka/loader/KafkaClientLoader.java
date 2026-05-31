@@ -35,7 +35,7 @@ public class KafkaClientLoader implements APILoader {
 			System.out.println("### DEBUG MESSAGE: " + message);
 			
 			// 메시지 전송
-			RESTUtil.postJSON(
+			RESTUtil.post(
 				path,
 				message,
 				(respCode, respMessage) -> {
