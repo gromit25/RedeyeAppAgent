@@ -75,10 +75,10 @@ public class APILoaderCronJob {
 
 
 		/** 호스트 아이디 URL */
-		private static final String HOST_ID_URL = "/api/host/id?organCode=%s&domainCode=%s&hostName=%s";
+		private static final String HOST_ID_URL = "/api/host/info/id?organCode=%s&domainCode=%s&hostName=%s";
 
 		/** 어플리케이션 아이디 URL */
-		private static final String APP_ID_URL = "/api/app/id?organCode=%s&domainCode=%s&appCode=%s";
+		private static final String APP_ID_URL = "/api/app/info/id?organCode=%s&domainCode=%s&appCode=%s";
 
 
 		/** 호스트 아이디 */
