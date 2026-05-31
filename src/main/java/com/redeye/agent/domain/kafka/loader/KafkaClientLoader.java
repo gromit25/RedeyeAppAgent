@@ -32,7 +32,6 @@ public class KafkaClientLoader implements APILoader {
 			
 			// 메시지 생성
 			String message = makeMessage(startTime, endTime);
-			System.out.println("### DEBUG MESSAGE: " + message);
 			
 			// 메시지 전송
 			RESTUtil.post(
