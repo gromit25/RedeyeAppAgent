@@ -14,9 +14,11 @@ import lombok.Getter;
  * @author jmsohn
  */
 public enum Config {
-	
 
-	/** 호스트 명 */
+	/**
+	 * 호스트 명<br>
+	 * 설정되어 있지 않으면 init() 메소드에서 강제 설정
+	 */
 	HOST_NAME(
 		"RE_HOST_NM",
 		null,
@@ -24,9 +26,12 @@ public enum Config {
 		false
 	),
 	
-	/** 프로세스 아이디(pid) */
+	/**
+	 * 프로세스 아이디(pid)<br>
+	 * init() 메소드에서 강제 설정
+	 */
 	APP_PID(
-		null,
+		null,	// 환경 설정값으로 읽어 들이지 않음
 		null,
 		"프로세스 아이디(pid)",
 		false
@@ -95,7 +100,7 @@ public enum Config {
 		"RE_EXPORTER_SERVER",
 		"0.0.0.0:0",
 		"익스포터 서비스 서버명(ip), 포트 설정",
-		false
+		() -> EXPORTER_YN.getValue().equalsIgnoreCase("Y")
 	),
 	
 	/** 익스포터 서버의 스레드 개수 */
@@ -103,7 +108,7 @@ public enum Config {
 		"RE_EXPORTER_THREAD_COUNT",
 		"-1",
 		"익스포터 서버의 스레드 개수",
-		false
+		() -> EXPORTER_YN.getValue().equalsIgnoreCase("Y")
 	),
 	
 	//---------------------------
@@ -121,7 +126,7 @@ public enum Config {
 		"RE_LOADER_API_SERVER",
 		"",
 		"로더에서 호출할 API의 기준 패스 - ex) http://localhost:8080",
-		false
+		() -> LOADER_YN.getValue().equalsIgnoreCase("Y")
 	),
 	
 	/** API 호출 스케쥴 */
@@ -129,7 +134,7 @@ public enum Config {
 		"RE_LOADER_SCHEDULE",
 		"*/10 * * * * *",	// 디폴트 : 10초에 한번씩
 		"API 호출 스케쥴",
-		false
+		() -> LOADER_YN.getValue().equalsIgnoreCase("Y")
 	);
 
 	//---------------------------
@@ -139,7 +144,7 @@ public enum Config {
 	 */
 	public static void init() throws Exception {
 		
-		// 환경 변수에서 설정 값을 읽어와 값을 설정
+		// 환경 변수에서 설정 값을 선언된 순서대로 읽어와 값을 설정
 		Config[] configs = Config.values();
 		
 		for(Config config: configs) {
@@ -187,7 +192,7 @@ public enum Config {
 		String value = System.getenv(config.key);
 		
 		// 필수 여부 검사
-		if(value == null && config.isMandatory == true) {
+		if(value == null && config.isMandatory() == true) {
 			throw new IllegalArgumentException("'" + config.key + "' is not set.");
 		}
 		
@@ -230,6 +235,7 @@ public enum Config {
 	
 	//---------------------------
 	
+	
 	/**
 	 * 환경 변수 키<br>
 	 * - null 일 경우, 환경 변수에서 가져오지 않음, init에서 강제 설정하는 경우
@@ -248,10 +254,27 @@ public enum Config {
 	@Getter
 	protected String desc;
 	
-	/** 필수 여부 */
-	@Getter
-	protected boolean isMandatory;
+	/** 필수 여부 반환 객체 */
+	protected MandatoryChecker mandatoryChecker;
+	
 
+	/**
+	 * 생성자
+	 * 
+	 * @param key 환경 변수 키
+	 * @param value 환경 변수 디폴트 값
+	 * @param desc 환경 변수 설명
+	 * @param mandatory 필수 여부 반환 객체 
+	 */
+	private Config(String key, String defaultValue, String desc, MandatoryChecker mandatoryChecker) {
+		
+		this.key = key;
+		this.value = defaultValue;
+		this.defaultValue = defaultValue;
+		this.desc = desc;
+		this.mandatoryChecker = mandatoryChecker;
+	}
+	
 	/**
 	 * 생성자
 	 * 
@@ -261,16 +284,12 @@ public enum Config {
 	 * @param isMandatory 필수 여부
 	 */
 	private Config(String key, String defaultValue, String desc, boolean isMandatory) {
-		
-		this.key = key;
-		this.value = defaultValue;
-		this.defaultValue = defaultValue;
-		this.desc = desc;
-		this.isMandatory = isMandatory;
+		this(key, defaultValue, desc, () -> isMandatory);
 	}
 
 	/**
-	 * 생성자
+	 * 생성자<br>
+	 * 필수 여부는 false 로 설정
 	 * 
 	 * @param key 환경 변수 키
 	 * @param value 환경 변수 디폴트 값
@@ -280,8 +299,32 @@ public enum Config {
 		this(key, defaultValue, desc, false);
 	}
 	
+	/**
+	 * 필수 여부 반환
+	 * 
+	 * @return 필수 여부
+	 */
+	public boolean isMandatory() {
+		return this.mandatoryChecker.isMandatory();
+	}
+	
 	@Override
 	public String toString() {
-		return this.key + "(" + this.defaultValue + ", " + this.isMandatory + "):" + this.desc;
+		return this.key + "(" + this.defaultValue + ", " + this.isMandatory() + "):" + this.desc;
 	}
 }
+
+/**
+ * 필수 여부 반환 인터페이스
+ */
+@FunctionalInterface
+interface MandatoryChecker {
+	
+	/**
+	 * 필수 여부 반환
+	 * 
+	 * @return 필수 여부
+	 */
+	boolean isMandatory();
+}
+
