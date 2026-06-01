@@ -6,7 +6,7 @@ package com.redeye.appagent.domain.metric.dto;
  * @author jmsohn
  */
 @Data
-public class MetricDTO implements JSONDTO {
+public class MetricDTO implements JSONEntity {
 
   /** CPU 사용율(%) */
   private double cpuUsage;
