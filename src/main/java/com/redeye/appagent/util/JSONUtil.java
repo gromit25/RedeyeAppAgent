@@ -13,7 +13,7 @@ import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * JSON 유틸리티 클래스
+ * JSON 생성 및 파싱 유틸리티 클래스
  * 
  * @author jmsohn
  */
