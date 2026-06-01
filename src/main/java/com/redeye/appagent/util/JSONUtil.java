@@ -20,6 +20,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class JSONUtil {
 
 	/**
+	 *
+	 */
+	public static interface JSONEntity {
+
+		/**
+		 *
+		 *
+		 * @return JSON 문자열
+		 */
+		String toJSON();
+	}
+
+	/**
 	 * Map 객체를 JSON 문자열로 변환하여 반환
 	 * 
 	 * @param map 대상 Map 객체
@@ -142,6 +155,10 @@ public class JSONUtil {
 		} else if(Set.class.isAssignableFrom(type) == true) {
 			
 			return toJSON((Set)obj);
+			
+		} else if(JSONEntity.class.isAssignableFrom(type) == true) {
+
+			return ((JSONEntity)obj).toJSON();
 			
 		} else {
 			
