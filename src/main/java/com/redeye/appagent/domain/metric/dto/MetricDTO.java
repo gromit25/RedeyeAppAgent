@@ -29,12 +29,14 @@ public class MetricDTO implements JSONDTO {
   @Override
   public String toJSON() {
     return new StringBuilder()
+      .append("{")
       .append(String.format("\"cpuUsage\": %f5.2,", this.cpuUsage))
       .append(String.format("\"maxHeap\": %d,", this.maxHeapMem))
       .append(String.format("\"usedHeap\": %d,", this.usedHeapMem))
       .append(String.format("\"maxNonHeap\": %d,", this.maxNonHeapMem))
       .append(String.format("\"usedNonHeap\": %d,", this.usedNonHeapMem))
-      .append(String.format("\"threadCount\": %d,", this.threadCount))
+      .append(String.format("\"threadCount\": %d", this.threadCount))
+      .append("}")
       .toString();
   }
 }
