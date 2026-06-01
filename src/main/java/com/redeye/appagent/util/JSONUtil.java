@@ -92,7 +92,12 @@ public class JSONUtil {
 				.append('"')
 				.append(key.toString())
 				.append("\": ")
-				.append(getJSONValue(map.get(key), indent + "\t"));
+				.append(
+					getJSONValue(
+						map.get(key),
+						increaseIndent(indent)
+					)
+				);
 			
 			isFirst = false;
 		}
@@ -247,6 +252,10 @@ public class JSONUtil {
 
 		// 변환된 문자열 반환
 		return buffer.toString();
+	}
+
+	private static String increaseIndent(String indent) {
+		return (indent == null)?null:indent + "\t";
 	}
 	
 	// ----------------------------------
