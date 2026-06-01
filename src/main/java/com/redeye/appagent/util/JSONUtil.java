@@ -131,7 +131,8 @@ public class JSONUtil {
 	}
 	
 	/**
-	 * List 객체를 JSON 문자열로 변환하여 반환
+	 * List 객체를 JSON 문자열로 변환하여 반환<br>
+	 * 만일 indent가 null 이면 들여쓰기 하지 않고 붙혀쓰기 방식으로 출력
 	 * 
 	 * @param list 대상 Map 객체
 	 * @param indent 들여쓰기
@@ -209,7 +210,8 @@ public class JSONUtil {
 	}
 	
 	/**
-	 * Set 객체를 JSON 문자열로 변환하여 반환
+	 * Set 객체를 JSON 문자열로 변환하여 반환<br>
+	 * 만일 indent가 null 이면 들여쓰기 하지 않고 붙혀쓰기 방식으로 출력
 	 * 
 	 * @param set 대상 Set 객체
 	 * @param indent 들여쓰기
