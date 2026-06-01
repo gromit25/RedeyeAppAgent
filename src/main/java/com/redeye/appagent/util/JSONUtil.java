@@ -66,6 +66,11 @@ public class JSONUtil {
 		StringBuffer json = new StringBuffer();
 
 		if(indent != null) {
+
+			if(indent.isEmpty() == false) {
+				json.append("\r\n");
+			}
+			
 			json.append(indent);
 		}
 		
@@ -74,17 +79,21 @@ public class JSONUtil {
 		// 첫 번째 항목 여부
 		// 중간에 ","를 넣기 위함
 		boolean isFirst = true;
+
+		// 항목에 대한 들여쓰기
+		// 들여쓰기에 탭 추가
+		String increasedIndent = increaseIndent(indent);
 		
 		for(Object key: map.keySet()) {
 			
 			// 끝에 "," 추가
 			if(isFirst == false) {
-				json.append(", ");
+				json.append(",");
 			}
 
 			// 들여쓰기 추가
-			if(indent != null) {
-				json.append("\r\n").append(indent);
+			if(increasedIndent != null) {
+				json.append("\r\n").append(increasedIndent);
 			}
 			
 			// Map 항목에 대해 JSON 문자열로 변환하여 추가
@@ -95,18 +104,22 @@ public class JSONUtil {
 				.append(
 					getJSONValue(
 						map.get(key),
-						increaseIndent(indent)
+						increaseIndent(increasedIndent)
 					)
 				);
 			
 			isFirst = false;
+		}
+
+		if(indent != null) {
+			json.append("\r\n").append(indent);
 		}
 		
 		json.append("}");
 		
 		return json.toString();
 	}
-	
+
 	/**
 	 * List 객체를 JSON 문자열로 변환하여 반환
 	 * 
@@ -114,37 +127,77 @@ public class JSONUtil {
 	 * @return JSON 문자열
 	 */
 	public static String toJSON(List<?> list) {
+		return toJSON(list, null);
+	}
+	
+	/**
+	 * List 객체를 JSON 문자열로 변환하여 반환
+	 * 
+	 * @param list 대상 Map 객체
+	 * @param indent 들여쓰기
+	 * @return JSON 문자열
+	 */
+	private static String toJSON(List<?> list, String indent) {
 		
 		// 입력 값 검증
-		if(list == null) {
+		if(list == null || list.size() == 0) {
 			return "[]";
 		}
 		
 		// 생성할 json 객체
-		StringBuffer json = new StringBuffer("[");
+		StringBuffer json = new StringBuffer();
+
+		if(indent != null) {
+
+			if(indent.isEmpty() == false) {
+				json.append("\r\n");
+			}
+			
+			json.append(indent);
+		}
+
+		json.append("[");
 		
 		// 첫 번째 항목 여부
 		// 중간에 ","를 넣기 위함
 		boolean isFirst = true;
+
+		// 항목에 대한 들여쓰기
+		// 들여쓰기에 탭 추가
+		String increasedIndent = increaseIndent(indent);
 		
 		for(Object value: list) {
 			
-			// 중간에 "," 추가
+			// 끝에 "," 추가
 			if(isFirst == false) {
-				json.append(", ");
+				json.append(",");
+			}
+
+			// 들여쓰기 추가
+			if(increasedIndent != null) {
+				json.append("\r\n").append(increasedIndent);
 			}
 			
 			// List 항목에 대해 JSON 문자열로 변환하여 추가
-			json.append(getJSONValue(value));
+			json.append(
+				getJSONValue(
+					value,
+					increaseIndent(increasedIndent)
+				)
+			);
 			
 			isFirst = false;
+		}
+
+		if(indent != null) {
+			json.append("\r\n").append(indent);
 		}
 		
 		json.append("]");
 		
 		return json.toString();
 	}
-	
+
 	/**
 	 * Set 객체를 JSON 문자열로 변환하여 반환
 	 * 
@@ -152,6 +205,17 @@ public class JSONUtil {
 	 * @return JSON 문자열
 	 */
 	public static String toJSON(Set<?> set) {
+		return toJSON(set, null);
+	}
+	
+	/**
+	 * Set 객체를 JSON 문자열로 변환하여 반환
+	 * 
+	 * @param set 대상 Set 객체
+	 * @param indent 들여쓰기
+	 * @return JSON 문자열
+	 */
+	private static String toJSON(Set<?> set, String indent) {
 		
 		// 입력 값 검증
 		if(set == null) {
@@ -159,17 +223,18 @@ public class JSONUtil {
 		}
 		
 		// Set을 List 형태로 변환하여 JSON 문자열을 만들어 반환
-		return toJSON(List.of(set.toArray()));
+		return toJSON(List.of(set.toArray()), indent);
 	}
 	
 	/**
 	 * 항목에 대해 JSON 문자열로 변환하여 추가
 	 * 
 	 * @param obj 대상 항목
+	 * @param indent 들여쓰기
 	 * @return JSON 문자열
 	 */
 	@SuppressWarnings("rawtypes")
-	private static String getJSONValue(Object obj) {
+	private static String getJSONValue(Object obj, String indent) {
 		
 		if(obj == null) {
 			return "null";
@@ -179,15 +244,15 @@ public class JSONUtil {
 		
 		if(Map.class.isAssignableFrom(type) == true) {
 			
-			return toJSON((Map)obj);
+			return toJSON((Map)obj, indent);
 			
 		} else if(List.class.isAssignableFrom(type) == true) {
 			
-			return toJSON((List)obj);
+			return toJSON((List)obj, indent);
 			
 		} else if(Set.class.isAssignableFrom(type) == true) {
 			
-			return toJSON((Set)obj);
+			return toJSON((Set)obj, indent);
 			
 		} else if(JSONEntity.class.isAssignableFrom(type) == true) {
 
