@@ -13,11 +13,15 @@ import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * JSON 생성 및 파싱 유틸리티 클래스
+ * JSON 메시지 생성 및 파서 유틸리티 클래스
  * 
  * @author jmsohn
  */
 public class JSONUtil {
+
+	// ----------------------------------
+	// JSON 메시지 생성
+	// ----------------------------------
 
 	/**
 	 * JSON 엔터티 인터페이스<br>
