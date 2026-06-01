@@ -20,12 +20,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class JSONUtil {
 
 	/**
-	 *
+	 * JSON 엔터티 인터페이스<br>
+	 * DTO나 VO의 객체에서 커스텀 JSON 메시지를 생성 및 반환할 경우 사용
 	 */
 	public static interface JSONEntity {
 
 		/**
-		 *
+		 * DTO나 VO의 객체에서 커스텀 JSON 메시지 반환
 		 *
 		 * @return JSON 문자열
 		 */
