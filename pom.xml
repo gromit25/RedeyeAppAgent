@@ -88,7 +88,7 @@
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
 						<manifestEntries>
-							<Premain-Class>com.redeye.appagent.RedeyeAgent</Premain-Class>
+							<Premain-Class>com.redeye.appagent.RedeyeAppAgent</Premain-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Can-Retransform-Classes>true</Can-Retransform-Classes>
 						</manifestEntries>
