@@ -11,7 +11,7 @@ import com.redeye.appagent.loader.LoaderService;
  * 
  * @author jmsohn
  */
-public class RedeyeAgent {
+public class RedeyeAppAgent {
 	
 	/**
 	 * 메인 메소드
