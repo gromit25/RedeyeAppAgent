@@ -44,24 +44,47 @@ public class JSONUtil {
 	 * @return JSON 문자열
 	 */
 	public static String toJSON(Map<?, ?> map) {
+		return toJSON(map, null);
+	}
+
+	/**
+	 * Map 객체를 JSON 문자열로 변환하여 반환<br>
+	 * 만일 indent가 null 이면 들여쓰기 하지 않고 붙혀쓰기 방식으로 출력
+	 * 
+	 * @param map 대상 Map 객체
+	 * @param indent 들여쓰기
+	 * @return JSON 문자열
+	 */
+	private static String toJSON(Map<?, ?> map, String indent) {
 		
 		// 입력 값 검증
-		if(map == null) {
+		if(map == null || map.size() == 0) {
 			return "{}";
 		}
 		
 		// 생성할 json 객체
-		StringBuffer json = new StringBuffer("{");
+		StringBuffer json = new StringBuffer();
+
+		if(indent != null) {
+			json.append(indent);
+		}
 		
+		json.append("{");
+
 		// 첫 번째 항목 여부
 		// 중간에 ","를 넣기 위함
 		boolean isFirst = true;
 		
 		for(Object key: map.keySet()) {
 			
-			// 중간에 "," 추가
+			// 끝에 "," 추가
 			if(isFirst == false) {
 				json.append(", ");
+			}
+
+			// 들여쓰기 추가
+			if(indent != null) {
+				json.append("\r\n").append(indent);
 			}
 			
 			// Map 항목에 대해 JSON 문자열로 변환하여 추가
@@ -69,7 +92,7 @@ public class JSONUtil {
 				.append('"')
 				.append(key.toString())
 				.append("\": ")
-				.append(getJSONValue(map.get(key)));
+				.append(getJSONValue(map.get(key), indent + "\t"));
 			
 			isFirst = false;
 		}
