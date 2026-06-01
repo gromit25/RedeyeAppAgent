@@ -6,7 +6,7 @@ package com.redeye.appagent.domain.metric.dto;
  * @author jmsohn
  */
 @Data
-public class MetricDTO {
+public class MetricDTO implements JSONDTO {
 
   /** CPU 사용율(%) */
   private double cpuUsage;
@@ -25,4 +25,16 @@ public class MetricDTO {
 
   /** 활성화된 스레드 수 */
   private int threadCount;
+
+  @Override
+  public String toJSON() {
+    return new StringBuilder()
+      .append(String.format("\"cpuUsage\": %f5.2,", this.cpuUsage))
+      .append(String.format("\"maxHeap\": %d,", this.maxHeapMem))
+      .append(String.format("\"usedHeap\": %d,", this.usedHeapMem))
+      .append(String.format("\"maxNonHeap\": %d,", this.maxNonHeapMem))
+      .append(String.format("\"usedNonHeap\": %d,", this.usedNonHeapMem))
+      .append(String.format("\"threadCount\": %d,", this.threadCount))
+      .toString();
+  }
 }
