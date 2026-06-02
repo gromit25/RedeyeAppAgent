@@ -27,16 +27,23 @@ public class MetricDTO implements JSONEntity {
   private int threadCount;
 
   @Override
-  public String toJSON() {
+  public String toJSON(String indent) {
+
+    if(indent != null) {
+      indent = "\r\n" + indent;
+    } else {
+      indent = "";
+    }
+    
     return new StringBuilder()
       .append("{")
-      .append(String.format("\"cpuUsage\": %f5.2,", this.cpuUsage))
-      .append(String.format("\"maxHeap\": %d,", this.maxHeapMem))
-      .append(String.format("\"usedHeap\": %d,", this.usedHeapMem))
-      .append(String.format("\"maxNonHeap\": %d,", this.maxNonHeapMem))
-      .append(String.format("\"usedNonHeap\": %d,", this.usedNonHeapMem))
-      .append(String.format("\"threadCount\": %d", this.threadCount))
-      .append("}")
+      .append(indent).append(String.format("\"cpuUsage\": %f5.2,", this.cpuUsage))
+      .append(indent).append(String.format("\"maxHeap\": %d,", this.maxHeapMem))
+      .append(indent).append(String.format("\"usedHeap\": %d,", this.usedHeapMem))
+      .append(indent).append(String.format("\"maxNonHeap\": %d,", this.maxNonHeapMem))
+      .append(indent).append(String.format("\"usedNonHeap\": %d,", this.usedNonHeapMem))
+      .append(indent).append(String.format("\"threadCount\": %d", this.threadCount))
+      .append(indent).append("}")
       .toString();
   }
 }
