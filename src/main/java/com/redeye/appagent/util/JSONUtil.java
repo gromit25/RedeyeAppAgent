@@ -32,9 +32,10 @@ public class JSONUtil {
 		/**
 		 * DTO나 VO의 객체에서 커스텀 JSON 메시지 반환
 		 *
+		 * @param indent 들여쓰기 문자열
 		 * @return JSON 문자열
 		 */
-		String toJSON();
+		String toJSON(String indent);
 	}
 
 	/**
