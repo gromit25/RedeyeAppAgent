@@ -139,6 +139,13 @@ public class MetricAcquisitor {
    * @return 스레드 개수
    */
   public static int getThreadCount() {
-    return threadBean.getThreadCount();
+
+    Integer threadCount = jmxSvc.get("java.lang:type=Threading", "ThreadCount", Integer.class);
+
+    if(threadCount != null) {
+      return threadCount;
+    } else {
+      return -1;
+    }
   }
 }
