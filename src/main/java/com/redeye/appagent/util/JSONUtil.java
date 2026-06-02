@@ -48,6 +48,16 @@ public class JSONUtil {
 	}
 
 	/**
+	 * Map 객체를 JSON 문자열로 변환하여 반환
+	 * 
+	 * @param map 대상 Map 객체
+	 * @return JSON 문자열
+	 */
+	public static String beautifyJSON(Map<?, ?> map) {
+		return toJSON(map, "");
+	}
+
+	/**
 	 * Map 객체를 JSON 문자열로 변환하여 반환<br>
 	 * 만일 indent가 null 이면 들여쓰기 하지 않고 붙혀쓰기 방식으로 출력
 	 * 
@@ -63,18 +73,7 @@ public class JSONUtil {
 		}
 		
 		// 생성할 json 객체
-		StringBuffer json = new StringBuffer();
-
-		if(indent != null) {
-
-			if(indent.isEmpty() == false) {
-				json.append("\r\n");
-			}
-			
-			json.append(indent);
-		}
-		
-		json.append("{");
+		StringBuffer json = new StringBuffer("{");
 
 		// 첫 번째 항목 여부
 		// 중간에 ","를 넣기 위함
@@ -104,7 +103,7 @@ public class JSONUtil {
 				.append(
 					getJSONValue(
 						map.get(key),
-						increaseIndent(increasedIndent)
+						increasedIndent
 					)
 				);
 			
@@ -129,6 +128,16 @@ public class JSONUtil {
 	public static String toJSON(List<?> list) {
 		return toJSON(list, null);
 	}
+
+	/**
+	 * List 객체를 JSON 문자열로 변환하여 반환
+	 * 
+	 * @param map 대상 Map 객체
+	 * @return JSON 문자열
+	 */
+	public static String beautifyJSON(List<?> list) {
+		return toJSON(list, "");
+	}
 	
 	/**
 	 * List 객체를 JSON 문자열로 변환하여 반환<br>
@@ -146,18 +155,7 @@ public class JSONUtil {
 		}
 		
 		// 생성할 json 객체
-		StringBuffer json = new StringBuffer();
-
-		if(indent != null) {
-
-			if(indent.isEmpty() == false) {
-				json.append("\r\n");
-			}
-			
-			json.append(indent);
-		}
-
-		json.append("[");
+		StringBuffer json = new StringBuffer("[");
 		
 		// 첫 번째 항목 여부
 		// 중간에 ","를 넣기 위함
@@ -183,7 +181,7 @@ public class JSONUtil {
 			json.append(
 				getJSONValue(
 					value,
-					increaseIndent(increasedIndent)
+					increasedIndent
 				)
 			);
 			
@@ -207,6 +205,16 @@ public class JSONUtil {
 	 */
 	public static String toJSON(Set<?> set) {
 		return toJSON(set, null);
+	}
+
+	/**
+	 * Set 객체를 JSON 문자열로 변환하여 반환
+	 * 
+	 * @param set 대상 Set 객체
+	 * @return JSON 문자열
+	 */
+	public static String beautifyJSON(Set<?> set) {
+		return toJSON(set, "");
 	}
 	
 	/**
@@ -549,10 +557,10 @@ public class JSONUtil {
 	 */
 	private static Map<String, Object> parseMap(JSONReader reader) throws Exception {
 		
-		//
+		// JSON 파싱 결과 저장용 맵 객체
 		Map<String, Object> jsonMap = new HashMap<>();
 		
-		//
+		// 맵 객체에 저장될 키 이름
 		StringBuilder name = new StringBuilder();
 		
 		MapParserStatus status = MapParserStatus.START;
@@ -651,7 +659,7 @@ public class JSONUtil {
 	 */
 	private static List<Object> parseList(JSONReader reader) throws Exception {
 		
-		//
+		// JSON 파싱 결과 저장용 목록 객체
 		List<Object> jsonList = new ArrayList<>();
 		
 		ListParserStatus status = ListParserStatus.START;
@@ -763,7 +771,8 @@ public class JSONUtil {
 	 * @return 파싱된 문자열 객체
 	 */
 	private static Object parseStr(JSONReader reader) throws Exception {
-		
+
+		// JSON 문자열 파싱 결과 저장용 객체
 		StringBuilder str = new StringBuilder();
 		
 		StrParserStatus status = StrParserStatus.START;
@@ -890,5 +899,35 @@ public class JSONUtil {
 	 */
 	private static boolean isSpace(char ch) {
 		return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
+	}
+	
+	// ----------------------------------
+	// JSON Beautifier
+	// ----------------------------------
+
+	/**
+	 * JSON 문자열을 인식하기 용이한 형태로 변환
+	 * 
+	 * @param jsonStr 대상 JSON 문자열
+	 * @return 변환된 JSON 문자열
+	 */
+	public static String beautifyJSON(String jsonStr) throws Exception {
+
+		// null 이거나 공백일 경우 공백 반환
+		if(StringUtil.isBlank(jsonStr) == true) {
+			return "";
+		}
+
+		// JSON 문자열 파싱
+		Object jsonObj = parse(jsonStr, Object.class);
+
+		// beautify 적용 및 반환
+		if(jsonObj instanceof Map) {
+			return beautifyJSON((Map)jsonObj);
+		} else if(jsonObj instanceof List) {
+			return beautifyJSON((List)jsonObj);
+		} else {
+			throw new RuntimeException("Unexpected type exception: " + jsonObj.getClass());
+		}
 	}
 }
