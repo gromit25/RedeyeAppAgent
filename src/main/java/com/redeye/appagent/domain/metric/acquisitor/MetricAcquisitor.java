@@ -6,7 +6,10 @@ package com.redeye.appagent.domain.metrics.acquisitor;
  * @author jmsohn
  */
 public class MetricAcquisitor {
+
   
+  /** */
+  private static final OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
   /** */
   private static final MemoryUsage heapUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
