@@ -13,16 +13,16 @@ public class MetricDTO implements JSONEntity {
   private double cpuUsage;
 
   /** 최대 힙메모리(Byte) */
-  private long maxHeapMem;
+  private long maxHeap;
 
   /** 사용중 힙메모리(Byte) */
-  private long usedHeapMem;
+  private long usedHeap;
   
   /** 최대 비힙메모리(Byte) */
-  private long maxNonHeapMem;
+  private long maxNonHeap;
 
   /** 사용중 비힙메모리(Byte) */
-  private long usedNonHeapMem;
+  private long usedNonHeap;
 
   /** 활성화된 스레드 수 */
   private int threadCount;
@@ -34,10 +34,10 @@ public class MetricDTO implements JSONEntity {
     return new StringBuilder()
       .append("{")
       .append(indent).append(String.format("\"cpuUsage\": %f.2,", this.cpuUsage))
-      .append(indent).append(String.format("\"maxHeap\": %d,", this.maxHeapMem))
-      .append(indent).append(String.format("\"usedHeap\": %d,", this.usedHeapMem))
-      .append(indent).append(String.format("\"maxNonHeap\": %d,", this.maxNonHeapMem))
-      .append(indent).append(String.format("\"usedNonHeap\": %d,", this.usedNonHeapMem))
+      .append(indent).append(String.format("\"maxHeap\": %d,", this.maxHeap))
+      .append(indent).append(String.format("\"usedHeap\": %d,", this.usedHeap))
+      .append(indent).append(String.format("\"maxNonHeap\": %d,", this.maxNonHeap))
+      .append(indent).append(String.format("\"usedNonHeap\": %d,", this.usedNonHeap))
       .append(indent).append(String.format("\"threadCount\": %d", this.threadCount))
       .append(indent).append("}")
       .toString();
