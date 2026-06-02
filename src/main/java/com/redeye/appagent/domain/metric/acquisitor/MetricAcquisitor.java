@@ -23,10 +23,10 @@ public class MetricAcquisitor {
     
     return new MetricDTO(
       getCPUUsage(),
-      getMaxHeapMem(),
-      getUsedHeapMem(),
-      getMaxNonHeapMem(),
-      getUsedNonHeapMem(),
+      getMaxHeap(),
+      getUsedHeap(),
+      getMaxNonHeap(),
+      getUsedNonHeap(),
       getThreadCount()
     );
   }
@@ -60,7 +60,7 @@ public class MetricAcquisitor {
    *
    * @return
    */
-  public static long getMaxHeapMem() {
+  public static long getMaxHeap() {
     
     CompositeData heapUsage = jmxSvc.get(
       "java.lang:type=Memory",
@@ -85,7 +85,7 @@ public class MetricAcquisitor {
    *
    * @return
    */
-  public static long getUsedHeapMem() {
+  public static long getUsedHeap() {
 
     CompositeData heapUsage = jmxSvc.get(
       "java.lang:type=Memory",
@@ -110,7 +110,7 @@ public class MetricAcquisitor {
    *
    * @return
    */
-  public static long getMaxNonHeapMem() {
+  public static long getMaxNonHeap() {
     
     CompositeData nonHeapUsage = jmxSvc.get(
       "java.lang:type=Memory",
@@ -135,7 +135,7 @@ public class MetricAcquisitor {
    *
    * @return
    */
-  public static long getUsedNonHeapMem() {
+  public static long getUsedNonHeap() {
 
     CompositeData nonHeapUsage = jmxSvc.get(
       "java.lang:type=Memory",
