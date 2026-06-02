@@ -346,10 +346,10 @@ public class JSONUtil {
 		
 		
 		/** 이전 행별 열 수 */
-		private Stack<AtomicInteger> rowStack;
+		private Stack<AtomicInteger> columnCountPerRowStack;
 		
 		/** 현재 행의 읽은 열 수 */
-		private AtomicInteger column;
+		private AtomicInteger columnCount;
 		
 
 		/**
@@ -361,8 +361,8 @@ public class JSONUtil {
 			
 			super(reader);
 			
-			this.rowStack = new Stack<>();
-			this.column = new AtomicInteger(0);
+			this.columnCountPerRowStack = new Stack<>();
+			this.columnCount = new AtomicInteger(0);
 		}
 		
 		@Override
@@ -374,12 +374,12 @@ public class JSONUtil {
 				
 				if((char)read == '\n') {
 					
-					this.rowStack.push(this.column);
-					this.column = new AtomicInteger(0);
+					this.columnCountPerRowStack.push(this.column);
+					this.columnCount = new AtomicInteger(0);
 					
 				} else {
 					
-					this.column.addAndGet(1);
+					this.columnCount.addAndGet(1);
 				}
 			}
 			
@@ -394,9 +394,9 @@ public class JSONUtil {
 			synchronized(this) {
 				
 				if((char)read == '\n') {
-					this.column = this.rowStack.pop();
+					this.columnCount = this.columnCountPerRowStack.pop();
 				} else {
-					this.column.addAndGet(-1);
+					this.columnCount.addAndGet(-1);
 				}
 			}
 		}
@@ -407,7 +407,7 @@ public class JSONUtil {
 		 * @return 행 수
 		 */
 		int getRow() {
-			return this.rowStack.size() + 1;
+			return this.columnCountPerRowStack.size() + 1;
 		}
 		
 		/**
@@ -416,7 +416,7 @@ public class JSONUtil {
 		 * @return 열 수
 		 */
 		int getColumn() {
-			return this.column.get();
+			return this.columnCount.get();
 		}
 	}
 
@@ -927,7 +927,7 @@ public class JSONUtil {
 		} else if(jsonObj instanceof List) {
 			return beautifyJSON((List)jsonObj);
 		} else {
-			throw new RuntimeException("Unexpected type exception: " + jsonObj.getClass());
+			throw new RuntimeException("unexpected type exception: " + jsonObj.getClass());
 		}
 	}
 }
