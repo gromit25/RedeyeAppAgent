@@ -40,7 +40,11 @@ public class MetricAcquisitor {
    */
   public static double getCPUUsage() {
     
-    Double cpuUsage = jmxSvc.get("java.lang:type=OperatingSystem", "ProcessCpuLoad", Double.class);
+    Double cpuUsage = jmxSvc.get(
+      "java.lang:type=OperatingSystem",
+      "ProcessCpuLoad",
+      Double.class
+    );
     
     if(cpuUsage != null) {
       return cpuUsage;
@@ -58,7 +62,12 @@ public class MetricAcquisitor {
    */
   public static long getMaxHeapMem() {
     
-    CompositeData heapUsage = jmxSvc.get("java.lang:type=Memory", "HeapMemoryUsage", CompositeData.class);
+    CompositeData heapUsage = jmxSvc.get(
+      "java.lang:type=Memory",
+      "HeapMemoryUsage",
+      CompositeData.class
+    );
+    
     if(heapUsage == null) {
       return -1L;
     }
@@ -78,7 +87,12 @@ public class MetricAcquisitor {
    */
   public static long getUsedHeapMem() {
 
-    CompositeData heapUsage = jmxSvc.get("java.lang:type=Memory", "HeapMemoryUsage", CompositeData.class);
+    CompositeData heapUsage = jmxSvc.get(
+      "java.lang:type=Memory",
+      "HeapMemoryUsage",
+      CompositeData.class
+    );
+    
     if(heapUsage == null) {
       return -1L;
     }
@@ -98,7 +112,12 @@ public class MetricAcquisitor {
    */
   public static long getMaxNonHeapMem() {
     
-    CompositeData nonHeapUsage = jmxSvc.get("java.lang:type=Memory", "NonHeapMemoryUsage", CompositeData.class);
+    CompositeData nonHeapUsage = jmxSvc.get(
+      "java.lang:type=Memory",
+      "NonHeapMemoryUsage",
+      CompositeData.class
+    );
+    
     if(nonHeapUsage == null) {
       return -1L;
     }
@@ -118,7 +137,12 @@ public class MetricAcquisitor {
    */
   public static long getUsedNonHeapMem() {
 
-    CompositeData nonHeapUsage = jmxSvc.get("java.lang:type=Memory", "NonHeapMemoryUsage", CompositeData.class);
+    CompositeData nonHeapUsage = jmxSvc.get(
+      "java.lang:type=Memory",
+      "NonHeapMemoryUsage",
+      CompositeData.class
+    );
+    
     if(nonHeapUsage == null) {
       return -1L;
     }
@@ -140,7 +164,11 @@ public class MetricAcquisitor {
    */
   public static int getThreadCount() {
 
-    Integer threadCount = jmxSvc.get("java.lang:type=Threading", "ThreadCount", Integer.class);
+    Integer threadCount = jmxSvc.get(
+      "java.lang:type=Threading",
+      "ThreadCount",
+      Integer.class
+    );
 
     if(threadCount != null) {
       return threadCount;
