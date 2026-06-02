@@ -9,16 +9,7 @@ public class MetricAcquisitor {
 
   
   /** */
-  private static final OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-
-  /** */
-  private static final MemoryUsage heapUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-
-  /** */
-  private static final MemoryUsage nonHeapUsage = ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage();
-  
-  /** */
-  private static final ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
+  private static final JMXService jmxSvc = new JMXService();
   
 
   // ----------------------------------
@@ -48,7 +39,14 @@ public class MetricAcquisitor {
    * @return
    */
   public static double getCPUUsage() {
-    OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+    
+    Double cpuUsage = jmxSvc.get("java.lang:type=OperatingSystem", "ProcessCpuLoad", Double.class);
+    
+    if(cpuUsage != null) {
+      return cpuUsage;
+    } else {
+      return -1.0;
+    }
   }
 
   // ----------------------------------
@@ -58,26 +56,39 @@ public class MetricAcquisitor {
    *
    * @return
    */
-  public static long getUsedHeapMem() {
-    return heapUsage.getUsed();
-  }
-
-  /**
-   *
-   *
-   * @return
-   */
   public static long getMaxHeapMem() {
-    return heapUsage.getMax();
-  }
+    
+    CompositeData heapUsage = jmxSvc.get("java.lang:type=Memory", "HeapMemoryUsage", CompositeData.class);
+    if(heapUsage == null) {
+      return -1L;
+    }
 
+    Object maxObj = heapUsage.get("max");
+    if(maxObj == null || maxObj instanceof Long == false) {
+      return -1L;
+    }
+
+    return (Long) maxObj;
+  }
+  
   /**
    *
    *
    * @return
    */
-  public static long getUsedNonHeapMem() {
-    return nonHeapUsage.getUsed();
+  public static long getUsedHeapMem() {
+
+    CompositeData heapUsage = jmxSvc.get("java.lang:type=Memory", "HeapMemoryUsage", CompositeData.class);
+    if(heapUsage == null) {
+      return -1L;
+    }
+
+    Object usedObj = heapUsage.get("used");
+    if(usedObj == null || usedObj instanceof Long == false) {
+      return -1L;
+    }
+
+    return (Long) usedObj;
   }
 
   /**
@@ -86,7 +97,38 @@ public class MetricAcquisitor {
    * @return
    */
   public static long getMaxNonHeapMem() {
-    return nonHeapUsage.getMax();
+    
+    CompositeData nonHeapUsage = jmxSvc.get("java.lang:type=Memory", "NonHeapMemoryUsage", CompositeData.class);
+    if(nonHeapUsage == null) {
+      return -1L;
+    }
+
+    Object maxObj = nonHeapUsage.get("max");
+    if(maxObj == null || maxObj instanceof Long == false) {
+      return -1L;
+    }
+
+    return (Long) maxObj;
+  }
+
+  /**
+   *
+   *
+   * @return
+   */
+  public static long getUsedNonHeapMem() {
+
+    CompositeData nonHeapUsage = jmxSvc.get("java.lang:type=Memory", "NonHeapMemoryUsage", CompositeData.class);
+    if(nonHeapUsage == null) {
+      return -1L;
+    }
+
+    Object usedObj = nonHeapUsage.get("used");
+    if(usedObj == null || usedObj instanceof Long == false) {
+      return -1L;
+    }
+
+    return (Long) usedObj;
   }
 
   // ----------------------------------
