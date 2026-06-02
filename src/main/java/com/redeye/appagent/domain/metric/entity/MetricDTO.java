@@ -7,6 +7,7 @@ package com.redeye.appagent.domain.metric.dto;
  */
 @Data
 public class MetricDTO implements JSONEntity {
+  
 
   /** CPU 사용율(%) */
   private double cpuUsage;
@@ -25,6 +26,7 @@ public class MetricDTO implements JSONEntity {
 
   /** 활성화된 스레드 수 */
   private int threadCount;
+  
 
   @Override
   public String toJSON(String indent) {
