@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.redeye.appagent.Config;
+import com.redeye.appagent.loader.entity.APIContextDTO;
 import com.redeye.appagent.util.CronJob;
 import com.redeye.appagent.util.JSONUtil;
 import com.redeye.appagent.util.LogUtil;
@@ -122,14 +123,19 @@ public class APILoaderCronJob {
 
 			try {
 				
-				// 호스트 아이디 설정
-				if(this.hostId == -1) {
-					this.hostId = getHostId();
-				}
-
-				// 어플리케이션 아이디 설정
-				if(this.appId == -1) {
-					this.appId = getAppId();
+				// basePath가 설정된 경우에만 수행
+				// 설정되어 있지 않은 경우 스킵
+				if(StringUtil.isBlank(basePath) == false) {
+					
+					// 호스트 아이디 설정
+					if(this.hostId == -1) {
+						this.hostId = getHostId();
+					}
+	
+					// 어플리케이션 아이디 설정
+					if(this.appId == -1) {
+						this.appId = getAppId();
+					}
 				}
 				
 			} catch(Exception ex) {
@@ -139,6 +145,15 @@ public class APILoaderCronJob {
 				return;
 			}
 			
+			// API 컨택스트 객체 생성
+			APIContextDTO context = new APIContextDTO(
+				this.hostId,
+				this.appId,
+				basePath,
+				startTime,
+				nextTime
+			);
+			
 			// 목록의 각 로더들을 하나씩 멀티스레드로 수행함
 			for(APILoader loader: loaderList) {
 				
@@ -146,7 +161,7 @@ public class APILoaderCronJob {
 					
 					@Override
 					public void run() {
-						loader.load(hostId, appId, basePath, startTime, nextTime);
+						loader.load(context);
 					}
 				});
 			}
@@ -157,48 +172,40 @@ public class APILoaderCronJob {
 		 *
 		 * @return 호스트 아이디
 		 */
-		private long getHostId() {
+		private long getHostId() throws Exception {
 			
-			try {
-				
-				AtomicLong hostId = new AtomicLong(-1L);
-				
-				RESTUtil.get(
+			AtomicLong hostId = new AtomicLong(-1L);
+			
+			RESTUtil.get(
 
-					// 접속 URL
-					String.format(
-						basePath + HOST_ID_URL,
-						Config.ORGAN_CODE.getValue(),
-						Config.DOMAIN_CODE.getValue(),
-						Config.HOST_NAME.getValue()
-					),
+				// 접속 URL
+				String.format(
+					basePath + HOST_ID_URL,
+					Config.ORGAN_CODE.getValue(),
+					Config.DOMAIN_CODE.getValue(),
+					Config.HOST_NAME.getValue()
+				),
 
-					// 응답 처리
-					(respCode, respMsg) -> {
-						
-						if(respCode == 200) {
-							try {
-								
-								hostId.set(
-									(long)JSONUtil.parseMap(respMsg).get("id")
-								);
-								
-							} catch(Exception ex) {
-								
-								LogUtil.log(ex);
-								hostId.set(-1L);
-							}
+				// 응답 처리
+				(respCode, respMsg) -> {
+					
+					if(respCode == 200) {
+						try {
+							
+							hostId.set(
+								(long)JSONUtil.parseMap(respMsg).get("id")
+							);
+							
+						} catch(Exception ex) {
+							
+							LogUtil.log(ex);
+							hostId.set(-1L);
 						}
 					}
-				);
-				
-				return hostId.get();
-				
-			} catch(Exception ex) {
-				
-				LogUtil.log(ex);
-				return -1L;
-			}
+				}
+			);
+			
+			return hostId.get();
 		}
 
 		/**
@@ -206,48 +213,40 @@ public class APILoaderCronJob {
 		 *
 		 * @return 어플리케이션 아이디
 		 */
-		private long getAppId() {
+		private long getAppId() throws Exception {
 			
-			try {
-				
-				AtomicLong hostId = new AtomicLong(-1L);
-				
-				RESTUtil.get(
+			AtomicLong hostId = new AtomicLong(-1L);
+			
+			RESTUtil.get(
 
-					// 접속 URL
-					String.format(
-						basePath + APP_ID_URL,
-						Config.ORGAN_CODE.getValue(),
-						Config.DOMAIN_CODE.getValue(),
-						Config.APP_CODE.getValue()
-					),
+				// 접속 URL
+				String.format(
+					basePath + APP_ID_URL,
+					Config.ORGAN_CODE.getValue(),
+					Config.DOMAIN_CODE.getValue(),
+					Config.APP_CODE.getValue()
+				),
 
-					// 응답 처리
-					(respCode, respMsg) -> {
-						
-						if(respCode == 200) {
-							try {
-								
-								hostId.set(
-									(long)JSONUtil.parseMap(respMsg).get("id")
-								);
-								
-							} catch(Exception ex) {
-								
-								LogUtil.log(ex);
-								hostId.set(-1L);
-							}
+				// 응답 처리
+				(respCode, respMsg) -> {
+					
+					if(respCode == 200) {
+						try {
+							
+							hostId.set(
+								(long)JSONUtil.parseMap(respMsg).get("id")
+							);
+							
+						} catch(Exception ex) {
+							
+							LogUtil.log(ex);
+							hostId.set(-1L);
 						}
 					}
-				);
-				
-				return hostId.get();
-				
-			} catch(Exception ex) {
-				
-				LogUtil.log(ex);
-				return -1L;
-			}
+				}
+			);
+			
+			return hostId.get();
 		}
 		
 		/**

@@ -1,6 +1,7 @@
 package com.redeye.appagent.domain.kafka.loader;
 
 import com.redeye.appagent.loader.APILoader;
+import com.redeye.appagent.loader.entity.APIContextDTO;
 
 /**
  * kafka 브로커 데이터 로더 클래스
@@ -15,7 +16,7 @@ public class KafkaBrokerLoader implements APILoader {
 	
 
 	@Override
-	public void load(long hostId, long appId, String basePath, long startTime, long endTime) {
+	public void load(APIContextDTO context) {
 		// TODO Auto-generated method stub
 	}
 }

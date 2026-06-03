@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.redeye.appagent.domain.kafka.acquisitor.KafkaAcquisitor;
 import com.redeye.appagent.loader.APILoader;
+import com.redeye.appagent.loader.entity.APIContextDTO;
 import com.redeye.appagent.util.JSONUtil;
 import com.redeye.appagent.util.LogUtil;
 import com.redeye.appagent.util.RESTUtil;
@@ -23,15 +24,15 @@ public class KafkaClientLoader implements APILoader {
 
 
 	@Override
-	public void load(long hostId, long appId, String basePath, long startTime, long endTime) {
+	public void load(APIContextDTO context) {
 		
 		try {
 			
 			// 메시지 전송 url path 생성
-			String path = makePath(basePath);
+			String path = makePath(context);
 			
 			// 메시지 생성
-			String message = makeMessage(startTime, endTime);
+			String message = makeMessage(context);
 			
 			// 메시지 전송
 			RESTUtil.post(
@@ -58,9 +59,9 @@ public class KafkaClientLoader implements APILoader {
 	 * @param basePath 기본 패스
 	 * @return 생성된 패스
 	 */
-	private static String makePath(String basePath) {
+	private static String makePath(APIContextDTO context) {
 		
-		return new StringBuilder(basePath)
+		return new StringBuilder(context.getBasePath())
 			.append(SUBPATH)
 			.toString();
 	}
@@ -72,14 +73,14 @@ public class KafkaClientLoader implements APILoader {
 	 * @param endTime 다음 실행 시간
 	 * @return 생성된 Json 메시지
 	 */
-	private static String makeMessage(long startTime, long endTime) throws Exception {
+	private static String makeMessage(APIContextDTO context) throws Exception {
 		
 		// json 맵 객체 변수
 		Map<String, Object> jsonMap = new HashMap<>();
 		
 		// 통계 수집 시간 정보 추가
-		jsonMap.put("startTime", startTime);
-		jsonMap.put("endTime", endTime);
+		jsonMap.put("startTime", context.getStartTime());
+		jsonMap.put("endTime", context.getEndTime());
 		
 		// 프로듀서 정보 맵 추가
 		Map<String, Object> producerMap = new HashMap<>();

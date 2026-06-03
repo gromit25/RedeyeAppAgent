@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import com.redeye.appagent.domain.jdbc.acquisitor.JDBCAcquisitor;
 import com.redeye.appagent.loader.APILoader;
+import com.redeye.appagent.loader.entity.APIContextDTO;
 import com.redeye.appagent.util.JSONUtil;
 import com.redeye.appagent.util.LogUtil;
 import com.redeye.appagent.util.RESTUtil;
@@ -31,10 +32,10 @@ public class SqlStatLoader implements APILoader {
 
 
 	@Override
-	public void load(long hostId, long appId, String basePath, long startTime, long endTime) {
+	public void load(APIContextDTO context) {
 		
 		// 전송할 url 패스 생성
-		String path = makePath(appId, basePath);
+		String path = makePath(context);
 		
 		JDBCAcquisitor.sqlStatDaemon.flush(
 			(id, stat) -> {
@@ -46,7 +47,7 @@ public class SqlStatLoader implements APILoader {
 				}
 
 				// 전송할 JSON 메시지 생성
-				String message = makeMessage(startTime, endTime, idM, stat);
+				String message = makeMessage(context, idM, stat);
 				
 				// JSON 메시지 전송
 				try {
@@ -77,10 +78,10 @@ public class SqlStatLoader implements APILoader {
 	 * @param basePath 기본 패스
 	 * @return 생성된 패스
 	 */
-	private static String makePath(long appId, String basePath) {
+	private static String makePath(APIContextDTO context) {
 		
 		return new StringBuilder()
-			.append(basePath)
+			.append(context.getBasePath())
 			.append(SUBPATH)
 			.toString();
 	}
@@ -94,7 +95,7 @@ public class SqlStatLoader implements APILoader {
 	 * @param stat sql 통계 정보
 	 * @return Sql 통계 Json 메시지
 	 */
-	private static String makeMessage(long startTime, long endTime, Matcher idM, Parameter stat) {
+	private static String makeMessage(APIContextDTO context, Matcher idM, Parameter stat) {
 
 		Map<String, Object> msgMap = new HashMap<>();
 
@@ -102,11 +103,12 @@ public class SqlStatLoader implements APILoader {
 		msgMap.put("type", "sql");
 
 		// 시간 정보 메시지 추가
-		msgMap.put("startTime", startTime);
-		msgMap.put("endTime", endTime);
+		msgMap.put("startTime", context.getStartTime());
+		msgMap.put("endTime", context.getEndTime());
 
 		// sql 기본 정보
-		msgMap.put("info",
+		msgMap.put(
+			"info",
 			Map.ofEntries(
 				Map.entry("className", idM.group("class")),
 				Map.entry("methodName", idM.group("method")),

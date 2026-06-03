@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.redeye.appagent.loader.APILoader;
+import com.redeye.appagent.loader.entity.APIContextDTO;
 import com.redeye.appagent.util.JSONUtil;
 import com.redeye.appagent.util.LogUtil;
 import com.redeye.appagent.util.RESTUtil;
@@ -36,7 +37,7 @@ public class EnvLoader implements APILoader {
 	}
 	
 	@Override
-	public void load(long hostId, long appId, String basePath, long startTime, long endTime) {
+	public void load(APIContextDTO context) {
 		
 		// 이미 전송되었으면 전송하지 않음
 		if(this.isSend == true) {
@@ -44,10 +45,10 @@ public class EnvLoader implements APILoader {
 		}
 		
 		// 전송할 url 패스 생성
-		String path = makePath(hostId, appId, basePath);
+		String path = makePath(context);
 		
 		// 전송 메시지 생성
-		String message = this.makeMessage(startTime, endTime);
+		String message = this.makeMessage(context);
 				
 		try {
 			
@@ -75,32 +76,29 @@ public class EnvLoader implements APILoader {
 	/**
 	 * 호출 패스 생성
 	 * 
-	 * @param hostId 호스트 아이디
-	 * @param appId 어플리케이션 아이디
-	 * @param basePath 기본 패스
+	 * @param context API 컨텍스트 객체
 	 * @return 생성된 패스
 	 */
-	private static String makePath(long hostId, long appId, String basePath) {
+	private static String makePath(APIContextDTO context) {
 		
 		return new StringBuilder()
-			.append(basePath)
-			.append(String.format(SUBPATH, hostId, appId))
+			.append(context.getBasePath())
+			.append(String.format(SUBPATH, context.getHostId(), context.getAppId()))
 			.toString();
 	}
 	
 	/**
 	 * Sql 통계 Json 메시지 생성 및 반환
 	 * 
-	 * @param startTime 통계 수집 시작 시간
-	 * @param endTime 통계 수집 종료 시간
+	 * @param context API 컨텍스트 객체
 	 * @return Sql 통계 Json 메시지
 	 */
-	private String makeMessage(long startTime, long endTime) {
+	private String makeMessage(APIContextDTO context) {
 
 		Map<String, Object> msgMap = new HashMap<>();
 
-		msgMap.put("startTime", startTime);
-		msgMap.put("endTime", endTime);
+		msgMap.put("startTime", context.getStartTime());
+		msgMap.put("endTime", context.getEndTime());
 		
 		msgMap.put("envMap", this.envMap);
 		
