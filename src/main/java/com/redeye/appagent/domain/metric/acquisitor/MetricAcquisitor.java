@@ -6,22 +6,23 @@ import com.redeye.appagent.domain.metric.entity.MetricDTO;
 import com.redeye.appagent.util.jmx.JMXService;
 
 /**
- *
+ * 프로세스(JVM) 의 성능 정보(CPU, Memory 등) 수집기
  *
  * @author jmsohn
  */
 public class MetricAcquisitor {
 
 	
-	/** */
+	/** 성능 측정을 위한 JMX 객체 */
 	private static final JMXService jmxSvc = new JMXService();
+	
 	
 	// ----------------------------------
 	
 	/**
+	 * 프로세스(JVM) 의 성능 정보 반환
 	 *
-	 *
-	 * @return
+	 * @return 프로세스(JVM) 의 성능 정보
 	 */
 	public static MetricDTO getMetric() {
 		
@@ -38,9 +39,9 @@ public class MetricAcquisitor {
 	// ----------------------------------
 
 	/**
+	 * 프로세스(JVM) 의 CPU 성능 정보 반환
 	 *
-	 *
-	 * @return
+	 * @return 프로세스(JVM) 의 CPU 성능 정보
 	 */
 	public static double getCPUUsage() {
 		
@@ -60,9 +61,9 @@ public class MetricAcquisitor {
 	// ----------------------------------
 
 	/**
+	 * 프로세스(JVM) 의 최대 힙메모리 크기(byte) 반환
 	 *
-	 *
-	 * @return
+	 * @return 최대 힙메모리 크기
 	 */
 	public static long getMaxHeap() {
 		
@@ -85,9 +86,9 @@ public class MetricAcquisitor {
 	}
 	
 	/**
+	 * 프로세스(JVM) 의 사용 중 힙메모리 크기(byte) 반환
 	 *
-	 *
-	 * @return
+	 * @return 사용 중 힙메모리 크기
 	 */
 	public static long getUsedHeap() {
 
@@ -110,9 +111,9 @@ public class MetricAcquisitor {
 	}
 
 	/**
+	 * 프로세스(JVM) 의 최대 논힙메모리 크기(byte) 반환
 	 *
-	 *
-	 * @return
+	 * @return 최대 힙메모리 크기
 	 */
 	public static long getMaxNonHeap() {
 		
@@ -135,9 +136,9 @@ public class MetricAcquisitor {
 	}
 
 	/**
+	 * 프로세스(JVM) 의 사용 중 논힙메모리 크기(byte) 반환
 	 *
-	 *
-	 * @return
+	 * @return 사용 중 논힙메모리 크기
 	 */
 	public static long getUsedNonHeap() {
 
@@ -162,7 +163,7 @@ public class MetricAcquisitor {
 	// ----------------------------------
 
 	/**
-	 *
+	 * 프로세스(JVM) 의 스레드 개수 반환
 	 *
 	 * @return 스레드 개수
 	 */
