@@ -267,7 +267,7 @@ public class JSONUtil {
 			
 		} else if(JSONEntity.class.isAssignableFrom(type) == true) {
 
-			return ((JSONEntity)obj).toJSON();
+			return ((JSONEntity)obj).toJSON(indent);
 			
 		} else {
 			
@@ -375,7 +375,7 @@ public class JSONUtil {
 				
 				if((char)read == '\n') {
 					
-					this.columnCountPerRowStack.push(this.column);
+					this.columnCountPerRowStack.push(this.columnCount);
 					this.columnCount = new AtomicInteger(0);
 					
 				} else {
@@ -912,6 +912,7 @@ public class JSONUtil {
 	 * @param jsonStr 대상 JSON 문자열
 	 * @return 변환된 JSON 문자열
 	 */
+	@SuppressWarnings("rawtypes")
 	public static String beautifyJSON(String jsonStr) throws Exception {
 
 		// null 이거나 공백일 경우 공백 반환

@@ -186,7 +186,7 @@ public class JMXService implements Closeable {
 	 * @param attrNameStr 속성 명
 	 * @return 속성 값
 	 */
-	public Object get(String objectNameStr, String attrNameStr) throws Exception {
+	public Object get(String objectNameStr, String attrNameStr) {
 
 		// 입력 값 검증
 		if(StringUtil.isBlank(objectNameStr) == true) {
@@ -194,7 +194,11 @@ public class JMXService implements Closeable {
 		}
 		
 		// JMX 값 획득 및 반환
-		return this.get(new ObjectName(objectNameStr), attrNameStr);
+		try {
+			return this.get(new ObjectName(objectNameStr), attrNameStr);
+		} catch(Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	/**
@@ -219,7 +223,7 @@ public class JMXService implements Closeable {
 		try {
 			return this.getMBeanConnection().getAttribute(objectName, attrNameStr);
 		} catch(Exception ex) {
-			return "";
+			throw new RuntimeException(ex);
 		}
 	}
 	
@@ -232,7 +236,7 @@ public class JMXService implements Closeable {
 	 * @param returnType 속성 값 반환 타입
 	 * @return 속성 값
 	 */
-	public <T> T get(String objectNameStr, String attrNameStr, Class<T> returnType) throws Exception {
+	public <T> T get(String objectNameStr, String attrNameStr, Class<T> returnType) {
 
 		// 입력 값 검증
 		if(returnType == null) {
@@ -241,7 +245,12 @@ public class JMXService implements Closeable {
 
 		// JMX 값 획득 및 반환
 		Object value = this.get(objectNameStr, attrNameStr);
-		return returnType.cast(value);
+		
+		if(value != null) {
+			return returnType.cast(value);
+		} else {
+			return null;
+		}
 	}
 	
 
