@@ -81,12 +81,18 @@ public class APILoaderCronJob {
 		/** 어플리케이션 아이디 URL */
 		private static final String APP_ID_URL = "/api/app/info/id?organCode=%s&domainCode=%s&appCode=%s";
 
+		/** 프로세스 아이디 URL */
+		private static final String PRC_ID_URL = "/api/prc/info/id?hostId=%d&appId=%d";
+
 
 		/** 호스트 아이디 */
 		private long hostId = -1;
 
 		/** 어플리케이션 아이디 */
 		private long appId = -1;
+
+		/** 프로세스 아이디 */
+		private long prcId = -1;
 		
 		/** API 저장 로더 목록 */
 		private final List<APILoader> loaderList;
@@ -136,6 +142,11 @@ public class APILoaderCronJob {
 					if(this.appId == -1) {
 						this.appId = getAppId();
 					}
+
+					// 프로세스 아이디 설정
+					if(this.prcId == -1) {
+						this.prcId = getPrcId(this.hostId, this.appId);
+					}
 				}
 				
 			} catch(Exception ex) {
@@ -149,6 +160,7 @@ public class APILoaderCronJob {
 			APIContextDTO context = new APIContextDTO(
 				this.hostId,
 				this.appId,
+				this.prcId,
 				basePath,
 				startTime,
 				nextTime
@@ -225,6 +237,48 @@ public class APILoaderCronJob {
 					Config.ORGAN_CODE.getValue(),
 					Config.DOMAIN_CODE.getValue(),
 					Config.APP_CODE.getValue()
+				),
+
+				// 응답 처리
+				(respCode, respMsg) -> {
+					
+					if(respCode == 200) {
+						try {
+							
+							hostId.set(
+								(long)JSONUtil.parseMap(respMsg).get("id")
+							);
+							
+						} catch(Exception ex) {
+							
+							LogUtil.log(ex);
+							hostId.set(-1L);
+						}
+					}
+				}
+			);
+			
+			return hostId.get();
+		}
+
+		/**
+		 * 프로세스 아이디 반환
+		 *
+		 * @param hostId 호스트 아이디
+		 * @param appId 어플리케이션 아이디
+		 * @return 프로세스 아이디
+		 */
+		private long getPrcId(long hostId, long appId) throws Exception {
+			
+			AtomicLong hostId = new AtomicLong(-1L);
+			
+			RESTUtil.get(
+
+				// 접속 URL
+				String.format(
+					basePath + PRC_ID_URL,
+					hostId,
+					appId
 				),
 
 				// 응답 처리
