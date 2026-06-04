@@ -18,7 +18,7 @@ public class EnvLoader implements APILoader {
 	
 	
 	/** 환경 변수 서브패스 */
-	private static String SUBPATH = "/api/prc/%d/%d/env";
+	private static String SUBPATH = "/api/prc/%d/env";
 	
 	/** 환경 변수 맵 */
 	private Map<String, String> envMap;
@@ -83,7 +83,7 @@ public class EnvLoader implements APILoader {
 		
 		return new StringBuilder()
 			.append(context.getBasePath())
-			.append(String.format(SUBPATH, context.getHostId(), context.getAppId()))
+			.append(String.format(SUBPATH, context.getPrcId()))
 			.toString();
 	}
 	
