@@ -17,6 +17,9 @@ public class APIContextDTO {
 	
 	/** 어플리케이션 아이디 */
 	private final long appId;
+
+	/** 프로세스 아이디 */
+	private final long prcId;
 	
 	/** 기준 패스 */
 	private final String basePath;
