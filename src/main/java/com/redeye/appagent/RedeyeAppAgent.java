@@ -52,4 +52,18 @@ public class RedeyeAppAgent {
 			context.addTransformer(inst);;
 		}
 	}
+
+	/**
+	 * 메인 메소드
+	 *
+	 * @param args 명령행 인수
+	 */
+	public static void main(String[] args) throws Exception {
+
+		// 설정 값 초기화
+		Config.init();
+
+		// 설정 값 내용 화면 출력
+		System.out.println(Config.showConfigurableEnv());
+	}
 }
