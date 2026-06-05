@@ -17,7 +17,7 @@ public class LoaderService {
 	
 	
 	/** API를 통한 성능 정보 저장 크론잡 객체 */
-	private static APILoaderCronJob loader;
+	private static LoaderCronJob loader;
 	
 
 	/**
@@ -49,7 +49,7 @@ public class LoaderService {
 		
 		// ------------------------
 		// API 호출 로더 생성 및 기동
-		loader = new APILoaderCronJob(
+		loader = new LoaderCronJob(
 			Config.LOADER_API_SERVER.getValue(),
 			Config.LOADER_SCHEDULE.getValue(),
 			loaderList
