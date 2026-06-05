@@ -20,7 +20,7 @@ import com.redeye.appagent.util.CronJob.Job;
  * 
  * @author jmsohn
  */
-public class APILoaderCronJob {
+class LoaderCronJob {
 	
 	
 	/**
