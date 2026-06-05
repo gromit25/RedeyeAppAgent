@@ -50,8 +50,8 @@ public class APILoaderCronJob {
 	) throws Exception {
 		
 		// 입력값 검증
-		if(StringUtil.isBlank(basePath) == true) {
-			throw new IllegalArgumentException("'basePath' is null or blank.");
+		if(basePath == null) {
+			throw new IllegalArgumentException("'basePath' is null.");
 		}
 		
 		if(StringUtil.isBlank(schedule) == true) {
@@ -59,7 +59,11 @@ public class APILoaderCronJob {
 		}
 		
 		// 기준 패스 설정
-		this.basePath = basePath;
+		if(basePath.isBlank() == false) {
+			this.basePath = basePath;
+		} else {
+			this.basePath = "";
+		}
 		
 		// 크론잡에서 로드를 수행하는 잡 객체 및 크론잡 생성
 		this.loaderJob = new LoaderJob(loaderList);
