@@ -209,7 +209,7 @@ public class APILoaderCronJob {
 						try {
 							
 							hostId.set(
-								(long)JSONUtil.parseMap(respMsg).get("id")
+								getIdFromResp(respMsg)
 							);
 							
 						} catch(Exception ex) {
@@ -250,7 +250,7 @@ public class APILoaderCronJob {
 						try {
 							
 							hostId.set(
-								(long)JSONUtil.parseMap(respMsg).get("id")
+								getIdFromResp(respMsg)
 							);
 							
 						} catch(Exception ex) {
@@ -292,7 +292,7 @@ public class APILoaderCronJob {
 						try {
 							
 							hostId.set(
-								(long)JSONUtil.parseMap(respMsg).get("id")
+								getIdFromResp(respMsg)
 							);
 							
 						} catch(Exception ex) {
@@ -305,6 +305,16 @@ public class APILoaderCronJob {
 			);
 			
 			return hostId.get();
+		}
+
+		/**
+		 * 응답 메시지에서 아이디 추출 및 반환
+		 *
+		 * @param respMsg 응답 메시지
+		 * @return 아이디
+		 */
+		private long getIdFromResp(String respMsg) throws Exception {
+			return (long) JSONUtil.parseMap(respMsg).get("data").get("id");
 		}
 		
 		/**
