@@ -50,16 +50,12 @@ public class APILoaderCronJob {
 	) throws Exception {
 		
 		// 입력값 검증
-		if(basePath == null) {
-			throw new IllegalArgumentException("'basePath' is null.");
-		}
-		
 		if(StringUtil.isBlank(schedule) == true) {
 			throw new IllegalArgumentException("'schedule' is null or blank.");
 		}
 		
 		// 기준 패스 설정
-		if(basePath.isBlank() == false) {
+		if(StringUtil.isBlank(basePath) == false) {
 			this.basePath = basePath;
 		} else {
 			this.basePath = "";
