@@ -40,17 +40,6 @@ public class LoaderService {
 		}
 		
 		// ------------------------
-		// 로더 기동을 위한 옵션 획득
-		
-		// 호출할 API의 기준 패스 획득
-		// 주의) 기준 패스가 설정되어 있지 않는 경우
-		//     발송 내용이 화면 출력만 됨 -> 보내지 않음
-		String basePath = Config.LOADER_API_SERVER.getValue();
-		
-		// API 호출 스케쥴 획득
-		String schedule = Config.LOADER_SCHEDULE.getValue();
-		
-		// ------------------------
 		// API 호출 로더 목록 설정
 		List<APILoader> loaderList = new ArrayList<>();
 		
@@ -60,7 +49,12 @@ public class LoaderService {
 		
 		// ------------------------
 		// API 호출 로더 생성 및 기동
-		loader = new APILoaderCronJob(basePath, schedule, loaderList);
+		loader = new APILoaderCronJob(
+			Config.LOADER_API_SERVER.getValue(),
+			Config.LOADER_SCHEDULE.getValue(),
+			loaderList
+		);
+		
 		loader.start();
 		
 		LogUtil.log("metrics api loader is started.");
