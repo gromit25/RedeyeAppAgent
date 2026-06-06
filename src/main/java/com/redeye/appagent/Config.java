@@ -210,7 +210,7 @@ public enum Config {
 	 * 
 	 * @return 설정 가능한 환경변수 목록 문자열
 	 */
-	public String showConfigurableEnv() {
+	public static String showConfigurableEnv() {
 		
 		// 설정 가능한 환경변수 목록 문자열 생성 변수
 		StringBuilder builder = new StringBuilder("");
