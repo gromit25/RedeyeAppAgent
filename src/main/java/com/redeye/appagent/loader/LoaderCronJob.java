@@ -1,6 +1,7 @@
 package com.redeye.appagent.loader;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
@@ -43,7 +44,7 @@ class LoaderCronJob {
 	 * @param schedule 저장 API 실행 스케쥴
 	 * @param loaderList API 저장 로더 목록
 	 */
-	public APILoaderCronJob(
+	public LoaderCronJob(
 		String basePath,
 		String schedule,
 		List<APILoader> loaderList
@@ -185,39 +186,15 @@ class LoaderCronJob {
 		 * @return 호스트 아이디
 		 */
 		private long getHostId() throws Exception {
-			
-			AtomicLong hostId = new AtomicLong(-1L);
-			
-			RESTUtil.get(
 
-				// 접속 URL
+			return this.getId(
 				String.format(
 					basePath + HOST_ID_URL,
 					Config.ORGAN_CODE.getValue(),
 					Config.DOMAIN_CODE.getValue(),
 					Config.HOST_NAME.getValue()
-				),
-
-				// 응답 처리
-				(respCode, respMsg) -> {
-					
-					if(respCode == 200) {
-						try {
-							
-							hostId.set(
-								getIdFromResp(respMsg)
-							);
-							
-						} catch(Exception ex) {
-							
-							LogUtil.log(ex);
-							hostId.set(-1L);
-						}
-					}
-				}
+				)
 			);
-			
-			return hostId.get();
 		}
 
 		/**
@@ -226,39 +203,15 @@ class LoaderCronJob {
 		 * @return 어플리케이션 아이디
 		 */
 		private long getAppId() throws Exception {
-			
-			AtomicLong hostId = new AtomicLong(-1L);
-			
-			RESTUtil.get(
 
-				// 접속 URL
+			return this.getId(
 				String.format(
 					basePath + APP_ID_URL,
 					Config.ORGAN_CODE.getValue(),
 					Config.DOMAIN_CODE.getValue(),
 					Config.APP_CODE.getValue()
-				),
-
-				// 응답 처리
-				(respCode, respMsg) -> {
-					
-					if(respCode == 200) {
-						try {
-							
-							hostId.set(
-								getIdFromResp(respMsg)
-							);
-							
-						} catch(Exception ex) {
-							
-							LogUtil.log(ex);
-							hostId.set(-1L);
-						}
-					}
-				}
+				)
 			);
-			
-			return hostId.get();
 		}
 
 		/**
@@ -270,16 +223,29 @@ class LoaderCronJob {
 		 */
 		private long getPrcId(long hostId, long appId) throws Exception {
 			
-			AtomicLong hostId = new AtomicLong(-1L);
+			return this.getId(
+				String.format(
+					basePath + PRC_ID_URL,
+					prcId,
+					appId
+				)
+			);
+		}
+		
+		/**.
+		 * 주어진 패스에서 자원 아이디(ex 호스트, 어플리케이션, 프로세스 등) 조회 및 반환
+		 * 
+		 * @param path 조회할 패스
+		 * @return 자원 아이디
+		 */
+		private long getId(String path) throws Exception {
+			
+			AtomicLong id = new AtomicLong(-1L);
 			
 			RESTUtil.get(
 
 				// 접속 URL
-				String.format(
-					basePath + PRC_ID_URL,
-					hostId,
-					appId
-				),
+				path,
 
 				// 응답 처리
 				(respCode, respMsg) -> {
@@ -287,20 +253,20 @@ class LoaderCronJob {
 					if(respCode == 200) {
 						try {
 							
-							hostId.set(
+							id.set(
 								getIdFromResp(respMsg)
 							);
 							
 						} catch(Exception ex) {
 							
 							LogUtil.log(ex);
-							hostId.set(-1L);
+							id.set(-1L);
 						}
 					}
 				}
 			);
 			
-			return hostId.get();
+			return id.get();
 		}
 
 		/**
@@ -309,8 +275,29 @@ class LoaderCronJob {
 		 * @param respMsg 응답 메시지
 		 * @return 아이디
 		 */
+		@SuppressWarnings("unchecked")
 		private long getIdFromResp(String respMsg) throws Exception {
-			return (long) JSONUtil.parseMap(respMsg).get("data").get("id");
+			
+			// 입력 값 검증
+			if(StringUtil.isBlank(respMsg) == true) {
+				throw new IllegalArgumentException("'resMsg' is null or blank.");
+			}
+			
+			// 응답에서 'data' 항목 추출
+			Object dataObj = JSONUtil.parseMap(respMsg).get("data");
+			
+			if(dataObj == null) {
+				throw new RuntimeException("Can't find data map: " + respMsg);
+			}
+			
+			if(dataObj instanceof Map) {
+				throw new RuntimeException("data item type is not Map: " + respMsg);
+			}
+			
+			Map<String, Object> dataMap = (Map<String, Object>)dataObj;
+			
+			// 'data' 항목에서 'id' 추출 후 반환
+			return (long) dataMap.get("id");
 		}
 		
 		/**
@@ -326,7 +313,7 @@ class LoaderCronJob {
 	 * 
 	 * @return 현재 객체
 	 */
-	public APILoaderCronJob start() {
+	public LoaderCronJob start() {
 		
 		this.cronJob.start();
 		
@@ -338,7 +325,7 @@ class LoaderCronJob {
 	 * 
 	 * @return 현재 객체
 	 */
-	public APILoaderCronJob stop() {
+	public LoaderCronJob stop() {
 		
 		this.cronJob.stop();
 		
