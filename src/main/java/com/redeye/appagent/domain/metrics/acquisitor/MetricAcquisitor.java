@@ -1,8 +1,8 @@
-package com.redeye.appagent.domain.metric.acquisitor;
+package com.redeye.appagent.domain.metrics.acquisitor;
 
 import javax.management.openmbean.CompositeData;
 
-import com.redeye.appagent.domain.metric.entity.MetricDTO;
+import com.redeye.appagent.domain.metrics.entity.MetricDTO;
 import com.redeye.appagent.util.jmx.JMXService;
 
 /**

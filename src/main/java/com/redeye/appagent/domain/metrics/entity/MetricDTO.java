@@ -1,4 +1,4 @@
-package com.redeye.appagent.domain.metric.entity;
+package com.redeye.appagent.domain.metrics.entity;
 
 import com.redeye.appagent.util.JSONUtil.JSONEntity;
 

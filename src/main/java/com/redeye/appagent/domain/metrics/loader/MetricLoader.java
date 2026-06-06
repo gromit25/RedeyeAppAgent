@@ -1,4 +1,4 @@
-package com.redeye.appagent.domain.metric.loader;
+package com.redeye.appagent.domain.metrics.loader;
 
 import com.redeye.appagent.loader.APILoader;
 import com.redeye.appagent.loader.entity.APIContextDTO;
